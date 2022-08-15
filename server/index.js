@@ -6,12 +6,9 @@ const connectDB = require("./Connection/connection")
 const multer = require ("multer")
 const mongoose = require("mongoose")
 const bodyparser = require("body-parser")
-const employeeRoute = require("./Routes/employees")
-const CalendarRoute = require("./Routes/calendar")
-const holidayRoute = require("./Routes/holiday")
-const ecxel = require("./convertecxel")
+const authRoute = require('./Routes/Auth/auth')
 const cors = require("cors")
-const importecxel = require("./Routes/import")
+env.config()
 app.use(express.json());
 app.use(cors());
 
@@ -37,15 +34,22 @@ app.post("/upload", upload.single("file"), (req, res) => {
 });
 //Routes
 // app.use(require("./Routes/holiday"));
-app.use('/employee',employeeRoute);
-app.use("/calendar",CalendarRoute);
-app.use("/calendar/holiday",holidayRoute);
-app.use("/",importecxel)
-app.use("/",ecxel);
+app.use('/auth',authRoute)
+
+app.use((err,req,res,next)=>{
+  console.log("i am middleware", req.body);
+  const errorStatus = err.status || 500;
+  const errorMessage = err.message || "Something went wrong!";
+  return res.status(errorStatus).json({
+    success: false,
+    status: errorStatus,
+    message: errorMessage,
+    stack: err.stack,
+  });
+})
 //Port settings
 const PORT = 5000;
 
-console.log('hello world')
 app.listen(PORT,()=>{
   console.log(`app is listen at ${PORT}`)
 })

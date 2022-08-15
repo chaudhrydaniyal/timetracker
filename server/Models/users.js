@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require('mongoose-sequence')(mongoose);
-const EmployeesSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
        
      emp_id:Number,
      firstname:{
@@ -37,7 +37,7 @@ const EmployeesSchema = new mongoose.Schema({
         require:true
      },
     
-     designation:{
+     role:{
         type:String,
         required:true
      },
@@ -53,9 +53,13 @@ const EmployeesSchema = new mongoose.Schema({
      profilepic:{
       type:String,
       default:""
+     },
+     isAdmin:{
+      type:Boolean,
+      default:false
      }
     
 },{ timestamps: true },);
-EmployeesSchema.plugin(AutoIncrement, {inc_field: 'emp_id'});
-const Employees = mongoose.model("Employees",EmployeesSchema)
-module.exports = Employees;
+userSchema.plugin(AutoIncrement, {inc_field: 'emp_id'});
+const Users = mongoose.model("Users",userSchema)
+module.exports = Users;

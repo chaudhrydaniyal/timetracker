@@ -1,7 +1,7 @@
 const dotenv = require('dotenv')
 const mongoose = require("mongoose");
 const path = require("path")
-const url = "mongodb://localhost:27017/Attendance"
+const url = "mongodb://localhost:27017/timeTracker"
 //env
 
 
