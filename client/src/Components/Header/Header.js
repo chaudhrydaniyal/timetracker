@@ -104,7 +104,7 @@ const Header = () => {
               </div>
             </li>
             {/* <!-- Notifications Dropdown Menu --> */}
-            <li className="nav-item dropdown">
+            {/* <li className="nav-item dropdown">
               <a className="nav-link" data-toggle="dropdown" href="/">
                 <i className="far fa-bell"></i>
                 <span className="badge badge-warning navbar-badge">15</span>
@@ -139,7 +139,7 @@ const Header = () => {
               <a className="nav-link" data-widget="control-sidebar" data-slide="true" href="/" role="button">
                 <i className="fas fa-th-large"></i>
               </a>
-            </li>
+            </li> */}
           </ul>
         </nav>
       </div>

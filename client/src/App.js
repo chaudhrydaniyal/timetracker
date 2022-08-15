@@ -18,6 +18,9 @@ import { Context } from "./Context/Context";
 import { Suspense, useContext } from "react";
 
 import Login from "./pages/Login/Login";
+import Projects from "./pages/Projects/Projects";
+import Users from "./pages/Users/Users";
+import DailyTasks from "./pages/DailyTasks/DailyTasks";
 
 function App() {
 
@@ -34,10 +37,13 @@ function App() {
               <Routes>
                 <Route path='/Leaves' element={< EmployeeLeaves />} />
                 <Route path='/attendance' element={<EmpAttendance />} />
-                <Route path="/holidays" element={<EmpHolidays />} />
+                <Route path="/projects" element={<Projects />} />
                 <Route path='/allemployees' element={<AllEmployees />} />
                 <Route path='/employee/:id' element={<EmpDetails />} />
-                <Route path='/calendar' element={<Calendar />}></Route>
+                <Route path='/users' element={<Users />}></Route>
+                <Route path='/users' element={<Users />}></Route>
+                <Route path='/dailytasks' element={<DailyTasks />}></Route>
+
                 <Route path="/calendar/:id" element={<CalendarDetails />}></Route>
                 <Route path="/datamanagement" element={<DataManagement />} />
               </Routes>
