@@ -1,6 +1,6 @@
 const express = require('express');
 const User = require('../../Models/users')
-const {createError} = require('../../Utils/Error/error')
+const createError = require('../../Utils/Error/error')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const AddUser = async(req,res,next) =>{
@@ -42,18 +42,15 @@ const login = async(req,res,next) =>{
         });
         console.log(user, "user");
         //custom error
-        if (!user) {
-          return next(createError.createError(404, "User not found!"));
-        }
+        if (!user) return next(createError(404, "User not found!"));
     
         //password comparret
         const comparePassword = await bcrypt.compare(
           req.body.password,
           user.password
         );
-        if (!comparePassword) {
-          return next(createError.createError(400, "Wrong password or username!"));
-        }
+        if (!comparePassword) return next(createError(400, "Wrong password or username!"));
+        
         const token = jwt.sign(
           { id: user._id, isAdmin: user.isAdmin },
           process.env.jwtkey

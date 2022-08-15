@@ -4,11 +4,11 @@ const createError = require("../Error/error");
 // const verifyToken = (req, res, next) => {
 //     const token = req.cookies.access_token;
 //     if (!token) {
-//       return next(createError.createError(401, "You are not authenticated!"));
+//       return next(createError(401, "You are not authenticated!"));
 //     }
 
 //     jwt.verify(token, process.env.jwtkey, (err, user) => {
-//       if (err) return next(createError.createError(403, "Token is not valid!"));
+//       if (err) return next(createError(403, "Token is not valid!"));
 //       req.user = user;
 //       next();
 //     });
@@ -20,13 +20,13 @@ const verifyToken = (req, res, next) => {
   const token = req.cookies.access_token
   console.log(req.cookies.access_token, "token");
   if (!token) {
-    return next(createError.createError(401, "You are not Authenticated"));
+    return next(createError(401, "You are not Authenticated"));
   }
   //if token found then checking the validity of token !
 
   jwt.verify(token, process.env.jwtkey, (err, user) => {
     //the third paremeter is returning us an error or user information
-    if (err) return next(createError.createError(403, "Token is not valid"));
+    if (err) return next(createError(403, "Token is not valid"));
     //if everything is okay then setting new request property
     //req.user mean you can write anything with req.(any name) and = user <= coming from user parameter
     req.user = user;
@@ -41,7 +41,7 @@ const verifyToken = (req, res, next) => {
 //       if (req.user.id === req.params.id || req.user.isAdmin) {
 //         next();
 //       } else {
-//         return next(createError.createError(403, "You are not authorized!"));
+//         return next(createError(403, "You are not authorized!"));
 //       }
 //     });
 //   };
@@ -51,7 +51,7 @@ const verifyUser = (req, res, next) => {
     if (req.body.id === req.params.id || req.user.isAdmin) {
       next();
     } else {
-      next(createError.createError(403, "please Logged in"));
+      next(createError(403, "please Logged in"));
     }
   });
 };
@@ -61,7 +61,7 @@ const verifyAdmin = (req, res, next) => {
     if (req.user.isAdmin) {
       next();
     } else {
-      next(createError.createError(403, "You are unauthorized"));
+      next(createError(403, "You are unauthorized"));
     }
   });
 };
