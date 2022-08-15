@@ -137,7 +137,7 @@ const DailyTasks = () => {
             label: "Project(s)",
 
         },
-    
+
 
         {
             id: "Details",
@@ -294,7 +294,7 @@ const DailyTasks = () => {
                                         className="mr-5"
                                         style={{ marginTop: "0px", marginBottom: "0px" }}
                                     >
-                                        Daily Tasks Summary
+                                        Daily Tasks
                                     </h3>
                                     <div
                                         style={{
@@ -321,15 +321,28 @@ const DailyTasks = () => {
                                     </div>
                                     <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
 
-                                        <label>{propDetail.propertyType} Add User</label>      <Button style={{ marginLeft: "auto" }} variant="success" onClick={handleShow}>Add User</Button>{' '}
+                                        <label>{propDetail.propertyType} Add User</label>      <Button style={{ marginLeft: "auto" }} variant="success" onClick={handleShow}>Add Today's Task</Button>{' '}
                                     </div>
                                     <br />
                                     <Modal style={{ marginTop: "30vh" }} show={show} onHide={handleClose} animation={false}>
                                         <Modal.Header closeButton>
-                                            <Modal.Title>Add User</Modal.Title>
+                                            <Modal.Title>Add Task</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
-                                            <input style={{ width: "80%" }} onChange={(e) => setUserName(e.target.value)}></input>
+                                            <label for="birthday">Date:</label>
+
+                                            <input type="date" id="birthday" name="birthday" />
+                                            <br /><br />
+                                            <input placeholder="Task title" style={{ width: "80%" }} onChange={(e) => setUserName(e.target.value)}></input>
+                                            <br /><br />
+                                            <input placeholder="Task Description" style={{ width: "80%" }} onChange={(e) => setUserName(e.target.value)}></input>
+                                            <br /><br />
+                                            <select name="cars" id="cars">
+                                                <option value="volvo">Project 1</option>
+                                                <option value="saab">Project 2</option>
+                                                <option value="mercedes">Project 3</option>
+                                                <option value="audi">Project 4</option>
+                                            </select>
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <Button variant="secondary" onClick={handleClose}>
@@ -350,7 +363,7 @@ const DailyTasks = () => {
                                                 }
                                             }}>
 
-                                                Add User
+                                                Add Task
                                             </Button>
                                         </Modal.Footer>
                                     </Modal>

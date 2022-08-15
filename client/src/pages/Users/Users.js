@@ -38,7 +38,7 @@ import originURL from "../../url";
 import { Button } from "@mui/material";
 
 const Users = () => {
-    const [requestedProperties, setRequestedProperties] = useState([]);
+    const [users, setUsers] = useState([]);
 
 
     const [order, setOrder] = React.useState("asc");
@@ -51,7 +51,10 @@ const Users = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
 
-    const [userName, setUserName] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [role, setRole] = useState("");
+
 
     const [show, setShow] = useState(false);
 
@@ -66,15 +69,15 @@ const Users = () => {
     const propDetail = item.state || {}
 
     useEffect(() => {
-        axios.get(`${originURL}/properties/requestproperty`).then((res) => {
-            setRequestedProperties(res.data.getQuerries);
+        axios.get(`${originURL}/users/allusers`).then((res) => {
+            setUsers(res.data.users);
         });
 
 
     }, []);
 
 
-    console.log("reqprop", requestedProperties)
+    console.log("reqprop", users)
 
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
@@ -135,6 +138,8 @@ const Users = () => {
             numeric: false,
             disablePadding: false,
             label: "Role",
+            extended: true,
+
 
         },
         {
@@ -225,10 +230,10 @@ const Users = () => {
     // Avoid a layout jump when reaching the last page with empty rows.
 
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - requestedProperties.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
     const TableRowCustom = (props) => {
-        const { _id, Title, DetailLocation, updatedAt, Type } = props;
+        const { _id, username, password, updatedAt, role } = props;
 
         const labelId = props.labelId;
         const index = props.index
@@ -261,22 +266,19 @@ const Users = () => {
 
                 <TableCell align="left">{rowsPerPage * page + index + 1}</TableCell>
 
-                <TableCell align="left">{Title}</TableCell>
+                <TableCell align="left">{username}</TableCell>
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
-                <TableCell align="left">{DetailLocation}</TableCell>
-                <TableCell align="right">{updatedAt.slice(0, 25)}</TableCell>
-                <TableCell align="right">
-
-                    {Type}
-
-                </TableCell>
-
+                <TableCell align="left">  {role}</TableCell>
+                <TableCell align="left">{updatedAt.slice(0, 25)}</TableCell>
+           
                 <TableCell align="right">
                     <Link
-                        to="/propertylisting/propertyDetail"
+                        to="/users/userdetail"
                         state={{
                             item: props
                         }}
+                        style={{textDecoration:"none"}}
+
                     >
                         <Button variant="success">Details</Button>
                     </Link>
@@ -335,7 +337,13 @@ const Users = () => {
                                             <Modal.Title>Add User</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
-                                            <input style={{ width: "80%" }} onChange={(e) => setUserName(e.target.value)}></input>
+                                            <input placeholder="username" style={{ width: "80%" }} onChange={(e) => setUsername(e.target.value)}></input>
+                                            <br /><br />
+                                            <input placeholder="password" style={{ width: "80%" }} onChange={(e) => setPassword(e.target.value)}></input>
+                                            <br /><br />
+
+                                            <input placeholder="role" style={{ width: "80%" }} onChange={(e) => setRole(e.target.value)}></input>
+
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <Button variant="secondary" onClick={handleClose}>
@@ -343,9 +351,10 @@ const Users = () => {
                                             </Button>
                                             <Button variant="primary" onClick={() => {
                                                 try {
-                                                    axios.post(`${originURL}/addproperty/propertysubtype`, {
-                                                        propertysubtype: userName,
-                                                        addedIn: propDetail._id
+                                                    axios.post(`${originURL}/auth/register`, {
+                                                        username: username,
+                                                        password: password,
+                                                        role:role
                                                     })
 
 
@@ -377,7 +386,7 @@ const Users = () => {
                                         rowCount={5}
                                     />
                                     <TableBody>
-                                        {stableSort(requestedProperties, getComparator(order, orderBy))
+                                        {stableSort(users, getComparator(order, orderBy))
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((b, index) => {
                                                 const labelId = `enhanced-table-checkbox-${index}`;
@@ -386,13 +395,13 @@ const Users = () => {
 
 
                                                 return (
-                                                    (b.Title
+                                                    (b.username
                                                         .toLowerCase()
                                                         .includes(filteredRequestedProperties.toLowerCase()) ||
-                                                        b.fullname.toLowerCase().includes(
+                                                        b.password.toLowerCase().includes(
                                                             filteredRequestedProperties.toLowerCase()
                                                         ) ||
-                                                        b.DetailLocation
+                                                        b.role
                                                             .toLowerCase()
                                                             .includes(filteredRequestedProperties.toLowerCase())) && (
                                                         <TableRowCustom
@@ -424,7 +433,7 @@ const Users = () => {
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25]}
                                 component="div"
-                                count={requestedProperties.length}
+                                count={users.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
                                 onPageChange={handleChangePage}

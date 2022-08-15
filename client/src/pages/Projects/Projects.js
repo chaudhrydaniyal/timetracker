@@ -52,6 +52,10 @@ const Projects = () => {
 
 
     const [projectName, setProjectName] = useState("");
+    const [projectDescription, setProjectDescription] = useState("");
+
+    const [projects, setProjects] = useState([]);
+
 
     const [show, setShow] = useState(false);
 
@@ -67,8 +71,8 @@ const Projects = () => {
 
 
     useEffect(() => {
-        axios.get(`${originURL}/properties/requestproperty`).then((res) => {
-            setRequestedProperties(res.data.getQuerries);
+        axios.get(`${originURL}/project/allprojects`).then((res) => {
+            setProjects(res.data.get);
         });
 
 
@@ -136,7 +140,6 @@ const Projects = () => {
             numeric: false,
             disablePadding: false,
             label: "Assigned To",
-            extended: true,
 
         },
         {
@@ -147,7 +150,15 @@ const Projects = () => {
         },
      
         {
-            id: "details",
+            id: "Description",
+            numeric: true,
+            disablePadding: false,
+            label: "Description",
+            extended: true,
+
+        },
+        {
+            id: "Detail",
             numeric: true,
             disablePadding: false,
             label: "Details",
@@ -229,7 +240,8 @@ const Projects = () => {
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - requestedProperties.length) : 0;
 
     const TableRowCustom = (props) => {
-        const { _id, Title, DetailLocation, updatedAt, Type } = props;
+        console.log("table",props)
+        const { _id, projectname, description, updatedAt, createdAt } = props;
 
         const labelId = props.labelId;
         const index = props.index
@@ -262,24 +274,25 @@ const Projects = () => {
 
                 <TableCell align="left">{rowsPerPage * page + index + 1}</TableCell>
 
-                <TableCell align="left">{Title}</TableCell>
+                <TableCell align="left">{projectname}</TableCell>
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
-                <TableCell align="left">{DetailLocation}</TableCell>
+                <TableCell align="left"></TableCell>
                 <TableCell align="right">{updatedAt.slice(0, 25)}</TableCell>
                 <TableCell align="right">
 
-                    {Type}
+                {description}
 
                 </TableCell>
 
                 <TableCell align="right">
                     <Link
-                        to="/propertylisting/propertyDetail"
+                        to="/projects/projectdetail"
                         state={{
                             item: props
                         }}
+                        style={{textDecoration:"none"}}
                     >
-                        <Button variant="success">Details</Button>
+                        <Button >Details</Button>
                     </Link>
                 </TableCell>
             </TableRow>
@@ -328,7 +341,7 @@ const Projects = () => {
                                     </div>
                                     <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
 
-                                        <label>{propDetail.propertyType} Add Project</label>      <Button style={{ marginLeft: "auto" }} variant="success" onClick={handleShow}>Add More</Button>{' '}
+                                        <label>{propDetail.propertyType} Add Project</label>      <Button style={{ marginLeft: "auto" }} variant="success" onClick={handleShow}>Add Project</Button>{' '}
                                     </div>
                                     <br />
                                     <Modal style={{ marginTop: "30vh" }} show={show} onHide={handleClose} animation={false}>
@@ -336,7 +349,12 @@ const Projects = () => {
                                             <Modal.Title>Add another Project</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
-                                            <input style={{ width: "80%" }} onChange={(e) => setProjectName(e.target.value)}></input>
+                                            <input placeholder="Project name" style={{ width: "80%" }} onChange={(e) => setProjectName(e.target.value)}></input>
+                                            <br /><br />
+
+                                            <textarea placeholder="Description" style={{ width: "80%" }} onChange={(e) => setProjectDescription(e.target.value)}></textarea>
+                                           
+
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <Button variant="secondary" onClick={handleClose}>
@@ -344,9 +362,9 @@ const Projects = () => {
                                             </Button>
                                             <Button variant="primary" onClick={() => {
                                                 try {
-                                                    axios.post(`${originURL}/addproperty/propertysubtype`, {
-                                                        propertysubtype: projectName,
-                                                        addedIn: propDetail._id
+                                                    axios.post(`${originURL}/project/addproject`, {
+                                                        projectname: projectName,
+                                                        description: projectDescription
                                                     })
 
 
@@ -378,7 +396,7 @@ const Projects = () => {
                                         rowCount={5}
                                     />
                                     <TableBody>
-                                        {stableSort(requestedProperties, getComparator(order, orderBy))
+                                        {stableSort(projects, getComparator(order, orderBy))
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((b, index) => {
                                                 const labelId = `enhanced-table-checkbox-${index}`;
@@ -387,13 +405,13 @@ const Projects = () => {
 
 
                                                 return (
-                                                    (b.Title
+                                                    (b.projectname
                                                         .toLowerCase()
                                                         .includes(filteredRequestedProperties.toLowerCase()) ||
-                                                        b.fullname.toLowerCase().includes(
+                                                        b.description.toLowerCase().includes(
                                                             filteredRequestedProperties.toLowerCase()
                                                         ) ||
-                                                        b.DetailLocation
+                                                        b.updatedAt
                                                             .toLowerCase()
                                                             .includes(filteredRequestedProperties.toLowerCase())) && (
                                                         <TableRowCustom
