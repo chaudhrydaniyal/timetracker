@@ -7,10 +7,15 @@ const multer = require ("multer")
 const mongoose = require("mongoose")
 const bodyparser = require("body-parser")
 const authRoute = require('./Routes/Auth/auth')
+const usersRoute = require('./Routes/users')
+const cookieparser = require("cookie-parser");
+const projectRoute = require('./Routes/Admin/Project/createProject')
 const cors = require("cors")
 env.config()
-app.use(express.json());
 app.use(cors());
+app.use(cookieparser());
+app.use(express.json());
+
 
 //DB connection
 connectDB();
@@ -35,7 +40,8 @@ app.post("/upload", upload.single("file"), (req, res) => {
 //Routes
 // app.use(require("./Routes/holiday"));
 app.use('/auth',authRoute)
-
+app.use('/project',projectRoute)
+app.use('/users',usersRoute)
 app.use((err,req,res,next)=>{
   console.log("i am middleware", req.body);
   const errorStatus = err.status || 500;

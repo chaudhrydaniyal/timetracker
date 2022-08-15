@@ -53,8 +53,8 @@ const allUsers = async (req,res,next) =>{
  
     try {
 
-        const abc = await User.find();
-        abc &&  res.status(200).json({message:"All Users",abc});
+        const users = await User.find();
+        users &&  res.status(200).json({message:"All Users",users});
 
     } catch (err) {
       console.log("Finding Users Error",error);

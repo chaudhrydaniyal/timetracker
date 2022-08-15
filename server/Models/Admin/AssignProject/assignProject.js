@@ -6,11 +6,11 @@ const assignprojectSchema = mongoose.Schema({
     ref:'Projects'
    },
    assignTo:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:'Users'
+      references: { type: [Schema.Types.ObjectId], refPath: 'Users' },
    },
    assignBy:{
-    references: { type: [Schema.Types.ObjectId], refPath: 'Users' },
+     type:mongoose.Schema.Types.ObjectId,
+     ref:'Users'
    },
    assignDate:{
     type:Date
