@@ -32,7 +32,7 @@ exports.create = (req, res) => {
                 data.password
             );
             if (!comparePassword) {
-                return next(createError.createError(400, "Wrong password or username!"));
+                return next(createError(400, "Wrong password or username!"));
             }
             res
             .status(200)
