@@ -3,49 +3,39 @@ const userSchema = new mongoose.Schema({
    
      firstname:{
         type:String,
-      
      },
      lastname:{
         type:String,
-       
      },
      username:{
       type:String,
       unique:true,
-      
      },
      email:{
       type:String,
-
       trim: true,
       lowercase: true
       },
      
      password:{
       type:String,
-      
      },
 
      phone:{
         type:Number,
-      
      },
      address:{
         type:String,
-       
      },
     
      role:{
         type:String,
-    
      },
      department:{
        type:String,
-      
      },
      joiningdate:{
       type:String,
- 
 
      },
      profilepic:{
@@ -57,6 +47,6 @@ const userSchema = new mongoose.Schema({
       default:false
      }
     
-},{ timestamps: true });
+},{ timestamps: true },);
 const Users = mongoose.model("Users",userSchema)
 module.exports = Users;

@@ -9,7 +9,7 @@ const {verifyAdmin,verifyUser} = require('../Utils/VerifyAdmin/Verify')
 //for getting All employee 
 
 
-router.get("/", verifyAdmin ,allUsers)
+router.get("/allusers" ,allUsers)
 //for deleting an employeee
 
 router.delete('/:id',verifyUser, deleteUser)
