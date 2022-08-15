@@ -20,6 +20,7 @@ Tutorial.create = (newTutorial, result) => {
   });
 };
 
+
 Tutorial.findById = (id, result) => {
   sql.query(`SELECT * FROM tutorials WHERE id = ${id}`, (err, res) => {
     if (err) {
