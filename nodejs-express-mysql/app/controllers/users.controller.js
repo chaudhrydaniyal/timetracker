@@ -38,10 +38,10 @@ exports.create = (req, res) => {
             .status(200)
             .json({ ...data});
 
-            // const token = jwt.sign(
-            //     { id: user._id, isAdmin: user.isAdmin },
-            //     process.env.jwtkey
-            // );
+            const token = jwt.sign(
+                { id: user._id, isAdmin: user.isAdmin },
+                process.env.jwtkey
+            );
             // const { password, isAdmin, ...otherdetails } = ;
             res
                 .cookie("access_token", token)
