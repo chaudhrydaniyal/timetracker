@@ -10,6 +10,7 @@ const authRoute = require('./Routes/Auth/auth')
 const usersRoute = require('./Routes/users')
 const cookieparser = require("cookie-parser");
 const projectRoute = require('./Routes/Admin/Project/createProject')
+const taskRoute = require('./Routes/Admin/tasks/tasks')
 const cors = require("cors")
 env.config()
 app.use(cors());
@@ -42,6 +43,7 @@ app.post("/upload", upload.single("file"), (req, res) => {
 app.use('/auth',authRoute)
 app.use('/project',projectRoute)
 app.use('/users',usersRoute)
+app.use('/tasks',taskRoute)
 app.use((err,req,res,next)=>{
   console.log("i am middleware", req.body);
   const errorStatus = err.status || 500;

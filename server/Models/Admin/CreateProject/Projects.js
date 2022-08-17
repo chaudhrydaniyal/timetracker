@@ -1,22 +1,23 @@
-const mongoose = require("mongoose")
-const projectSchema = mongoose.Schema({
+const mongoose = require('mongoose')
+const projectSchema = new mongoose.Schema({
 
     projectname:{
-        type:String,
-     
+        type:String
     },
     description:{
         type:String
     },
+    assignto:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Users'
+    },
     datestart:{
-        type:Date,
-       
+        type:Date
     },
     deadline:{
-       type:Date,
- 
+        type:Date
     }
 },{timestamps:true},)
 
-const Project = mongoose.model("Projects",projectSchema);
-module.exports = Project;
+const Projects = mongoose.model('Projects',projectSchema);
+module.exports = Projects
