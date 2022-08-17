@@ -12,7 +12,7 @@ const Sidebar = () => {
         {/* <!-- Brand Logo --> */}
         <Link to="/" className="brand-link">
           <img src={logo} alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{ opacity: .8 }} />
-          <span className="brand-text font-weight-light">Attendance System</span>
+          <span className="brand-text font-weight-light">Timesheet</span>
         </Link>
         {/* <!-- Sidebar --> */}
         <div className="sidebar">
@@ -61,12 +61,12 @@ const Sidebar = () => {
               </li>
               <li className="nav-item">
                 {/* <a  className="nav-link"> */}
-                <Link to={"attendance"} style={{textDecoration:"none"}} className="nav-link">
+                <Link to={"/dailytasks"} style={{textDecoration:"none"}} className="nav-link">
                 <i className="nav-icon fa-solid fa-user"></i>
                   
                 
                   <p>
-                    Employee Attendance
+                    Daily Tasks
                   </p>
                  
                    
@@ -85,21 +85,21 @@ const Sidebar = () => {
                 
               </li>
               <li className="nav-item">
-                <Link to="/calendar" className="nav-link">
+                <Link to="/projects" className="nav-link">
                 <i className=" nav-icon fa-solid fa-calendar-days"></i>
                  
                     <p>
-                     Calandar
+                     Projects
                     </p>
                   </Link>
                 
               </li>
               <li className="nav-item">
-                <Link to="/holidays" className="nav-link">
+                <Link to="/users" className="nav-link">
                   <i className="nav-icon  fa-solid fa-user"></i>
                  
                     <p>
-                      Holidays
+                      Users
                     </p>
                   </Link>
                 

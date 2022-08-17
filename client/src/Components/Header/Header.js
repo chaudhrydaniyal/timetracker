@@ -1,8 +1,24 @@
+import { Button } from 'mdbreact';
 import React from 'react'
+import { useContext } from "react";
+import {Context} from "../../Context/Context"
+import { useNavigate } from "react-router-dom";
+
+
 // import '../../dist/css/adminlte.min.css'
 // import 'font-awesome/css/font-awesome.min.css';
 
 const Header = () => {
+
+  const {user,dispatch} = useContext(Context)
+
+  const navigate = useNavigate()
+
+  const handleLogout = async () =>{
+    await dispatch({type:"LOGOUT"})
+     navigate("/")
+     
+ }
   return (
     <>
       <div className="wrapper">
@@ -24,6 +40,8 @@ const Header = () => {
           {/* <!-- Right navbar links --> */}
           <ul className="navbar-nav ml-auto">
             {/* <!-- Navbar Search --> */}
+
+           
             <li className="nav-item">
               <a className="nav-link" data-widget="navbar-search" href="/" role="button">
                 <i className="fas fa-search"></i>
@@ -103,8 +121,10 @@ const Header = () => {
                 <a href="/" className="dropdown-item dropdown-footer">See All Messages</a>
               </div>
             </li>
+
+            <li><Button onClick={handleLogout}>Logout</Button></li>
             {/* <!-- Notifications Dropdown Menu --> */}
-            <li className="nav-item dropdown">
+            {/* <li className="nav-item dropdown">
               <a className="nav-link" data-toggle="dropdown" href="/">
                 <i className="far fa-bell"></i>
                 <span className="badge badge-warning navbar-badge">15</span>
@@ -139,7 +159,7 @@ const Header = () => {
               <a className="nav-link" data-widget="control-sidebar" data-slide="true" href="/" role="button">
                 <i className="fas fa-th-large"></i>
               </a>
-            </li>
+            </li> */}
           </ul>
         </nav>
       </div>

@@ -2,7 +2,7 @@ import axios from "axios";
 import originURL from "../../url";
 
 
-const url =`${originURL}/api/login`
+const url =`${originURL}/auth/login`
 
 export const loginCall = async(userCredientials,dispatch) =>{
     dispatch({type:"LOGIN_START"});
