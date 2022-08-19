@@ -21,6 +21,7 @@ const AddUser = async(req,res,next) =>{
             role: req.body.role,
             joiningdate: req.body.joiningdate,
             profilepic: req.body.profilepic,
+            projects:req.body.projects,
             isAdmin:req.body.isAdmin
         })
         await newUser.save();

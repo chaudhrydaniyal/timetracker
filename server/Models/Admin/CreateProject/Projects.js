@@ -1,21 +1,20 @@
 const mongoose = require('mongoose')
-const projectSchema = new mongoose.Schema({
+const projectSchema =  new mongoose.Schema({
 
     projectname:{
-        type:String
+        type:String,
+        unique:true
     },
     description:{
         type:String
     },
-    assignto:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Users'
-    },
+    assignto:[{type:mongoose.Schema.Types.ObjectId, ref: 'Users' }]
+    ,
     datestart:{
-        type:Date
+        type:String
     },
     deadline:{
-        type:Date
+        type:String
     }
 },{timestamps:true},)
 

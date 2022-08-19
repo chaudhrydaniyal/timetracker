@@ -7,7 +7,7 @@ const {createError} = require('../Utils/Error/error')
 const singleUser = async(req,res,next)=>{
 
     try{
-         const find = await User.findById(req.body.id);
+         const find = await User.findById(req.body.id).populate('projects').exec();
         
         find && res.status(200).json({message:"sucessfully found user",find})
     }catch(error){
@@ -32,6 +32,8 @@ const deleteUser = async (req,res,next)=>{
  const updateUser = async (req,res,next)=>{
     try {
         const find = await User.findById(req.body.id);
+       
+        console.log("find",find)
         if(!find){
             next(createError(404,"User not found"))
         }

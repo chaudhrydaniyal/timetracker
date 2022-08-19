@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 const taskSchema = mongoose.Schema({
 
    date:{
-      type:Date,
+      type:String,
    },
    title:{
     type:String,
@@ -10,10 +10,20 @@ const taskSchema = mongoose.Schema({
    description:{
     type:String
    },
-   selectProject:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:'Projects'
+   startTime:{
+      type:String
    },
+   endTime:{
+      type:String
+   },
+   // selectProject:{
+   //  type:mongoose.Schema.Types.ObjectId,
+   //  ref:'Projects'
+   // },
+   // addedby:{
+   //    type:mongoose.Schema.Types.ObjectId,
+   //    ref:'Users'
+   // },
 
 },{timestamps:true},)
 

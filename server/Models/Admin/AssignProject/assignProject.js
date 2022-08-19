@@ -5,9 +5,7 @@ const assignprojectSchema = mongoose.Schema({
     type:mongoose.Schema.Types.ObjectId,
     ref:'Projects'
    },
-   assignTo:{
-      references: { type: [Schema.Types.ObjectId], refPath: 'Users' },
-   },
+   assignTo: [{type:mongoose.Schema.Types.ObjectId, ref: 'Users' }],
    assignBy:{
      type:mongoose.Schema.Types.ObjectId,
      ref:'Users'
