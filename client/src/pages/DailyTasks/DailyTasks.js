@@ -61,8 +61,6 @@ const DailyTasks = () => {
     const item = useLocation();
 
 
-    console.log("testvalue", item)
-
     const propDetail = item.state || {}
 
     useEffect(() => {
@@ -329,14 +327,28 @@ const DailyTasks = () => {
                                             <Modal.Title>Add Task</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
-                                            <label for="birthday">Date:</label>
+                                            <label >Date:</label>
 
-                                            <input type="date" id="birthday" name="birthday" />
+                                            <input type="date" defaultValue="2014-02-09" />
                                             <br /><br />
                                             <input placeholder="Task title" style={{ width: "80%" }} onChange={(e) => setUserName(e.target.value)}></input>
                                             <br /><br />
                                             <input placeholder="Task Description" style={{ width: "80%" }} onChange={(e) => setUserName(e.target.value)}></input>
                                             <br /><br />
+
+                                            <div className="d-flex">
+
+                                                <label for="appt">Start Time: &nbsp;</label>
+                                                <input type="time" id="appt" name="appt"></input>
+
+                                                &nbsp;&nbsp;
+                                                <label for="appt">End Time:&nbsp;</label>
+                                                <input type="time" id="appt" name="appt"></input>
+
+                                            </div>
+
+                                            <br /><br />
+
                                             <select name="cars" id="cars">
                                                 <option value="volvo">Project 1</option>
                                                 <option value="saab">Project 2</option>

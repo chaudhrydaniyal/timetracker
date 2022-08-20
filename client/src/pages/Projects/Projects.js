@@ -71,7 +71,7 @@ const Projects = () => {
 
 
     useEffect(() => {
-        axios.get(`${originURL}/project/allprojects`).then((res) => {
+        axios.get(`${originURL}/projects/allprojects`).then((res) => {
             setProjects(res.data.get);
         });
 
@@ -362,7 +362,7 @@ const Projects = () => {
                                             </Button>
                                             <Button variant="primary" onClick={() => {
                                                 try {
-                                                    axios.post(`${originURL}/project/addproject`, {
+                                                    axios.post(`${originURL}/projects/addproject`, {
                                                         projectname: projectName,
                                                         description: projectDescription
                                                     })

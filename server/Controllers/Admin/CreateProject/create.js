@@ -7,7 +7,7 @@ const AddProject = async (req, res, next) => {
     const add = new Projects({
       projectname: req.body.projectname,
       description: req.body.description,
-      assignto: req.body.assignTo,
+      assignTo: req.body.assignTo,
       datestart: req.body.datestart,
       deadline: req.body.deadline,
     });
@@ -30,45 +30,14 @@ const assign = async(req,res,next) =>{
    }
 }
 const updateProject = async (req, res, next) => {
+  
   try {
 
-
-    const update =  await Projects.findByIdAndUpdate(
+    return Projects.findByIdAndUpdate(
       req.params.id,
-      { $push: { assignto: req.body.assignto } },
+      { $push: { assignTo: req.body.assignTo } },
       { new: true, useFindAndModify: false }
     );
-
-
-    // const find = await Projects.findById(req.params.id);
-    // console.log(find)
-
-
-    // if (!find) {
-    //   next(createError(404, "project not found"));
-    // }
-
-
-    // console.log( 
-    //   find.assignto.indexOf(req.body.assignto))
-    // if (find.assignto.length > 0){
-    //   find.assignto.indexOf(req.body.assignto) >= 0 &&   console.log("already exists")
-    //   find.assignto.indexOf(req.body.assignto) === -1 &&  find.assignto.push(req.body.assignto);
-    // }else{
-    //   find.assignto.push(req.body.assignto);
-    // }
-   
-
-    // const update = await Projects.updateOne(
-    //   { _id : req.params.id },
-    //   { $addToSet: { assignto: req.body.assignto } },
-
-    //   {}
-      
-    //   );
-
-    update && res.status(200).json({ message: "success", update });
-
 
   } catch (error) {
 
@@ -84,7 +53,7 @@ const updateProject = async (req, res, next) => {
 
 const single = async(req,res,next) =>{
       try{
-             const finduser  = await Projects.find({assignto:req.params.id});
+             const finduser  = await Projects.find({assignTo:req.params.id});
              if(!finduser){
               next(createError(404,"not found"))
              }
@@ -98,7 +67,7 @@ const single = async(req,res,next) =>{
 
 const getAll = async (req, res, next) => {
   try {
-    const get = await Projects.find().populate("assignto").exec();
+    const get = await Projects.find().populate("assignTo").exec();
     get && res.status(200).json({ message: "All Projects", get });
   } catch (error) {
     next(error);

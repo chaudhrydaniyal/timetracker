@@ -269,7 +269,7 @@ const Users = () => {
                 <TableCell align="left">{username}</TableCell>
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
                 <TableCell align="left">  {role}</TableCell>
-                <TableCell align="left">{updatedAt.slice(0, 25)}</TableCell>
+                {/* <TableCell align="left">{updatedAt.slice(0, 25)}</TableCell> */}
            
                 <TableCell align="right">
                     <Link
