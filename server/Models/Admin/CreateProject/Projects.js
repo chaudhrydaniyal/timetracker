@@ -36,7 +36,7 @@ const projects = mongoose.model(
         ref: "user"
       }
     ]
-  })
+  },{timestamps:true})
 );
 
 module.exports = projects;

@@ -19,60 +19,61 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Modal from 'react-bootstrap/Modal';
 import { useLocation, useParams } from 'react-router-dom';
-
-
 import { visuallyHidden } from "@mui/utils";
 import { Link } from "react-router-dom";
-
-
-
-// import { Dropdown, ButtonGroup, Button } from "@themesberg/react-bootstrap";
-
-// import { Card } from "@themesberg/react-bootstrap";
-
 import { useEffect, useState } from "react";
-
 import axios from "axios";
 import { Container } from "react-bootstrap";
 import originURL from "../../url";
 import { Button } from "@mui/material";
 
+var moment = require('moment'); // require
+
+
+
 const DailyTasks = () => {
+
     const [requestedProperties, setRequestedProperties] = useState([]);
-
-
+    const [tasks, setTasks] = useState([]);
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("name");
-
     const [filteredRequestedProperties, setFilteredRequestedProperties] = useState("");
-
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-
-    const [userName, setUserName] = useState("");
-
+    const [projects, setProjects] = useState("")
+    const [taskTitle, setTaskTitle] = useState("");
+    const [taskDescription, setTaskDescription] = useState("");
+    const [taskDate, setTaskDate] = useState( moment(new Date).format("YYYY-MM-DD"));
+    const [taskStartTime, setTaskStartTime] = useState("");
+    const [taskEndTime, setTaskEndTime] = useState("");
+    const [taskProject, setTaskProject] = useState("");
     const [show, setShow] = useState(false);
+    const [update, setUpdate] = useState(false);
+
+
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+
     const item = useLocation();
-
-
     const propDetail = item.state || {}
 
     useEffect(() => {
-        axios.get(`${originURL}/properties/requestproperty`).then((res) => {
-            setRequestedProperties(res.data.getQuerries);
+
+        axios.get(`${originURL}/tasks/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+            setTasks(res.data.task);
+        });
+
+        axios.get(`${originURL}/projects/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+            setProjects(res.data.finduser);
         });
 
 
-    }, []);
+    }, [update]);
 
 
-    console.log("reqprop", requestedProperties)
 
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
@@ -105,10 +106,7 @@ const DailyTasks = () => {
             return a[1] - b[1];
         });
 
-        console.log(
-            "stabilizedThis",
-            stabilizedThis.map((el) => el[0])
-        );
+     
 
         return stabilizedThis.map((el) => el[0]);
     }
@@ -129,14 +127,18 @@ const DailyTasks = () => {
             extended: true,
         },
         {
-            id: "Projects",
+            id: "Start_Time",
             numeric: false,
             disablePadding: false,
-            label: "Project(s)",
+            label: "Start Time",
 
         },
-
-
+        {
+            id: "End_Time",
+            numeric: true,
+            disablePadding: false,
+            label: "End Time",
+        },
         {
             id: "Details",
             numeric: true,
@@ -217,10 +219,10 @@ const DailyTasks = () => {
     // Avoid a layout jump when reaching the last page with empty rows.
 
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - requestedProperties.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tasks.length) : 0;
 
     const TableRowCustom = (props) => {
-        const { _id, Title, DetailLocation, updatedAt, Type } = props;
+        const { _id,date, title, startTime, endTime } = props;
 
         const labelId = props.labelId;
         const index = props.index
@@ -251,17 +253,18 @@ const DailyTasks = () => {
                 selected={isItemSelected}
             >
 
-                <TableCell align="left">{rowsPerPage * page + index + 1}</TableCell>
+                {/* <TableCell align="left">{rowsPerPage * page + index + 1}</TableCell> */}
+                <TableCell align="left">{date}</TableCell>
 
-                <TableCell align="left">{Title}</TableCell>
+                <TableCell align="left">{title}</TableCell>
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
-                <TableCell align="left">{DetailLocation}</TableCell>
-                <TableCell align="right">{updatedAt.slice(0, 25)}</TableCell>
-                <TableCell align="right">
+                <TableCell align="left">{startTime}</TableCell>
+                <TableCell align="right">{endTime}</TableCell>
+                {/* <TableCell align="right">
 
                     {Type}
 
-                </TableCell>
+                </TableCell> */}
 
                 <TableCell align="right">
                     <Link
@@ -304,6 +307,7 @@ const DailyTasks = () => {
                                         <input
                                             id="tableSearch"
                                             onChange={(e) => {
+                                                console.log("projects",projects)
                                                 setFilteredRequestedProperties(e.target.value);
                                             }}
                                             className="form-control "
@@ -322,39 +326,45 @@ const DailyTasks = () => {
                                         <label>{propDetail.propertyType} Add User</label>      <Button style={{ marginLeft: "auto" }} variant="success" onClick={handleShow}>Add Today's Task</Button>{' '}
                                     </div>
                                     <br />
-                                    <Modal style={{ marginTop: "30vh" }} show={show} onHide={handleClose} animation={false}>
+                                    <Modal style={{ marginTop: "20vh" }} show={show} onHide={handleClose} animation={false}>
                                         <Modal.Header closeButton>
                                             <Modal.Title>Add Task</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
-                                            <label >Date:</label>
 
-                                            <input type="date" defaultValue="2014-02-09" />
+                                            <label >Date:</label>
+                                            <input type="date" defaultValue={ moment(new Date).format("YYYY-MM-DD")} onChange={(e)=>{
+                    
+                                                setTaskDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
+                                            
+                                            }                                          
+                                            } 
+                                                
+                                                />
+
                                             <br /><br />
-                                            <input placeholder="Task title" style={{ width: "80%" }} onChange={(e) => setUserName(e.target.value)}></input>
+                                            
+                                            <input placeholder="Task title" style={{ width: "80%" }} onChange={(e) => setTaskTitle(e.target.value)}></input>
                                             <br /><br />
-                                            <input placeholder="Task Description" style={{ width: "80%" }} onChange={(e) => setUserName(e.target.value)}></input>
+                                            
+                                            <textarea placeholder="Task Description" style={{ width: "80%" }} onChange={(e) => setTaskDescription(e.target.value)}></textarea>
                                             <br /><br />
 
                                             <div className="d-flex">
-
                                                 <label for="appt">Start Time: &nbsp;</label>
-                                                <input type="time" id="appt" name="appt"></input>
-
+                                                <input type="time" id="appt" name="appt" onChange={(e) => setTaskStartTime(e.target.value)}></input>
                                                 &nbsp;&nbsp;
                                                 <label for="appt">End Time:&nbsp;</label>
-                                                <input type="time" id="appt" name="appt"></input>
-
+                                                <input type="time" id="appt" name="appt" onChange={(e) => setTaskEndTime(e.target.value)}></input>
                                             </div>
-
                                             <br /><br />
+                                            
+                                            <select onClick={(e) => { setTaskProject(e.target.value) }} style={{width:"70%"}}>
 
-                                            <select name="cars" id="cars">
-                                                <option value="volvo">Project 1</option>
-                                                <option value="saab">Project 2</option>
-                                                <option value="mercedes">Project 3</option>
-                                                <option value="audi">Project 4</option>
+                                                {projects && projects.map((p) => (<option value={`${p._id}`}>{p.projectname}</option>))}
+
                                             </select>
+
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <Button variant="secondary" onClick={handleClose}>
@@ -362,14 +372,23 @@ const DailyTasks = () => {
                                             </Button>
                                             <Button variant="primary" onClick={() => {
                                                 try {
-                                                    axios.post(`${originURL}/addproperty/propertysubtype`, {
-                                                        propertysubtype: userName,
-                                                        addedIn: propDetail._id
+                                                    axios.post(`${originURL}/tasks/addtask`, {
+
+                                                        date:taskDate,
+                                                        title:taskTitle,
+                                                        description:taskDescription,
+                                                        selectProject:taskProject,
+                                                        startTime:taskStartTime,
+                                                        endTime:taskEndTime,
+                                                        addedby:JSON.parse(localStorage.getItem("user")).details._id
                                                     })
 
 
 
                                                     handleClose()
+
+                                                    setUpdate(!update)
+
                                                 } catch (err) {
                                                     console.log(err)
                                                 }
@@ -396,22 +415,18 @@ const DailyTasks = () => {
                                         rowCount={5}
                                     />
                                     <TableBody>
-                                        {stableSort(requestedProperties, getComparator(order, orderBy))
+                                        {stableSort(tasks, getComparator(order, orderBy))
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((b, index) => {
                                                 const labelId = `enhanced-table-checkbox-${index}`;
-
-
-
-
                                                 return (
-                                                    (b.Title
+                                                    (b.title
                                                         .toLowerCase()
                                                         .includes(filteredRequestedProperties.toLowerCase()) ||
-                                                        b.fullname.toLowerCase().includes(
+                                                        b.description.toLowerCase().includes(
                                                             filteredRequestedProperties.toLowerCase()
                                                         ) ||
-                                                        b.DetailLocation
+                                                        b.date
                                                             .toLowerCase()
                                                             .includes(filteredRequestedProperties.toLowerCase())) && (
                                                         <TableRowCustom
@@ -443,7 +458,7 @@ const DailyTasks = () => {
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25]}
                                 component="div"
-                                count={requestedProperties.length}
+                                count={tasks.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
                                 onPageChange={handleChangePage}

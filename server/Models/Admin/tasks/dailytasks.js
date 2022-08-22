@@ -16,14 +16,14 @@ const taskSchema = mongoose.Schema({
    endTime:{
       type:String
    },
-   // selectProject:{
-   //  type:mongoose.Schema.Types.ObjectId,
-   //  ref:'Projects'
-   // },
-   // addedby:{
-   //    type:mongoose.Schema.Types.ObjectId,
-   //    ref:'Users'
-   // },
+   selectProject:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'projects'
+   },
+   addedby:{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:'user'
+   },
 
 },{timestamps:true},)
 

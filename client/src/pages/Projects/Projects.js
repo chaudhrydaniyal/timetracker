@@ -61,6 +61,7 @@ const Projects = () => {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [update, setUpdate] = useState(false);
 
     const item = useLocation();
 
@@ -76,7 +77,7 @@ const Projects = () => {
         });
 
 
-    }, []);
+    }, [update]);
 
 
     console.log("reqprop", requestedProperties)
@@ -135,13 +136,7 @@ const Projects = () => {
             label: "Title",
             extended: true,
         },
-        {
-            id: "assignedTo",
-            numeric: false,
-            disablePadding: false,
-            label: "Assigned To",
-
-        },
+   
         {
             id: "dateStarted",
             numeric: true,
@@ -237,7 +232,7 @@ const Projects = () => {
     // Avoid a layout jump when reaching the last page with empty rows.
 
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - requestedProperties.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - projects.length) : 0;
 
     const TableRowCustom = (props) => {
         console.log("table",props)
@@ -276,8 +271,8 @@ const Projects = () => {
 
                 <TableCell align="left">{projectname}</TableCell>
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
-                <TableCell align="left"></TableCell>
-                <TableCell align="right">{updatedAt.slice(0, 25)}</TableCell>
+                <TableCell align="left">{updatedAt}</TableCell>
+                {/* <TableCell align="right">{updatedAt.slice(0, 25)}</TableCell> */}
                 <TableCell align="right">
 
                 {description}
@@ -370,6 +365,8 @@ const Projects = () => {
 
 
                                                     handleClose()
+                                                    setUpdate(!update)
+
                                                 } catch (err) {
                                                     console.log(err)
                                                 }
@@ -443,7 +440,7 @@ const Projects = () => {
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25]}
                                 component="div"
-                                count={requestedProperties.length}
+                                count={projects.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
                                 onPageChange={handleChangePage}

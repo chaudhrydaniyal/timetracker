@@ -54,6 +54,7 @@ const Users = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
+    const [update, setUpdate] = useState(false);
 
 
     const [show, setShow] = useState(false);
@@ -74,7 +75,7 @@ const Users = () => {
         });
 
 
-    }, []);
+    }, [update]);
 
 
     console.log("reqprop", users)
@@ -142,13 +143,7 @@ const Users = () => {
 
 
         },
-        {
-            id: "Current_Projects",
-            numeric: false,
-            disablePadding: false,
-            label: "Current Projects",
-            extended: true,
-        },
+   
 
         {
             id: "actions",
@@ -360,6 +355,8 @@ const Users = () => {
 
 
                                                     handleClose()
+                                                    setUpdate(!update)
+
                                                 } catch (err) {
                                                     console.log(err)
                                                 }

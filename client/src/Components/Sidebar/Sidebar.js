@@ -49,20 +49,11 @@ const Sidebar = () => {
                   </p>
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link to="/allemployees" className="nav-link">
-                  <i className="nav-icon fa-solid fa-user"></i>
-                 
-                    <p>
-                      Employees
-                    </p>
-                  </Link>
-                
-              </li>
+        
               <li className="nav-item">
                 {/* <a  className="nav-link"> */}
                 <Link to={"/dailytasks"} style={{textDecoration:"none"}} className="nav-link">
-                <i className="nav-icon fa-solid fa-user"></i>
+                <i className="nav-icon fa-solid fa-tasks"></i>
                   
                 
                   <p>
@@ -74,19 +65,10 @@ const Sidebar = () => {
                 {/* </a> */}
                 
               </li>
-              <li className="nav-item">
-                <Link to="/leaves" className="nav-link">
-                  <i className="nav-icon fa-solid fa-user"></i>
-                 
-                    <p>
-                      Employee Leaves
-                    </p>
-                  </Link>
-                
-              </li>
+   
               <li className="nav-item">
                 <Link to="/projects" className="nav-link">
-                <i className=" nav-icon fa-solid fa-calendar-days"></i>
+                <i className=" nav-icon fa-solid fa-file"></i>
                  
                     <p>
                      Projects
@@ -104,16 +86,7 @@ const Sidebar = () => {
                   </Link>
                 
               </li>
-              <li className="nav-item">
-                <Link to="/datamanagement" className="nav-link">
-                  <i className="nav-icon  fa-solid fa-user"></i>
-                 
-                    <p>
-                      Data Management
-                    </p>
-                  </Link>
-                
-              </li>
+ 
               
               
             </ul>
