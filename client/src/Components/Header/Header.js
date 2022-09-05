@@ -1,7 +1,7 @@
 import { Button } from 'mdbreact';
 import React from 'react'
 import { useContext } from "react";
-import {Context} from "../../Context/Context"
+import { Context } from "../../Context/Context"
 import { useNavigate } from "react-router-dom";
 
 
@@ -10,15 +10,15 @@ import { useNavigate } from "react-router-dom";
 
 const Header = () => {
 
-  const {user,dispatch} = useContext(Context)
+  const { user, dispatch } = useContext(Context)
 
   const navigate = useNavigate()
 
-  const handleLogout = async () =>{
-    await dispatch({type:"LOGOUT"})
-     navigate("/")
-     
- }
+  const handleLogout = async () => {
+    await dispatch({ type: "LOGOUT" })
+    navigate("/")
+
+  }
   return (
     <>
       <div className="wrapper">
@@ -38,10 +38,10 @@ const Header = () => {
           </ul>
 
           {/* <!-- Right navbar links --> */}
-          <ul className="navbar-nav ml-auto">
+          <ul className="navbar-nav ml-auto mr-5">
             {/* <!-- Navbar Search --> */}
 
-           
+
             <li className="nav-item">
               <a className="nav-link" data-widget="navbar-search" href="/" role="button">
                 <i className="fas fa-search"></i>
@@ -65,10 +65,10 @@ const Header = () => {
 
             {/* <!-- Messages Dropdown Menu --> */}
             <li className="nav-item dropdown">
-              <a className="nav-link" data-toggle="dropdown" href="/">
+              {/* <a className="nav-link" data-toggle="dropdown" href="/">
                 <i className="far fa-comments"></i>
                 <span className="badge badge-danger navbar-badge">3</span>
-              </a>
+              </a> */}
               <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <a href="/" className="dropdown-item">
                   {/* <!-- Message Start --> */}

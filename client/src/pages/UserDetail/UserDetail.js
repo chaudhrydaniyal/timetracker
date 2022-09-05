@@ -119,14 +119,14 @@ const UserDetail = () => {
             label: "No.",
         },
         {
-            id: "Project_Name",
+            id: "projectname",
             numeric: false,
             disablePadding: false,
             label: "Project Name",
             extended: true,
         },
         {
-            id: "Description",
+            id: "description",
             numeric: false,
             disablePadding: false,
             label: "Description",
@@ -189,28 +189,28 @@ const UserDetail = () => {
 
     const headCellsForTimesheet = [
         {
-            id: "Date",
+            id: "date",
             numeric: false,
             disablePadding: false,
             label: "Date",
         },
 
         {
-            id: "Tasks",
+            id: "title",
             numeric: false,
             disablePadding: false,
             label: "Tasks",
             extended: true,
         },
         {
-            id: "Start_Time",
+            id: "startTime",
             numeric: false,
             disablePadding: false,
             label: "Start Time",
 
         },
         {
-            id: "End_Time",
+            id: "endTime",
             numeric: true,
             disablePadding: false,
             label: "End Time",
@@ -281,9 +281,11 @@ const UserDetail = () => {
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
+
     };
 
     const handleChangePageForTimesheet = (event, newPage) => {
+
         setPageForTimesheet(newPage);
     };
 
@@ -348,13 +350,13 @@ const UserDetail = () => {
 
                 <TableCell align="right">
                     <Link
-                        to="/users/userdetail"
+                        to="/projects/projectdetail"
                         state={{
                             item: props
                         }}
                         style={{ textDecoration: "none" }}
                     >
-                        <Button variant="success">Details</Button>
+                        <Button style={{ backgroundColor: "gray", color: "white", fontWeight: "500" }} variant="success">Details</Button>
                     </Link>
                 </TableCell>
             </TableRow>
@@ -363,7 +365,7 @@ const UserDetail = () => {
 
 
     const TableRowCustomForTimesheet = (props) => {
-        const { _id,date, title, startTime, endTime } = props;
+        const { _id, date, title, startTime, endTime } = props;
 
         const labelId = props.labelId;
         const index = props.index
@@ -413,8 +415,10 @@ const UserDetail = () => {
                         state={{
                             item: props
                         }}
+                        style={{ textDecoration: "none" }}
+
                     >
-                        <Button variant="success">Details</Button>
+                        <Button style={{ backgroundColor: "gray", color: "white", fontWeight: "500" }} variant="success">Details</Button>
                     </Link>
                 </TableCell>
             </TableRow>
@@ -423,10 +427,10 @@ const UserDetail = () => {
 
     return (
         <>
-            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', paddingTop: "50px" }}>
+            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', height: "90vh", paddingTop: "50px" }}>
                 <Container style={{ marginTop: "20px", marginBottom: "80px" }}>
                     <Box sx={{ width: "95%" }}>
-                        <Paper className="p-4" sx={{ width: "100%", mb: 2 }}>
+                        <Paper sx={{ width: "100%", mb: 2, padding: "30px", paddingBottom: "70px" }}>
 
                             <span>{propDetail.use}</span>
                             <TableContainer >
@@ -460,9 +464,10 @@ const UserDetail = () => {
                                             }}
                                         ></input>
                                     </div>
-                                    <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
-                                        <label>{propDetail.propertyType} </label>      <Button style={{ marginLeft: "auto" }} variant="success" onClick={handleShow}>Assign Project</Button>{' '}
-                                    </div>
+                                    {JSON.parse(localStorage.getItem("user")).isAdmin &&
+                                        <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
+                                            <Button style={{ marginLeft: "auto", backgroundColor: "#ff9b44", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Assign Project</Button>{' '}
+                                        </div>}
                                     <br />
                                     <Modal style={{ marginTop: "30vh" }} show={show} onHide={handleClose} animation={false}>
                                         <Modal.Header closeButton>
@@ -490,10 +495,14 @@ const UserDetail = () => {
                                             <br />
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <Button variant="secondary" onClick={handleClose}>
+                                            <Button style={{ marginLeft: "auto", backgroundColor: "gray", color: "white", fontWeight: "700" }} variant="secondary" onClick={handleClose}>
                                                 Close
                                             </Button>
-                                            <Button variant="primary" onClick={() => {
+
+                                            &nbsp;&nbsp;
+
+
+                                            <Button style={{ backgroundColor: "#ff9b44", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
                                                 try {
                                                     axios.put(`${originURL}/projects/assignproject/${assignedProject}`, {
 
@@ -507,7 +516,7 @@ const UserDetail = () => {
                                                     console.log(err)
                                                 }
                                             }}>
-                                                Add User
+                                                Assign Project
                                             </Button>
                                         </Modal.Footer>
                                     </Modal>
@@ -635,7 +644,7 @@ const UserDetail = () => {
                                         {
 
                                             stableSort(tasks, getComparator(order, orderBy))
-                                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                .slice(pageForTimesheet * rowsPerPageForTimesheet, pageForTimesheet * rowsPerPageForTimesheet + rowsPerPageForTimesheet)
                                                 .map((b, index) => {
                                                     const labelId = `enhanced-table-checkbox-${index}`;
                                                     return (
@@ -653,8 +662,8 @@ const UserDetail = () => {
                                                                 {...b}
                                                                 labelId={labelId}
                                                                 index={index}
-                                                                rowsPerPage={rowsPerPage}
-                                                                page={page}
+                                                                rowsPerPage={rowsPerPageForTimesheet}
+                                                                page={pageForTimesheet}
                                                             />
                                                         )
                                                     );

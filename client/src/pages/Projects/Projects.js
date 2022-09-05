@@ -18,24 +18,18 @@ import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Modal from 'react-bootstrap/Modal';
-
-
 import { visuallyHidden } from "@mui/utils";
 import { Link } from "react-router-dom";
-
 import { useLocation, useParams } from 'react-router-dom';
-
-
-// import { Dropdown, ButtonGroup, Button } from "@themesberg/react-bootstrap";
-
-// import { Card } from "@themesberg/react-bootstrap";
-
 import { useEffect, useState } from "react";
-
 import axios from "axios";
 import { Container } from "react-bootstrap";
 import originURL from "../../url";
 import { Button } from "@mui/material";
+
+
+var moment = require('moment'); // require
+
 
 const Projects = () => {
     const [requestedProperties, setRequestedProperties] = useState([]);
@@ -55,8 +49,12 @@ const Projects = () => {
     const [projectDescription, setProjectDescription] = useState("");
 
     const [projects, setProjects] = useState([]);
+    const [projectStartDate, setProjectStartDate] = useState("");
+    const [projectEndDate, setProjectEndDate] = useState("");
 
+    const [allocatedWorkingDays, setAllocatedWorkingDays] = useState("");
 
+    
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -67,7 +65,7 @@ const Projects = () => {
 
 
     console.log("testvalue", item)
-  
+
     const propDetail = item.state || {}
 
 
@@ -130,22 +128,24 @@ const Projects = () => {
         },
 
         {
-            id: "title",
+            id: "projectname",
             numeric: false,
             disablePadding: false,
             label: "Title",
             extended: true,
         },
-   
+
         {
-            id: "dateStarted",
-            numeric: true,
+            id: "datestart",
+            numeric: false,
             disablePadding: false,
             label: "Date Started",
+            extended: true,
+
         },
-     
+
         {
-            id: "Description",
+            id: "description",
             numeric: true,
             disablePadding: false,
             label: "Description",
@@ -235,8 +235,8 @@ const Projects = () => {
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - projects.length) : 0;
 
     const TableRowCustom = (props) => {
-        console.log("table",props)
-        const { _id, projectname, description, updatedAt, createdAt } = props;
+        console.log("table", props)
+        const { _id, projectname, description, updatedAt, createdAt ,datestart} = props;
 
         const labelId = props.labelId;
         const index = props.index
@@ -271,11 +271,11 @@ const Projects = () => {
 
                 <TableCell align="left">{projectname}</TableCell>
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
-                <TableCell align="left">{updatedAt}</TableCell>
+                <TableCell align="left">{datestart}</TableCell>
                 {/* <TableCell align="right">{updatedAt.slice(0, 25)}</TableCell> */}
                 <TableCell align="right">
 
-                {description}
+                    {description}
 
                 </TableCell>
 
@@ -285,9 +285,9 @@ const Projects = () => {
                         state={{
                             item: props
                         }}
-                        style={{textDecoration:"none"}}
+                        style={{ textDecoration: "none" }}
                     >
-                        <Button >Details</Button>
+                        <Button style={{ backgroundColor:"gray", color:"white",fontWeight:"500"  }} >Details</Button>
                     </Link>
                 </TableCell>
             </TableRow>
@@ -297,10 +297,8 @@ const Projects = () => {
     return (
         <>
 
-            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7' , paddingTop:"50px"  }}>
-
+            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', height:"90vh" , paddingTop: "50px" }}>
                 <Container style={{ marginTop: "20px", marginBottom: "50px" }}>
-
                     <Box sx={{ width: "95%" }}>
                         <Paper className="p-4" sx={{ width: "100%", mb: 2 }}>
                             <TableContainer >
@@ -334,12 +332,15 @@ const Projects = () => {
                                             }}
                                         ></input>
                                     </div>
-                                    <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
 
-                                        <label>{propDetail.propertyType} Add Project</label>      <Button style={{ marginLeft: "auto" }} variant="success" onClick={handleShow}>Add Project</Button>{' '}
-                                    </div>
+
+                                    {
+                                    JSON.parse(localStorage.getItem("user")).isAdmin &&
+                                    <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
+                                            <Button style={{ marginLeft: "auto" , backgroundColor:"#ff9b44", color:"white", fontWeight:"700"}} variant="success" onClick={handleShow}>Add Project</Button>{' '}
+                                    </div>}
                                     <br />
-                                    <Modal style={{ marginTop: "30vh" }} show={show} onHide={handleClose} animation={false}>
+                                    <Modal style={{ marginTop: "20vh" }} show={show} onHide={handleClose} animation={false}>
                                         <Modal.Header closeButton>
                                             <Modal.Title>Add another Project</Modal.Title>
                                         </Modal.Header>
@@ -347,22 +348,37 @@ const Projects = () => {
                                             <input placeholder="Project name" style={{ width: "80%" }} onChange={(e) => setProjectName(e.target.value)}></input>
                                             <br /><br />
 
-                                            <textarea placeholder="Description" style={{ width: "80%" }} onChange={(e) => setProjectDescription(e.target.value)}></textarea>
-                                           
+                                            <label >Start Date:</label> &nbsp;
+                                            <input type="date" defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
+                                                setProjectStartDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
+                                            }}
+                                            />
+                                            <br /><br />
 
+                                            <label >Estimated End Date:</label> &nbsp;
+                                            <input type="date" defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
+                                                setProjectEndDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
+                                            }}
+                                            />
+                                            <br /><br />
+
+                                            <input placeholder="Allocated Working Days" type="number" style={{ width: "80%" }} onChange={(e) => setAllocatedWorkingDays(e.target.value)}></input>
+                                            <br /><br />
+                                    
+                                            <textarea placeholder="Description" style={{ width: "80%" }} onChange={(e) => setProjectDescription(e.target.value)}></textarea>
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <Button variant="secondary" onClick={handleClose}>
+                                            <Button style={{ marginLeft: "auto", backgroundColor:"gray", color:"white", fontWeight:"700" }} variant="secondary" onClick={handleClose}>
                                                 Close
                                             </Button>
-                                            <Button variant="primary" onClick={() => {
+                                            &nbsp; &nbsp;
+                                            <Button style={{ backgroundColor:"#ff9b44", color:"white", fontWeight:"700" }} variant="primary" onClick={() => {
                                                 try {
                                                     axios.post(`${originURL}/projects/addproject`, {
                                                         projectname: projectName,
-                                                        description: projectDescription
+                                                        description: projectDescription,
+                                                        datestart:moment(new Date).format("dddd, MMMM Do YYYY")
                                                     })
-
-
 
                                                     handleClose()
                                                     setUpdate(!update)
@@ -397,10 +413,6 @@ const Projects = () => {
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((b, index) => {
                                                 const labelId = `enhanced-table-checkbox-${index}`;
-
-
-
-
                                                 return (
                                                     (b.projectname
                                                         .toLowerCase()

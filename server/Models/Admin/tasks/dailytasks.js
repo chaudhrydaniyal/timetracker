@@ -24,6 +24,9 @@ const taskSchema = mongoose.Schema({
       type:mongoose.Schema.Types.ObjectId,
       ref:'user'
    },
+   projectPhase:{
+      type:String
+   }
 
 },{timestamps:true},)
 

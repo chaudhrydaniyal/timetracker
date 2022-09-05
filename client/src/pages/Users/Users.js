@@ -19,19 +19,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Modal from 'react-bootstrap/Modal';
 import { useLocation, useParams } from 'react-router-dom';
-
-
 import { visuallyHidden } from "@mui/utils";
 import { Link } from "react-router-dom";
-
-
-
-// import { Dropdown, ButtonGroup, Button } from "@themesberg/react-bootstrap";
-
-// import { Card } from "@themesberg/react-bootstrap";
-
 import { useEffect, useState } from "react";
-
 import axios from "axios";
 import { Container } from "react-bootstrap";
 import originURL from "../../url";
@@ -39,46 +29,38 @@ import { Button } from "@mui/material";
 
 const Users = () => {
     const [users, setUsers] = useState([]);
-
-
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("name");
-
     const [filteredRequestedProperties, setFilteredRequestedProperties] = useState("");
-
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
     const [update, setUpdate] = useState(false);
-
-
     const [show, setShow] = useState(false);
+
+
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+
     const item = useLocation();
 
-
-    console.log("testvalue", item)
 
     const propDetail = item.state || {}
 
     useEffect(() => {
+
         axios.get(`${originURL}/users/allusers`).then((res) => {
             setUsers(res.data.users);
         });
 
-
     }, [update]);
 
 
-    console.log("reqprop", users)
 
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
@@ -90,34 +72,35 @@ const Users = () => {
         return 0;
     }
 
-    function getComparator(order, orderBy) {
 
+    function getComparator(order, orderBy) {
         return order === "desc"
             ? (a, b) => descendingComparator(a, b, orderBy)
             : (a, b) => -descendingComparator(a, b, orderBy);
     }
 
-    // This method is created for cross-browser compatibility, if you don't
-    // need to support IE11, you can use Array.prototype.sort() directly
+
     function stableSort(array, comparator) {
         const stabilizedThis = array.map((el, index) => [el, index]);
         stabilizedThis.sort((a, b) => {
             const order = comparator(a[0], b[0]);
-
-
             if (order !== 0) {
                 return order;
             }
             return a[1] - b[1];
         });
-
-        console.log(
-            "stabilizedThis",
-            stabilizedThis.map((el) => el[0])
-        );
-
         return stabilizedThis.map((el) => el[0]);
     }
+
+
+    const handleRequestSort = (event, property) => {
+        const isAsc = orderBy === property && order === "asc";
+        setOrder(isAsc ? "desc" : "asc");
+        setOrderBy(property);
+    };
+
+
+
 
     const headCells = [
         {
@@ -126,16 +109,15 @@ const Users = () => {
             disablePadding: false,
             label: "No.",
         },
-
         {
-            id: "Name",
+            id: "username",
             numeric: false,
             disablePadding: false,
             label: "Name",
             extended: true,
         },
         {
-            id: "Role",
+            id: "role",
             numeric: false,
             disablePadding: false,
             label: "Role",
@@ -143,8 +125,6 @@ const Users = () => {
 
 
         },
-   
-
         {
             id: "actions",
             numeric: true,
@@ -152,6 +132,8 @@ const Users = () => {
             label: "Actions",
         },
     ];
+
+
 
     function EnhancedTableHead(props) {
         const {
@@ -164,12 +146,14 @@ const Users = () => {
         } = props;
         const createSortHandler = (property) => (event) => {
             onRequestSort(event, property);
+            
         };
+
+    
 
         return (
             <TableHead>
                 <TableRow>
-
                     {headCells.map((headCell) => (
                         <TableCell
                             key={headCell.id}
@@ -200,11 +184,6 @@ const Users = () => {
         );
     }
 
-    const handleRequestSort = (event, property) => {
-        const isAsc = orderBy === property && order === "asc";
-        setOrder(isAsc ? "desc" : "asc");
-        setOrderBy(property);
-    };
 
 
 
@@ -217,9 +196,6 @@ const Users = () => {
         setPage(0);
     };
 
-    const handleChangeDense = (event) => {
-        setDense(event.target.checked);
-    };
 
 
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -258,26 +234,24 @@ const Users = () => {
                 key={_id}
                 selected={isItemSelected}
             >
-
                 <TableCell align="left">{rowsPerPage * page + index + 1}</TableCell>
-
                 <TableCell align="left">{username}</TableCell>
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
                 <TableCell align="left">  {role}</TableCell>
                 {/* <TableCell align="left">{updatedAt.slice(0, 25)}</TableCell> */}
-           
                 <TableCell align="right">
+
                     <Link
                         to="/users/userdetail"
                         state={{
                             item: props
                         }}
-                        style={{textDecoration:"none"}}
-
+                       style={{textDecoration: "none",}}
                     >
-                        <Button variant="success">Details</Button>
+                        <Button  style={{ backgroundColor:"gray", color:"white",fontWeight:"500"  }} variant="success">Details</Button>
                     </Link>
                 </TableCell>
+
             </TableRow>
         );
     };
@@ -285,7 +259,7 @@ const Users = () => {
     return (
         <>
 
-            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', paddingTop: "50px" }}>
+            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7',height:"90vh", paddingTop: "50px" }}>
 
                 <Container style={{ marginTop: "20px", marginBottom: "50px" }}>
 
@@ -322,34 +296,40 @@ const Users = () => {
                                             }}
                                         ></input>
                                     </div>
-                                    <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
 
-                                        <label>{propDetail.propertyType} Add User</label>      <Button style={{ marginLeft: "auto" }} variant="success" onClick={handleShow}>Add User</Button>{' '}
-                                    </div>
+                                    {
+                                    JSON.parse(localStorage.getItem("user")).isAdmin &&
+                                        <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
+                                             <Button style={{ marginLeft: "auto", backgroundColor:"#ff9b44", color:"white", fontWeight:"700" }} variant="success" onClick={handleShow}>Add User</Button>{' '}
+                                        </div>
+                                    }
+
                                     <br />
                                     <Modal style={{ marginTop: "30vh" }} show={show} onHide={handleClose} animation={false}>
                                         <Modal.Header closeButton>
                                             <Modal.Title>Add User</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
+
                                             <input placeholder="username" style={{ width: "80%" }} onChange={(e) => setUsername(e.target.value)}></input>
                                             <br /><br />
                                             <input placeholder="password" style={{ width: "80%" }} onChange={(e) => setPassword(e.target.value)}></input>
                                             <br /><br />
-
                                             <input placeholder="role" style={{ width: "80%" }} onChange={(e) => setRole(e.target.value)}></input>
 
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <Button variant="secondary" onClick={handleClose}>
+                                            <Button style={{ marginLeft: "auto", backgroundColor:"gray", color:"white", fontWeight:"700" }} variant="secondary" onClick={handleClose}>
                                                 Close
                                             </Button>
-                                            <Button variant="primary" onClick={() => {
+                                            &nbsp;&nbsp;
+                                            <Button style={{ backgroundColor:"#ff9b44", color:"white", fontWeight:"700" }} variant="primary" onClick={() => {
                                                 try {
                                                     axios.post(`${originURL}/auth/register`, {
                                                         username: username,
                                                         password: password,
-                                                        role:role
+                                                        role: role,
+                                                        isAdmin: false
                                                     })
 
 
@@ -387,9 +367,6 @@ const Users = () => {
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((b, index) => {
                                                 const labelId = `enhanced-table-checkbox-${index}`;
-
-
-
 
                                                 return (
                                                     (b.username

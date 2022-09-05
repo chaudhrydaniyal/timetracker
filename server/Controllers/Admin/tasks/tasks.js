@@ -12,7 +12,8 @@ const AddTask  = async(req,res,next) =>{
             selectProject:req.body.selectProject,
             startTime:req.body.startTime,
             endTime:req.body.endTime,
-            addedby:req.body.addedby
+            addedby:req.body.addedby,
+            projectPhase: req.body.projectPhase
           })
           await addtask.save()
           addtask && res.status(200).json({message:"Sucessfully Added task",addtask}) 

@@ -56,6 +56,8 @@ const user = mongoose.model(
   new mongoose.Schema({
     username: String,
     password: String,
+    role:String,
+    isAdmin:Boolean,
     currentProjects: [
       {
         type: mongoose.Schema.Types.ObjectId,

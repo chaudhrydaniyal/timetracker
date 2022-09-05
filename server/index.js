@@ -56,7 +56,7 @@ app.use((err,req,res,next)=>{
   });
 })
 //Port settings
-const PORT = 5000;
+const PORT = 7000;
 
 app.listen(PORT,()=>{
   console.log(`app is listen at ${PORT}`)

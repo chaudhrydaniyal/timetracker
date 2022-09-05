@@ -23,6 +23,7 @@ import Users from "./pages/Users/Users";
 import DailyTasks from "./pages/DailyTasks/DailyTasks";
 import ProjectDetail from "./pages/ProjectDetail/ProjectDetail";
 import UserDetail from "./pages/UserDetail/UserDetail";
+import TaskDetail from "./pages/TaskDetail/TaskDetail";
 
 function App() {
 
@@ -41,15 +42,13 @@ function App() {
                 <Route path='/attendance' element={<EmpAttendance />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/projects/projectdetail" element={<ProjectDetail />} />
-
                 <Route path='/allemployees' element={<AllEmployees />} />
                 <Route path='/employee/:id' element={<EmpDetails />} />
                 <Route path='/users' element={<Users />}></Route>
                 <Route path='/users' element={<Users />}></Route>
                 <Route path="/users/userdetail" element={<UserDetail />} />
-
                 <Route path='/dailytasks' element={<DailyTasks />}></Route>
-           
+                <Route path="/dailytasks/taskdetail" element={<TaskDetail />} />
                 <Route path="/calendar/:id" element={<CalendarDetails />}></Route>
                 <Route path="/datamanagement" element={<DataManagement />} />
               </Routes>
