@@ -30,7 +30,12 @@ const projects = mongoose.model(
   new mongoose.Schema({
     projectname: String,
     description: String,
-    datestart:String,
+    
+    dateCreated: String,
+    projectStartDate: String,
+    projectEndDate: String,
+    allocatedWorkingDays: Number,
+
     assignTo: [
       {
         type: mongoose.Schema.Types.ObjectId,

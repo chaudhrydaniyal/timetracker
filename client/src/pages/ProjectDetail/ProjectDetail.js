@@ -39,30 +39,30 @@ const ProjectDetail = () => {
   const item = useLocation();
 
   console.log("testvalue", item);
- const [users,setusers] = useState('')
+  const [users, setusers] = useState('')
   const propDetail = item.state.item;
   console.log("propdetails", propDetail);
   const [coordinates, setCoordinates] = useState([]);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [datamodal,setmodaldata] = useState({})
+  const [datamodal, setmodaldata] = useState({})
   // const showDetail = async(id) =>{
   //        handleShow();
-     
+
   //       setmodaldata(id)
   //       console.log("ids",datamodal)
   // }
-  console.log("data",datamodal)
-  useEffect(()=>{
-   
-  },[])
+  console.log("data", datamodal)
+  useEffect(() => {
+
+  }, [])
 
   return (
     <>
       <div
         className="content-wrapper"
-        style={{ backgroundColor: "#f7f7f7",height:"90vh", paddingTop: "50px" }}
+        style={{ backgroundColor: "#f7f7f7", height: "90vh", paddingTop: "50px" }}
       >
         <Container style={{ marginTop: "20px", marginBottom: "50px" }}>
           <Box sx={{ width: "95%" }}>
@@ -107,18 +107,25 @@ const ProjectDetail = () => {
                                 }}
                               >
                                 Project Name:
-                                <span className="ml-2 ">
+                                <span className="ml-2 " style={{
+                                  fontWeight: "normal",
+                                }}>
                                   {propDetail.projectname}
                                 </span>
                               </p>
                             </div>
                           </div>
                         </div>
+                        <br />
                         <div className="d-flex align-items-center justify-content-between mt-2">
                           <div className="d-flex flex-column ">
                             <div>
                               {" "}
-                              <p style={{ fontWeight: "bold" }}>
+                              <p style={{
+                                fontWeight: "bold",
+                                paddingBottom: 1,
+                                marginBottom: 1,
+                              }}>
                                 Product Type
                               </p>{" "}
                             </div>
@@ -129,23 +136,35 @@ const ProjectDetail = () => {
                           </div>
                           <div className="d-flex flex-column ">
                             <div>
-                              <p style={{ fontWeight: "bold" }}> Start Date</p>
+                              <p style={{
+                                fontWeight: "bold",
+                                paddingBottom: 1,
+                                marginBottom: 1,
+                              }}> Start Date</p>
                             </div>
                             <div>
-                              <p> 17-april-2021</p>
-                            </div>
-                          </div>
-                          <div className="d-flex flex-column ">
-                            <div>
-                              <p style={{ fontWeight: "bold" }}> DeadLine</p>
-                            </div>
-                            <div>
-                              <p> 17-april-2022</p>
+                              <p> {propDetail.projectStartDate}</p>
                             </div>
                           </div>
                           <div className="d-flex flex-column ">
                             <div>
-                              <p style={{ fontWeight: "bold" }}> Status</p>
+                              <p style={{
+                                fontWeight: "bold",
+                                paddingBottom: 1,
+                                marginBottom: 1,
+                              }}> DeadLine</p>
+                            </div>
+                            <div>
+                              <p> {propDetail.projectEndDate}</p>
+                            </div>
+                          </div>
+                          <div className="d-flex flex-column ">
+                            <div>
+                              <p style={{
+                                fontWeight: "bold",
+                                paddingBottom: 1,
+                                marginBottom: 1,
+                              }}> Status</p>
                             </div>
                             <div>
                               <p> In progress</p>
@@ -153,7 +172,12 @@ const ProjectDetail = () => {
                           </div>
                           <div className="d-flex flex-column ">
                             <div>
-                              <p style={{ fontWeight: "bold" }}> Supervison</p>
+                              <p
+                                style={{
+                                  fontWeight: "bold",
+                                  paddingBottom: 1,
+                                  marginBottom: 1,
+                                }}> Supervison</p>
                             </div>
                             <div>
                               <p> Sir Raheel</p>
@@ -161,7 +185,11 @@ const ProjectDetail = () => {
                           </div>
                         </div>
                         <div>
-                          <h5>Description</h5>
+                          <p style={{
+                            fontWeight: "bold",
+                            paddingBottom: 1,
+                            marginBottom: 1,
+                          }}>Description</p>
                           <p>{propDetail.description}</p>
                         </div>
                       </div>
@@ -183,7 +211,7 @@ const ProjectDetail = () => {
                           return (
                             <div key={i}>
                               <div className="my-2 d-flex w-100">
-                                <div onClick={()=>{setmodaldata(d); handleShow() }}>
+                                <div onClick={() => { setmodaldata(d); handleShow() }}>
                                   <Avatar
                                     alt="user"
                                     src={img1}
@@ -207,35 +235,35 @@ const ProjectDetail = () => {
                                     show={show}
                                     onHide={handleClose}
                                     animation={false}
-                                    
-                                    
+
+
                                   >
                                     <Modal.Header closeButton>
                                       <Modal.Title>User Details</Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body>
                                       <div className="d-flex align-items-center justify-centent-between w-100">
-                                        <div style={{width:'40%'}}>
-                                           <Avatar src={avatar} sx={{width:150,height:150}}/>
+                                        <div style={{ width: '40%' }}>
+                                          <Avatar src={avatar} sx={{ width: 150, height: 150 }} />
                                         </div>
                                         <div>
-                                          <h6 style={{fontWeight:'bold'}}>
-                                            Username:<span className="ml-2">{datamodal.username}</span> 
+                                          <h6 style={{ fontWeight: 'bold' }}>
+                                            Username:<span className="ml-2">{datamodal.username}</span>
                                           </h6>
-                                          <h6 style={{fontWeight:'bold'}}>
-                                           Full Name:<span className="ml-2">{datamodal.firstname ? datamodal.firstname :'N/A'}</span> 
+                                          <h6 style={{ fontWeight: 'bold' }}>
+                                            Full Name:<span className="ml-2">{datamodal.firstname ? datamodal.firstname : 'N/A'}</span>
                                           </h6>
-                                          <h6 style={{fontWeight:'bold'}}>
-                                            Email:<span className="ml-2">{datamodal.email ? datamodal.email :"N/A"}</span> 
+                                          <h6 style={{ fontWeight: 'bold' }}>
+                                            Email:<span className="ml-2">{datamodal.email ? datamodal.email : "N/A"}</span>
                                           </h6>
-                                          <h6 style={{fontWeight:'bold'}}>
-                                          Designation:<span className="ml-2">{datamodal.role ? datamodal.role :"N/A"}</span>
+                                          <h6 style={{ fontWeight: 'bold' }}>
+                                            Designation:<span className="ml-2">{datamodal.role ? datamodal.role : "N/A"}</span>
                                           </h6>
-                                          <h6 style={{fontWeight:'bold'}}>
-                                            Phone:<span className="ml-2">{datamodal.phone ? datamodal.phone :"N/A"}</span> 
+                                          <h6 style={{ fontWeight: 'bold' }}>
+                                            Phone:<span className="ml-2">{datamodal.phone ? datamodal.phone : "N/A"}</span>
                                           </h6>
-                                          <h6 style={{fontWeight:'bold'}}>
-                                          joining Date:<span className="ml-2">{datamodal.joiningdate ? datamodal.joiningdate :"N/A"}</span>
+                                          <h6 style={{ fontWeight: 'bold' }}>
+                                            joining Date:<span className="ml-2">{datamodal.joiningdate ? datamodal.joiningdate : "N/A"}</span>
                                           </h6>
 
                                         </div>

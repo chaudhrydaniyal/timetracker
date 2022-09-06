@@ -411,7 +411,7 @@ const UserDetail = () => {
 
                 <TableCell align="right">
                     <Link
-                        to="/propertylisting/propertyDetail"
+                        to="/dailytasks/taskdetail"
                         state={{
                             item: props
                         }}

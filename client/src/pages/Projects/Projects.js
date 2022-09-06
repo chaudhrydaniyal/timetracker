@@ -46,6 +46,8 @@ const Projects = () => {
 
 
     const [projectName, setProjectName] = useState("");
+    const [projectManager, setProjectManager] = useState("");
+
     const [projectDescription, setProjectDescription] = useState("");
 
     const [projects, setProjects] = useState([]);
@@ -146,7 +148,7 @@ const Projects = () => {
 
         {
             id: "description",
-            numeric: true,
+            numeric: false,
             disablePadding: false,
             label: "Description",
             extended: true,
@@ -236,7 +238,7 @@ const Projects = () => {
 
     const TableRowCustom = (props) => {
         console.log("table", props)
-        const { _id, projectname, description, updatedAt, createdAt ,datestart} = props;
+        const { _id, projectname, description, projectStartDate, createdAt ,datestart} = props;
 
         const labelId = props.labelId;
         const index = props.index
@@ -271,9 +273,9 @@ const Projects = () => {
 
                 <TableCell align="left">{projectname}</TableCell>
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
-                <TableCell align="left">{datestart}</TableCell>
+                <TableCell align="left">{projectStartDate}</TableCell>
                 {/* <TableCell align="right">{updatedAt.slice(0, 25)}</TableCell> */}
-                <TableCell align="right">
+                <TableCell align="left">
 
                     {description}
 
@@ -340,32 +342,39 @@ const Projects = () => {
                                             <Button style={{ marginLeft: "auto" , backgroundColor:"#ff9b44", color:"white", fontWeight:"700"}} variant="success" onClick={handleShow}>Add Project</Button>{' '}
                                     </div>}
                                     <br />
-                                    <Modal style={{ marginTop: "20vh" }} show={show} onHide={handleClose} animation={false}>
+                                    <Modal style={{ marginTop: "18vh" }} show={show} onHide={handleClose} animation={false}>
                                         <Modal.Header closeButton>
                                             <Modal.Title>Add another Project</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
-                                            <input placeholder="Project name" style={{ width: "80%" }} onChange={(e) => setProjectName(e.target.value)}></input>
+                                            <div className="d-flex justify-content-center">
+                                                <div style={{width:"80%"}} >
+                                            <input placeholder="Project name" style={{ width: "100%" }} onChange={(e) => setProjectName(e.target.value)}></input>
+                                            <br /><br />
+
+                                            <input placeholder="Project Manager" style={{ width: "100%" }} onChange={(e) => setProjectManager(e.target.value)}></input>
                                             <br /><br />
 
                                             <label >Start Date:</label> &nbsp;
-                                            <input type="date" defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
+                                            <input type="date" defaultValue={moment(new Date).format("YYYY-MM-DD")} onSelect={(e) => {
                                                 setProjectStartDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
                                             }}
                                             />
                                             <br /><br />
 
                                             <label >Estimated End Date:</label> &nbsp;
-                                            <input type="date" defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
+                                            <input type="date" defaultValue={moment(new Date).format("YYYY-MM-DD")} onSelect={(e) => {
                                                 setProjectEndDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
                                             }}
                                             />
                                             <br /><br />
 
-                                            <input placeholder="Allocated Working Days" type="number" style={{ width: "80%" }} onChange={(e) => setAllocatedWorkingDays(e.target.value)}></input>
+                                            <input placeholder="Allocated Working Days" type="number" style={{ width: "100%" }} onChange={(e) => setAllocatedWorkingDays(e.target.value)}></input>
                                             <br /><br />
                                     
-                                            <textarea placeholder="Description" style={{ width: "80%" }} onChange={(e) => setProjectDescription(e.target.value)}></textarea>
+                                            <textarea placeholder="Description" style={{ width: "100%" }} onChange={(e) => setProjectDescription(e.target.value)}></textarea>
+                                            </div>
+                                            </div>
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <Button style={{ marginLeft: "auto", backgroundColor:"gray", color:"white", fontWeight:"700" }} variant="secondary" onClick={handleClose}>
@@ -377,7 +386,11 @@ const Projects = () => {
                                                     axios.post(`${originURL}/projects/addproject`, {
                                                         projectname: projectName,
                                                         description: projectDescription,
-                                                        datestart:moment(new Date).format("dddd, MMMM Do YYYY")
+                                                        dateCreated:moment(new Date).format("dddd, MMMM Do YYYY"),
+                                                        projectStartDate: projectStartDate,
+                                                        projectEndDate: projectEndDate,
+                                                        allocatedWorkingDays: allocatedWorkingDays
+
                                                     })
 
                                                     handleClose()

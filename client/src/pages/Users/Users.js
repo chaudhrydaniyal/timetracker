@@ -310,13 +310,14 @@ const Users = () => {
                                             <Modal.Title>Add User</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
+                                            <div className="d-flex justify-content-center"><div style={{width:"80%"}}>
 
-                                            <input placeholder="username" style={{ width: "80%" }} onChange={(e) => setUsername(e.target.value)}></input>
+                                            <input placeholder="username" style={{ width: "100%" }} onChange={(e) => setUsername(e.target.value)}></input>
                                             <br /><br />
-                                            <input placeholder="password" style={{ width: "80%" }} onChange={(e) => setPassword(e.target.value)}></input>
+                                            <input placeholder="password" style={{ width: "100%" }} onChange={(e) => setPassword(e.target.value)}></input>
                                             <br /><br />
-                                            <input placeholder="role" style={{ width: "80%" }} onChange={(e) => setRole(e.target.value)}></input>
-
+                                            <input placeholder="role" style={{ width: "100%" }} onChange={(e) => setRole(e.target.value)}></input>
+</div></div>
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <Button style={{ marginLeft: "auto", backgroundColor:"gray", color:"white", fontWeight:"700" }} variant="secondary" onClick={handleClose}>

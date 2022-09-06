@@ -325,8 +325,11 @@ const DailyTasks = () => {
                                         </Modal.Header>
                                         <Modal.Body>
 
+                                            <div className="d-flex justify-content-center">
+                                                <div style={{width:"80%"}} >
+
                                             <label >Date:</label> &nbsp;
-                                            <input type="date" defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
+                                            <input type="date" style={{width:"100%"}} defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
                                                 setTaskDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
                                             }}
                                             />
@@ -335,7 +338,7 @@ const DailyTasks = () => {
                                             <label>Select The Project:</label><br />
 
 
-                                            <select onClick={(e) => { setTaskProject(e.target.value) }} style={{ width: "70%" }}>
+                                            <select  onClick={(e) => { setTaskProject(e.target.value) }} style={{ width: "100%" }}>
 
                                                 {projects && projects.map((p) => (<option value={`${p._id}`}>{p.projectname}</option>))}
 
@@ -343,12 +346,10 @@ const DailyTasks = () => {
 
                                             <br />
 
-
-
                                             <label>Project Phase:</label><br />
 
 
-                                            <select onClick={(e) => { setProjectPhase(e.target.value) }} style={{ width: "70%" }}>
+                                            <select onClick={(e) => { setProjectPhase(e.target.value) }} style={{ width: "100%" }}>
 
                                                 <option value='Analysis'>Analysis</option>
                                                 <option value='Configuration'>Configuration</option>
@@ -363,13 +364,13 @@ const DailyTasks = () => {
                                             <br /><br />
 
 
-                                            <input placeholder="Task title" style={{ width: "80%" }} onChange={(e) => setTaskTitle(e.target.value)}></input>
+                                            <input placeholder="Task title" style={{ width: "100%" }} onChange={(e) => setTaskTitle(e.target.value)}></input>
                                             <br /><br />
 
-                                            <textarea placeholder="Task Description" style={{ width: "80%" }} onChange={(e) => setTaskDescription(e.target.value)}></textarea>
+                                            <textarea placeholder="Task Description" style={{ width: "100%" }} onChange={(e) => setTaskDescription(e.target.value)}></textarea>
                                             <br /><br />
 
-                                            <div className="d-flex">
+                                           
                                                 <label for="appt">Start Time: &nbsp;</label>
                                                 <input type="time" id="appt" name="appt" onChange={ (e) => {
 
@@ -391,7 +392,8 @@ const DailyTasks = () => {
 
                                                 }}></input>
                                                 &nbsp;&nbsp;
-                                                <label for="appt">End Time:&nbsp;</label>
+                                                <br />
+                                                <label for="appt">End Time:&nbsp;&nbsp;&nbsp;&nbsp;</label>
                                                 <input type="time" id="appt" name="appt" onChange={ (e) => {
 
 
@@ -410,7 +412,7 @@ const DailyTasks = () => {
 
                                                 }
                                                 }></input>
-                                            </div>
+                                        
                                             <br /><br />
                                             <label>Total Time:&nbsp;</label>{
 
@@ -419,6 +421,7 @@ const DailyTasks = () => {
 
                                             } mins
 
+</div></div>
 
                                         </Modal.Body>
                                         <Modal.Footer>

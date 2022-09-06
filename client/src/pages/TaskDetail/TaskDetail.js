@@ -41,6 +41,19 @@ const TaskDetail = () => {
 
   const propDetail = item.state.item;
   console.log("propdetails", propDetail)
+
+  let timeTaken='8 hours and 30 mins'
+try{
+  let start = propDetail.startTime.split(":")
+  let startInMin =(parseInt(start[0]) * 60) + parseInt(start[1])
+
+  let end = propDetail.endTime.split(":")
+
+  let endInMin = (parseInt(end[0]) * 60) + parseInt(end[1])
+
+  timeTaken = `${ Math.trunc((endInMin - startInMin)/60) } hours and ${ (endInMin - startInMin) % 60 } mins`
+}catch{ timeTaken='8 hours and 30 mins'}
+
   const [coordinates, setCoordinates] = useState([]);
 
   return (
@@ -80,59 +93,98 @@ const TaskDetail = () => {
                                 }}
                               >
                                 Task Title:
-                                <span className="ml-2 ">
-                                  Time Sheet Tracker
+                                <span className="ml-2 " style={{ fontWeight: "normal" }}>
+                                  {propDetail.title}
                                 </span>
                               </p>
                             </div>
                           </div>
 
+
                         </div>
+                        <br />
                         <div className="d-flex align-items-center justify-content-between mt-2">
                           <div className="d-flex flex-column ">
-                            <div> <p>Product Type</p> </div>
+                            <div> <p style={{
+                              fontWeight: "bold",
+                              paddingBottom: 1,
+                              marginBottom: 1,
+                            }}>Product Type</p> </div>
                             <div> <p>Company Product</p> </div>
                           </div>
                           <div className="d-flex flex-column ">
                             <div>
-                              <p> Start Date</p>
+                              <p style={{
+                                fontWeight: "bold",
+                                paddingBottom: 1,
+                                marginBottom: 1,
+                              }}> Start Time</p>
                             </div>
                             <div>
-                              <p> 17-april-2021</p>
+                              <p>    {propDetail.startTime}</p>
                             </div>
                           </div>
                           <div className="d-flex flex-column ">
                             <div>
-                              <p> DeadLine</p>
+                              <p style={{
+                                fontWeight: "bold",
+                                paddingBottom: 1,
+                                marginBottom: 1,
+                              }}> End Time</p>
                             </div>
                             <div>
-                              <p> 17-april-2022</p>
+                              <p>                                   {propDetail.endTime}
+                              </p>
                             </div>
                           </div>
                           <div className="d-flex flex-column ">
                             <div>
-                              <p> Status</p>
+                              <p style={{
+                                fontWeight: "bold",
+                                paddingBottom: 1,
+                                marginBottom: 1,
+                              }}> Time Taken:</p>
                             </div>
                             <div>
-                              <p> In progress</p>
+                              <p>                                   {timeTaken}
+                              </p>
                             </div>
                           </div>
                           <div className="d-flex flex-column ">
                             <div>
-                              <p> Supervison</p>
+                              <p style={{
+                                fontWeight: "bold",
+                                paddingBottom: 1,
+                                marginBottom: 1,
+                              }}> Date</p>
                             </div>
                             <div>
-                              <p> Sir Raheel</p>
+                              <p>                                   {propDetail.date}
+                              </p>
                             </div>
                           </div>
-                        </div>
+                          </div>
+                          <div className="d-flex flex-column ">
+                            <div>
+                              <p style={{
+                                fontWeight: "bold",
+                                paddingBottom: 1,
+                                marginBottom: 1,
+                              }}> Description</p>
+                            </div>
+                            <div>
+                              <p>                                   {propDetail.description}
+                              </p>
+                            </div>
+                          </div>
+                        
                       </div>
                     </Card>
                   </div>
-            
+
                   <div>
                     <Card className="cardcustomization" style={{ height: '240px' }}>
-                      <h5 className="text-center">Assigned Users</h5>
+                      <h5 className="text-center">User</h5>
                       <div className="flexusers">
                         <div className="my-2 d-flex w-100">
                           <div>
@@ -151,7 +203,7 @@ const TaskDetail = () => {
                                   fontSize: "13px",
                                 }}
                               >
-                                M.Noman
+                                {JSON.parse(localStorage.getItem("user")).details.username}
                               </p>
                             </div>
                             <div>
@@ -162,12 +214,12 @@ const TaskDetail = () => {
                                   fontSize: "13px",
                                 }}
                               >
-                                Jr Software Engineer
+                                {JSON.parse(localStorage.getItem("user")).details.role}
                               </p>
                             </div>
                           </div>
                         </div>
-                        <div className="my-2 d-flex w-100">
+                        {/* <div className="my-2 d-flex w-100">
                           <div>
                             {" "}
                             <Avatar
@@ -233,7 +285,7 @@ const TaskDetail = () => {
                               </p>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </Card>
                   </div>

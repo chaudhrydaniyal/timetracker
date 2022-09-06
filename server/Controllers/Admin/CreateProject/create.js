@@ -8,8 +8,11 @@ const AddProject = async (req, res, next) => {
       projectname: req.body.projectname,
       description: req.body.description,
       assignTo: req.body.assignTo,
-      datestart: req.body.datestart,
+      dateCreated: req.body.dateCreated,
       deadline: req.body.deadline,
+      projectStartDate: req.body.projectStartDate,
+      projectEndDate: req.body.projectEndDate,
+      allocatedWorkingDays: req.body.allocatedWorkingDays
     });
     const response = await add.save();
     response && res.status(200).json({ message: "success", response });

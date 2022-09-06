@@ -42,12 +42,12 @@ const Login = () => {
             <Form>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Username</Form.Label>
-                <Form.Control type="email" placeholder="Enter username" required ref={username} />
+                <Form.Control type="email" placeholder="Enter username"  ref={username} required/>
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" required ref={password} />
+                <Form.Control type="password" placeholder="Password"  ref={password} required/>
               </Form.Group>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Button variant="success" type="submit" className="px-5 mt-5" onClick={handleClick} >
