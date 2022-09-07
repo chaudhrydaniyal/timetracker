@@ -24,6 +24,7 @@ import DailyTasks from "./pages/DailyTasks/DailyTasks";
 import ProjectDetail from "./pages/ProjectDetail/ProjectDetail";
 import UserDetail from "./pages/UserDetail/UserDetail";
 import TaskDetail from "./pages/TaskDetail/TaskDetail";
+import Dashboard from "./pages/home/Home";
 
 function App() {
 
@@ -51,6 +52,8 @@ function App() {
                 <Route path="/dailytasks/taskdetail" element={<TaskDetail />} />
                 <Route path="/calendar/:id" element={<CalendarDetails />}></Route>
                 <Route path="/datamanagement" element={<DataManagement />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+
               </Routes>
               <Footer />
             </>

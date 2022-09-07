@@ -1,6 +1,6 @@
 a.btn.add-btn{
   color:#FFFF;
-  background-color: #ff9b44;
+  background-color: #0F52BA;
   font-size: 16px;
   padding: 6px 12px;
   border-radius:5px;
@@ -14,14 +14,14 @@ a.btn.add-btn{
 }
 Button.btn{
   color:#FFFF;
-  background-color: #ff9b44;
+  background-color: #0F52BA;
   border: none;
   border-radius: 5px;
  
   
 }
 Button.btn:hover{
-   background-color: #ff9b44;
+   background-color: #0F52BA;
    color: #FFFF;
 }
  

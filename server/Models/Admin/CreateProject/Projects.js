@@ -32,8 +32,8 @@ const projects = mongoose.model(
     description: String,
     
     dateCreated: String,
-    projectStartDate: String,
-    projectEndDate: String,
+    projectStartDate: Date,
+    projectEndDate: Date,
     allocatedWorkingDays: Number,
 
     assignTo: [

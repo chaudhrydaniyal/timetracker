@@ -26,9 +26,26 @@ import axios from "axios";
 import { Container } from "react-bootstrap";
 import originURL from "../../url";
 import { Button } from "@mui/material";
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 
+import { styled } from '@mui/material/styles';
 
 var moment = require('moment'); // require
+
+
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+    height: 10,
+    borderRadius: 5,
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+        backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+        borderRadius: 5,
+        backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
+    },
+}));
+
+
 
 
 const Projects = () => {
@@ -56,7 +73,7 @@ const Projects = () => {
 
     const [allocatedWorkingDays, setAllocatedWorkingDays] = useState("");
 
-    
+
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -128,7 +145,6 @@ const Projects = () => {
             disablePadding: false,
             label: "No.",
         },
-
         {
             id: "projectname",
             numeric: false,
@@ -136,21 +152,27 @@ const Projects = () => {
             label: "Title",
             extended: true,
         },
-
         {
-            id: "datestart",
+            id: "projectStartDate",
             numeric: false,
             disablePadding: false,
             label: "Date Started",
             extended: true,
 
         },
-
         {
-            id: "description",
+            id: "projectEndDate",
             numeric: false,
             disablePadding: false,
-            label: "Description",
+            label: "Project Deadline",
+            extended: true,
+
+        },
+        {
+            id: "timeSpent",
+            numeric: false,
+            disablePadding: false,
+            label: "Project Time Spent",
             extended: true,
 
         },
@@ -238,7 +260,7 @@ const Projects = () => {
 
     const TableRowCustom = (props) => {
         console.log("table", props)
-        const { _id, projectname, description, projectStartDate, createdAt ,datestart} = props;
+        const { _id, projectname, description, projectStartDate, projectEndDate, datestart } = props;
 
         const labelId = props.labelId;
         const index = props.index
@@ -273,11 +295,19 @@ const Projects = () => {
 
                 <TableCell align="left">{projectname}</TableCell>
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
-                <TableCell align="left">{projectStartDate}</TableCell>
+                <TableCell align="left">{moment(new Date(projectStartDate)).format("dddd, MMMM Do YYYY")}</TableCell>
                 {/* <TableCell align="right">{updatedAt.slice(0, 25)}</TableCell> */}
                 <TableCell align="left">
+                    {moment(new Date(projectEndDate)).format("dddd, MMMM Do YYYY")}
 
-                    {description}
+                </TableCell>
+                <TableCell align="left">
+                    {
+                    Math.round((((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime())))*100)
+                    }%
+                    <BorderLinearProgress variant="determinate" value={
+                    (((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime())))*100
+                } />
 
                 </TableCell>
 
@@ -289,7 +319,7 @@ const Projects = () => {
                         }}
                         style={{ textDecoration: "none" }}
                     >
-                        <Button style={{ backgroundColor:"gray", color:"white",fontWeight:"500"  }} >Details</Button>
+                        <Button style={{ backgroundColor: "gray", color: "white", fontWeight: "500" }} >Details</Button>
                     </Link>
                 </TableCell>
             </TableRow>
@@ -299,7 +329,7 @@ const Projects = () => {
     return (
         <>
 
-            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', height:"90vh" , paddingTop: "50px" }}>
+            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', height: "90vh", paddingTop: "50px" }}>
                 <Container style={{ marginTop: "20px", marginBottom: "50px" }}>
                     <Box sx={{ width: "95%" }}>
                         <Paper className="p-4" sx={{ width: "100%", mb: 2 }}>
@@ -337,10 +367,10 @@ const Projects = () => {
 
 
                                     {
-                                    JSON.parse(localStorage.getItem("user")).isAdmin &&
-                                    <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
-                                            <Button style={{ marginLeft: "auto" , backgroundColor:"#ff9b44", color:"white", fontWeight:"700"}} variant="success" onClick={handleShow}>Add Project</Button>{' '}
-                                    </div>}
+                                        JSON.parse(localStorage.getItem("user")).isAdmin &&
+                                        <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
+                                            <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Add Project</Button>{' '}
+                                        </div>}
                                     <br />
                                     <Modal style={{ marginTop: "18vh" }} show={show} onHide={handleClose} animation={false}>
                                         <Modal.Header closeButton>
@@ -348,45 +378,58 @@ const Projects = () => {
                                         </Modal.Header>
                                         <Modal.Body>
                                             <div className="d-flex justify-content-center">
-                                                <div style={{width:"80%"}} >
-                                            <input placeholder="Project name" style={{ width: "100%" }} onChange={(e) => setProjectName(e.target.value)}></input>
-                                            <br /><br />
+                                                <div style={{ width: "80%" }} >
+                                                    <input placeholder="Project name" style={{ width: "100%" }} onChange={(e) => setProjectName(e.target.value)}></input>
+                                                    <br /><br />
 
-                                            <input placeholder="Project Manager" style={{ width: "100%" }} onChange={(e) => setProjectManager(e.target.value)}></input>
-                                            <br /><br />
+                                                    <input placeholder="Project Manager" style={{ width: "100%" }} onChange={(e) => setProjectManager(e.target.value)}></input>
+                                                    <br /><br />
 
-                                            <label >Start Date:</label> &nbsp;
-                                            <input type="date" defaultValue={moment(new Date).format("YYYY-MM-DD")} onSelect={(e) => {
-                                                setProjectStartDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
-                                            }}
-                                            />
-                                            <br /><br />
+                                                    <label >Start Date:</label> &nbsp;
+                                                    <input type="date" defaultValue={
+                                                        // moment(new Date).format("YYYY-MM-DD")
+                                                        new Date
 
-                                            <label >Estimated End Date:</label> &nbsp;
-                                            <input type="date" defaultValue={moment(new Date).format("YYYY-MM-DD")} onSelect={(e) => {
-                                                setProjectEndDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
-                                            }}
-                                            />
-                                            <br /><br />
 
-                                            <input placeholder="Allocated Working Days" type="number" style={{ width: "100%" }} onChange={(e) => setAllocatedWorkingDays(e.target.value)}></input>
-                                            <br /><br />
-                                    
-                                            <textarea placeholder="Description" style={{ width: "100%" }} onChange={(e) => setProjectDescription(e.target.value)}></textarea>
-                                            </div>
+                                                    } onSelect={(e) => {
+                                                        // setProjectStartDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
+                                                        setProjectStartDate(new Date(e.target.value))
+
+                                                    }}
+                                                    />
+                                                    <br /><br />
+
+                                                    <label >Estimated End Date:</label> &nbsp;
+                                                    <input type="date" defaultValue={
+                                                        // moment(new Date).format("YYYY-MM-DD")
+                                                        new Date
+
+                                                    } onSelect={(e) => {
+                                                        // setProjectEndDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
+                                                        setProjectEndDate(new Date(e.target.value))
+
+                                                    }}
+                                                    />
+                                                    <br /><br />
+
+                                                    <input placeholder="Allocated Working Days" type="number" style={{ width: "100%" }} onChange={(e) => setAllocatedWorkingDays(e.target.value)}></input>
+                                                    <br /><br />
+
+                                                    <textarea placeholder="Description" style={{ width: "100%" }} onChange={(e) => setProjectDescription(e.target.value)}></textarea>
+                                                </div>
                                             </div>
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <Button style={{ marginLeft: "auto", backgroundColor:"gray", color:"white", fontWeight:"700" }} variant="secondary" onClick={handleClose}>
+                                            <Button style={{ marginLeft: "auto", backgroundColor: "gray", color: "white", fontWeight: "700" }} variant="secondary" onClick={handleClose}>
                                                 Close
                                             </Button>
                                             &nbsp; &nbsp;
-                                            <Button style={{ backgroundColor:"#ff9b44", color:"white", fontWeight:"700" }} variant="primary" onClick={() => {
+                                            <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
                                                 try {
                                                     axios.post(`${originURL}/projects/addproject`, {
                                                         projectname: projectName,
                                                         description: projectDescription,
-                                                        dateCreated:moment(new Date).format("dddd, MMMM Do YYYY"),
+                                                        dateCreated: moment(new Date).format("dddd, MMMM Do YYYY"),
                                                         projectStartDate: projectStartDate,
                                                         projectEndDate: projectEndDate,
                                                         allocatedWorkingDays: allocatedWorkingDays

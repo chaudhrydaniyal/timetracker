@@ -35,6 +35,11 @@ import img1 from "../../Assets/DataTables img/1.jpg";
 import img2 from "../../Assets/DataTables img/2.jpg";
 import avatar from '../../Assets/img/avatar.jpg'
 import "./single.css";
+
+
+var moment = require('moment'); // require
+
+
 const ProjectDetail = () => {
   const item = useLocation();
 
@@ -143,7 +148,10 @@ const ProjectDetail = () => {
                               }}> Start Date</p>
                             </div>
                             <div>
-                              <p> {propDetail.projectStartDate}</p>
+                              <p>
+                              {moment(new Date(propDetail.projectStartDate)).format("dddd, MMMM Do YYYY")}
+
+                                </p>
                             </div>
                           </div>
                           <div className="d-flex flex-column ">
@@ -155,7 +163,10 @@ const ProjectDetail = () => {
                               }}> DeadLine</p>
                             </div>
                             <div>
-                              <p> {propDetail.projectEndDate}</p>
+                              <p>
+                              {moment(new Date(propDetail.projectEndDate)).format("dddd, MMMM Do YYYY")}
+
+                                 </p>
                             </div>
                           </div>
                           <div className="d-flex flex-column ">

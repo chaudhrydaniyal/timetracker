@@ -466,7 +466,7 @@ const UserDetail = () => {
                                     </div>
                                     {JSON.parse(localStorage.getItem("user")).isAdmin &&
                                         <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
-                                            <Button style={{ marginLeft: "auto", backgroundColor: "#ff9b44", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Assign Project</Button>{' '}
+                                            <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Assign Project</Button>{' '}
                                         </div>}
                                     <br />
                                     <Modal style={{ marginTop: "30vh" }} show={show} onHide={handleClose} animation={false}>
@@ -502,7 +502,7 @@ const UserDetail = () => {
                                             &nbsp;&nbsp;
 
 
-                                            <Button style={{ backgroundColor: "#ff9b44", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
+                                            <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
                                                 try {
                                                     axios.put(`${originURL}/projects/assignproject/${assignedProject}`, {
 

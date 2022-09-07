@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 const taskSchema = mongoose.Schema({
 
    date: {
-      type: String,
+      type: Date,
    },
    title: {
       type: String,

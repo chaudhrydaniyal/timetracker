@@ -44,7 +44,7 @@ const DailyTasks = () => {
     const [projects, setProjects] = useState("")
     const [taskTitle, setTaskTitle] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
-    const [taskDate, setTaskDate] = useState(moment(new Date).format("dddd, MMMM Do YYYY"));
+    const [taskDate, setTaskDate] = useState(new Date());
     const [taskStartTime, setTaskStartTime] = useState("");
     const [timeTaken, setTimeTaken] = useState("");
 
@@ -257,7 +257,7 @@ const DailyTasks = () => {
                 selected={isItemSelected}
             >
                 {/* <TableCell align="left">{rowsPerPage * page + index + 1}</TableCell> */}
-                <TableCell align="left">{date}</TableCell>
+                <TableCell align="left">{moment(new Date(date)).format("dddd, MMMM Do YYYY")}</TableCell>
                 <TableCell align="left">{title}</TableCell>
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
                 <TableCell align="left">{startTime}</TableCell>
@@ -316,7 +316,7 @@ const DailyTasks = () => {
                                         ></input>
                                     </div>
                                     <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
-                                        <Button style={{ marginLeft: "auto", backgroundColor: "#ff9b44", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Add Task</Button>{' '}
+                                        <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Add Task</Button>{' '}
                                     </div>
                                     <br />
                                     <Modal style={{ marginTop: "15vh" }} show={show} onHide={handleClose} animation={false}>
@@ -326,102 +326,102 @@ const DailyTasks = () => {
                                         <Modal.Body>
 
                                             <div className="d-flex justify-content-center">
-                                                <div style={{width:"80%"}} >
+                                                <div style={{ width: "80%" }} >
 
-                                            <label >Date:</label> &nbsp;
-                                            <input type="date" style={{width:"100%"}} defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
-                                                setTaskDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
-                                            }}
-                                            />
-                                            <br /><br />
+                                                    <label >Date:</label> &nbsp;
+                                                    <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
+                                                        setTaskDate(new Date(e.target.value))
+                                                    }}
+                                                    />
+                                                    <br /><br />
 
-                                            <label>Select The Project:</label><br />
-
-
-                                            <select  onClick={(e) => { setTaskProject(e.target.value) }} style={{ width: "100%" }}>
-
-                                                {projects && projects.map((p) => (<option value={`${p._id}`}>{p.projectname}</option>))}
-
-                                            </select>
-
-                                            <br />
-
-                                            <label>Project Phase:</label><br />
+                                                    <label>Select The Project:</label><br />
 
 
-                                            <select onClick={(e) => { setProjectPhase(e.target.value) }} style={{ width: "100%" }}>
+                                                    <select onClick={(e) => { setTaskProject(e.target.value) }} style={{ width: "100%" }}>
 
-                                                <option value='Analysis'>Analysis</option>
-                                                <option value='Configuration'>Configuration</option>
-                                                <option value='Customization'>Customization</option>
-                                                <option value='Development'>Development</option>
-                                                <option value='Design'>Design</option>
-                                                <option value='Testing'>Testing</option>
-                                                <option value='Training'>Training</option>
+                                                        {projects && projects.map((p) => (<option value={`${p._id}`}>{p.projectname}</option>))}
 
-                                            </select>
+                                                    </select>
 
-                                            <br /><br />
+                                                    <br />
+
+                                                    <label>Project Phase:</label><br />
 
 
-                                            <input placeholder="Task title" style={{ width: "100%" }} onChange={(e) => setTaskTitle(e.target.value)}></input>
-                                            <br /><br />
+                                                    <select onClick={(e) => { setProjectPhase(e.target.value) }} style={{ width: "100%" }}>
 
-                                            <textarea placeholder="Task Description" style={{ width: "100%" }} onChange={(e) => setTaskDescription(e.target.value)}></textarea>
-                                            <br /><br />
+                                                        <option value='Analysis'>Analysis</option>
+                                                        <option value='Configuration'>Configuration</option>
+                                                        <option value='Customization'>Customization</option>
+                                                        <option value='Development'>Development</option>
+                                                        <option value='Design'>Design</option>
+                                                        <option value='Testing'>Testing</option>
+                                                        <option value='Training'>Training</option>
 
-                                           
-                                                <label for="appt">Start Time: &nbsp;</label>
-                                                <input type="time" id="appt" name="appt" onChange={ (e) => {
+                                                    </select>
 
-
-                                                     setTaskStartTime(e.target.value)
-
-                                                    let start = e.target.value.split(":")
-                                                    let startInMin = (parseInt(start[0]) * 60) + parseInt(start[1])
-
-                                               
-                                                    let end = taskEndTime.split(":")
-                                                   
-                                                    let endInMin = (parseInt(end[0]) * 60 )+ parseInt(end[1])
-                                                    console.log(endInMin,startInMin)
-
-                                                
-                                                     setTimeTaken(endInMin - startInMin)
+                                                    <br /><br />
 
 
-                                                }}></input>
-                                                &nbsp;&nbsp;
-                                                <br />
-                                                <label for="appt">End Time:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                                <input type="time" id="appt" name="appt" onChange={ (e) => {
+                                                    <input placeholder="Task title" style={{ width: "100%" }} onChange={(e) => setTaskTitle(e.target.value)}></input>
+                                                    <br /><br />
+
+                                                    <textarea placeholder="Task Description" style={{ width: "100%" }} onChange={(e) => setTaskDescription(e.target.value)}></textarea>
+                                                    <br /><br />
 
 
-                                                     setTaskEndTime(e.target.value)
+                                                    <label for="appt">Start Time: &nbsp;</label>
+                                                    <input type="time" id="appt" name="appt" onChange={(e) => {
 
-                                                    let start = taskStartTime.split(":")
-                                                    let startInMin =(parseInt(start[0]) * 60) + parseInt(start[1])
 
-                                                    let end = e.target.value.split(":")
+                                                        setTaskStartTime(e.target.value)
 
-                                                    let endInMin = (parseInt(end[0]) * 60) + parseInt(end[1])
+                                                        let start = e.target.value.split(":")
+                                                        let startInMin = (parseInt(start[0]) * 60) + parseInt(start[1])
 
-                                                    console.log(endInMin,startInMin)
 
-                                                     setTimeTaken(endInMin - startInMin)
+                                                        let end = taskEndTime.split(":")
 
-                                                }
-                                                }></input>
-                                        
-                                            <br /><br />
-                                            <label>Total Time:&nbsp;</label>{
+                                                        let endInMin = (parseInt(end[0]) * 60) + parseInt(end[1])
+                                                        console.log(endInMin, startInMin)
 
-                                                Math.trunc(timeTaken/60) } hours and { timeTaken % 60
- 
 
-                                            } mins
+                                                        setTimeTaken(endInMin - startInMin)
 
-</div></div>
+
+                                                    }}></input>
+                                                    &nbsp;&nbsp;
+                                                    <br />
+                                                    <label for="appt">End Time:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                                    <input type="time" id="appt" name="appt" onChange={(e) => {
+
+
+                                                        setTaskEndTime(e.target.value)
+
+                                                        let start = taskStartTime.split(":")
+                                                        let startInMin = (parseInt(start[0]) * 60) + parseInt(start[1])
+
+                                                        let end = e.target.value.split(":")
+
+                                                        let endInMin = (parseInt(end[0]) * 60) + parseInt(end[1])
+
+                                                        console.log(endInMin, startInMin)
+
+                                                        setTimeTaken(endInMin - startInMin)
+
+                                                    }
+                                                    }></input>
+
+                                                    <br /><br />
+                                                    <label>Total Time:&nbsp;</label>{
+
+                                                        Math.trunc(timeTaken / 60)} hours and {timeTaken % 60
+
+
+                                                    } mins
+
+                                                </div></div>
 
                                         </Modal.Body>
                                         <Modal.Footer>
@@ -431,7 +431,7 @@ const DailyTasks = () => {
                                             &nbsp;
                                             &nbsp;
 
-                                            <Button style={{ backgroundColor: "#ff9b44", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
+                                            <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
                                                 try {
                                                     axios.post(`${originURL}/tasks/addtask`, {
 
