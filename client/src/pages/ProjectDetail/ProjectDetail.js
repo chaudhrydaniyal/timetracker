@@ -35,7 +35,7 @@ import img1 from "../../Assets/DataTables img/1.jpg";
 import img2 from "../../Assets/DataTables img/2.jpg";
 import avatar from '../../Assets/img/avatar.jpg'
 
-import { useNavigate  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "./single.css";
 
@@ -54,7 +54,7 @@ const ProjectDetail = () => {
 
 
 
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
 
 
 
@@ -105,18 +105,15 @@ const ProjectDetail = () => {
             <Paper className="p-4" sx={{ width: "100%", mb: 2 }}>
               {/* {JSON.stringify(propDetail)} */}
               <div className="d-flex">
-              <h4>Project Details</h4> 
-              { JSON.parse(localStorage.getItem("user")).isAdmin && <>
-              <Button style={{ marginLeft: "auto",marginRight: "10px", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} onClick={handleShowProjectEdit}> &nbsp;&nbsp;&nbsp;<i class="bi bi-pencil-square mb-1"></i> &nbsp;Edit &nbsp;&nbsp;&nbsp;</Button>{' '}
-              {/* <Button style={{ marginRight: "10px", backgroundColor: "red", color: "white", fontWeight: "700" }} onClick={() => {
+                <h4>Project Details</h4>
+                {JSON.parse(localStorage.getItem("user")).isAdmin && <>
+                  <Button style={{ marginLeft: "auto", marginRight: "10px", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} onClick={handleShowProjectEdit}> &nbsp;&nbsp;&nbsp;<i class="bi bi-pencil-square mb-1"></i> &nbsp;Edit &nbsp;&nbsp;&nbsp;</Button>{' '}
+                  {/* <Button style={{ marginRight: "10px", backgroundColor: "red", color: "white", fontWeight: "700" }} onClick={() => {
                         axios.delete(`${originURL}/projects/${propDetail._id}`)
-                        navigate("/projects");
-
-                        
-
+                        navigate("/projects");             
                     }}> <i class="bi bi-trash mb-1"></i> &nbsp;Delete</Button>{' '} */}
-              </>
-              }
+                </>
+                }
               </div>
               <br></br>
               <Container fluid>
@@ -140,7 +137,7 @@ const ProjectDetail = () => {
                         <label >Start Date:</label> &nbsp;
                         <input type="date" defaultValue={
                           moment(new Date(projectStartDate)).format("YYYY-MM-DD")
-                          
+
 
 
                         } onSelect={(e) => {
@@ -154,7 +151,7 @@ const ProjectDetail = () => {
                         <label >Estimated End Date:</label> &nbsp;
                         <input type="date" defaultValue={
                           moment(new Date(projectEndDate)).format("YYYY-MM-DD")
-                          
+
 
                         } onSelect={(e) => {
                           // setProjectEndDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
@@ -191,14 +188,14 @@ const ProjectDetail = () => {
                         })
 
 
-                        propDetail.projectname= projectName;
-                        propDetail.description= projectDescription;
+                        propDetail.projectname = projectName;
+                        propDetail.description = projectDescription;
                         // propDetail.dateCreated= moment(new Date).format("dddd, MMMM Do YYYY"),
-                        propDetail.projectStartDate= projectStartDate;
-                        propDetail.projectEndDate= projectEndDate;
-                        propDetail.allocatedWorkingDays= allocatedWorkingDays;
+                        propDetail.projectStartDate = projectStartDate;
+                        propDetail.projectEndDate = projectEndDate;
+                        propDetail.allocatedWorkingDays = allocatedWorkingDays;
 
-                        
+
 
                         handleCloseProjectEdit()
                         setUpdate(!update)
@@ -361,16 +358,16 @@ const ProjectDetail = () => {
                         {propDetail.assignTo.map((d, i) => {
                           return (
                             <div key={i}>
-                              <div className="my-2 d-flex w-100">
-                                <div onClick={() => { setmodaldata(d); handleShow() }}>
+                              <div  style={{cursor:"pointer"}} className="my-2 d-flex w-100" onClick={() => { setmodaldata(d); handleShow() }}>
+                                <div >
                                   <Avatar
                                     alt="user"
                                     src={img1}
                                     sx={{ width: 46, height: 46 }}
                                   />
                                 </div>
-                                <div className="px-2 d-flex flex-column justify-content-center">
-                                  <div>
+                                <div className="px-2 d-flex flex-column justify-content-center" >
+                                  <div >
                                     <p
                                       style={{
                                         paddingBottom: 0,
@@ -381,7 +378,11 @@ const ProjectDetail = () => {
                                       {d.username}
                                     </p>
                                   </div>
-                                  <Modal
+                                 
+                    
+                                </div>
+                              </div>
+                              <Modal
                                     style={{ marginTop: "30vh" }}
                                     show={show}
                                     onHide={handleClose}
@@ -429,20 +430,8 @@ const ProjectDetail = () => {
                                       </Button>
                                     </Modal.Footer>
                                   </Modal>
-                                  {/* <div>
-                             <p
-                               style={{
-                                 paddingBottom: 0,
-                                 marginBottom: 0,
-                                 fontSize: "13px",
-                               }}
-                             >
-                               Jr Software Engineer
-                             </p>
-                           </div> */}
-                                </div>
-                              </div>
                             </div>
+                            
                           );
                         })}
                       </div>
