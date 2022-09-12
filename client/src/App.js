@@ -58,12 +58,12 @@ function App() {
               <Footer />
             </>
             :
-            <>
+            <div  style={{backgroundColor: '#f7f7f7'}}>
               <Routes>
                 <Route path="/" element={<Navigate to="/login" />} />
                 <Route path='/login' element={< Login />} />
               </Routes>
-            </>
+            </div>
         }
       </BrowserRouter>
     </>

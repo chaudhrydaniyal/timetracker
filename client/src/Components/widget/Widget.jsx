@@ -1,4 +1,4 @@
-import React , { Component}  from 'react';
+import React , { Component, useEffect, useState}  from 'react';
 
 import "./widget.css";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -7,8 +7,30 @@ import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalance
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import { Link } from 'react-router-dom';
+import axios from "axios";
+import originURL from "../../url";
+
 
 const Widget = ({ type }) => {
+
+  const [projects,setProjects] = useState([])
+  const [users,setUsers] = useState([])
+
+
+  useEffect(() => {
+    axios.get(`${originURL}/projects/allprojects`).then((res) => {
+
+      setProjects(res.data.get);
+
+    })
+
+    axios.get(`${originURL}/users/allusers`).then((res) => {
+      setUsers(res.data.users);
+  });
+
+  }, [])
+
+
   let data;
 
   //temporary
@@ -85,11 +107,15 @@ const Widget = ({ type }) => {
   }
 
   return (
-    <div className="widget">
+    <div className="widget" style={{backgroundColor:"white" }}>
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">
-          {data.isMoney && "$"} {amount}
+          {data.title=='USERS' && users.length}
+          {data.title=='PROJECTS' && projects.length}
+
+          {data.isMoney && `$${amount}`}
+
         </span>
         <Link to={`${data.linkURL}`} style={{textDecoration:"none", color:"black"}}>
         <span className="link">{data.link}</span>

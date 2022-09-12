@@ -17,7 +17,7 @@ const Login = () => {
   const handleClick = async(e) => {
     e.preventDefault();
     await loginCall({ username: username.current.value, password: password.current.value }, dispatch)
-    navigate("/")
+    navigate("/dashboard")
   } 
 
   console.log("Context", user)

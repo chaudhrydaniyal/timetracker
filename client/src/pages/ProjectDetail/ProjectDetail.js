@@ -34,6 +34,9 @@ import { Col, Row } from "react-bootstrap";
 import img1 from "../../Assets/DataTables img/1.jpg";
 import img2 from "../../Assets/DataTables img/2.jpg";
 import avatar from '../../Assets/img/avatar.jpg'
+
+import { useNavigate  } from "react-router-dom";
+
 import "./single.css";
 
 
@@ -41,6 +44,20 @@ var moment = require('moment'); // require
 
 
 const ProjectDetail = () => {
+
+
+
+
+
+
+
+
+
+
+  const navigate  = useNavigate();
+
+
+
   const item = useLocation();
 
   console.log("testvalue", item);
@@ -63,6 +80,20 @@ const ProjectDetail = () => {
 
   }, [])
 
+
+
+  const [projectName, setProjectName] = useState(propDetail.projectname);
+  const [projectManager, setProjectManager] = useState("");
+  const [projectDescription, setProjectDescription] = useState(propDetail.description);
+  const [projectStartDate, setProjectStartDate] = useState(propDetail.projectStartDate);
+  const [projectEndDate, setProjectEndDate] = useState(propDetail.projectEndDate);
+  const [allocatedWorkingDays, setAllocatedWorkingDays] = useState(propDetail.allocatedWorkingDays);
+  const [showProjectEdit, setShowProjectEdit] = useState(false);
+
+  const handleCloseProjectEdit = () => setShowProjectEdit(false);
+  const handleShowProjectEdit = () => setShowProjectEdit(true);
+  const [update, setUpdate] = useState(false);
+
   return (
     <>
       <div
@@ -73,9 +104,118 @@ const ProjectDetail = () => {
           <Box sx={{ width: "95%" }}>
             <Paper className="p-4" sx={{ width: "100%", mb: 2 }}>
               {/* {JSON.stringify(propDetail)} */}
-              <h4>Project Details</h4>
+              <div className="d-flex">
+              <h4>Project Details</h4> 
+              { JSON.parse(localStorage.getItem("user")).isAdmin && <>
+              <Button style={{ marginLeft: "auto",marginRight: "10px", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} onClick={handleShowProjectEdit}> &nbsp;&nbsp;&nbsp;<i class="bi bi-pencil-square mb-1"></i> &nbsp;Edit &nbsp;&nbsp;&nbsp;</Button>{' '}
+              {/* <Button style={{ marginRight: "10px", backgroundColor: "red", color: "white", fontWeight: "700" }} onClick={() => {
+                        axios.delete(`${originURL}/projects/${propDetail._id}`)
+                        navigate("/projects");
+
+                        
+
+                    }}> <i class="bi bi-trash mb-1"></i> &nbsp;Delete</Button>{' '} */}
+              </>
+              }
+              </div>
               <br></br>
               <Container fluid>
+
+
+
+
+                <Modal style={{ marginTop: "18vh" }} show={showProjectEdit} onHide={handleCloseProjectEdit} animation={false}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Edit Project</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <div className="d-flex justify-content-center">
+                      <div style={{ width: "80%" }} >
+                        <input value={projectName} style={{ width: "100%" }} onChange={(e) => setProjectName(e.target.value)}></input>
+                        <br /><br />
+
+                        <input placeholder="Project Manager" style={{ width: "100%" }} onChange={(e) => setProjectManager(e.target.value)}></input>
+                        <br /><br />
+
+                        <label >Start Date:</label> &nbsp;
+                        <input type="date" defaultValue={
+                          moment(new Date(projectStartDate)).format("YYYY-MM-DD")
+                          
+
+
+                        } onSelect={(e) => {
+                          // setProjectStartDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
+                          setProjectStartDate(new Date(e.target.value))
+
+                        }}
+                        />
+                        <br /><br />
+
+                        <label >Estimated End Date:</label> &nbsp;
+                        <input type="date" defaultValue={
+                          moment(new Date(projectEndDate)).format("YYYY-MM-DD")
+                          
+
+                        } onSelect={(e) => {
+                          // setProjectEndDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
+                          setProjectEndDate(new Date(e.target.value))
+
+                        }}
+                        />
+                        <br /><br />
+
+                        <input value={allocatedWorkingDays} type="number" style={{ width: "100%" }} onChange={(e) => setAllocatedWorkingDays(e.target.value)}></input>
+                        <br /><br />
+
+                        <textarea value={projectDescription} style={{ width: "100%" }} onChange={(e) => setProjectDescription(e.target.value)}></textarea>
+                      </div>
+                    </div>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button style={{ marginLeft: "auto", backgroundColor: "gray", color: "white", fontWeight: "700" }} variant="secondary" onClick={handleCloseProjectEdit}>
+                      Close
+                    </Button>
+                    &nbsp; &nbsp;
+                    <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
+                      try {
+                        axios.put(`${originURL}/projects/addproject`, {
+
+                          _id: propDetail._id,
+                          projectname: projectName,
+                          description: projectDescription,
+                          // dateCreated: moment(new Date).format("dddd, MMMM Do YYYY"),
+                          projectStartDate: projectStartDate,
+                          projectEndDate: projectEndDate,
+                          allocatedWorkingDays: allocatedWorkingDays
+
+                        })
+
+
+                        propDetail.projectname= projectName;
+                        propDetail.description= projectDescription;
+                        // propDetail.dateCreated= moment(new Date).format("dddd, MMMM Do YYYY"),
+                        propDetail.projectStartDate= projectStartDate;
+                        propDetail.projectEndDate= projectEndDate;
+                        propDetail.allocatedWorkingDays= allocatedWorkingDays;
+
+                        
+
+                        handleCloseProjectEdit()
+                        setUpdate(!update)
+
+                      } catch (err) {
+                        console.log(err)
+                      }
+                    }}>
+
+                      Save Changes
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+
+
+
+
                 {/* flex */}
                 <div className="cardflex ">
                   {/* flex items */}
@@ -149,9 +289,9 @@ const ProjectDetail = () => {
                             </div>
                             <div>
                               <p>
-                              {moment(new Date(propDetail.projectStartDate)).format("dddd, MMMM Do YYYY")}
+                                {moment(new Date(propDetail.projectStartDate)).format("dddd, MMMM Do YYYY")}
 
-                                </p>
+                              </p>
                             </div>
                           </div>
                           <div className="d-flex flex-column ">
@@ -160,13 +300,13 @@ const ProjectDetail = () => {
                                 fontWeight: "bold",
                                 paddingBottom: 1,
                                 marginBottom: 1,
-                              }}> DeadLine</p>
+                              }}> Deadline</p>
                             </div>
                             <div>
                               <p>
-                              {moment(new Date(propDetail.projectEndDate)).format("dddd, MMMM Do YYYY")}
+                                {moment(new Date(propDetail.projectEndDate)).format("dddd, MMMM Do YYYY")}
 
-                                 </p>
+                              </p>
                             </div>
                           </div>
                           <div className="d-flex flex-column ">

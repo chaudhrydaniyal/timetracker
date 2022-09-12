@@ -319,7 +319,7 @@ const Projects = () => {
                         }}
                         style={{ textDecoration: "none" }}
                     >
-                        <Button style={{ backgroundColor: "gray", color: "white", fontWeight: "500" }} >Details</Button>
+                        <Button style={{ backgroundColor: "#0096FF", color: "white", fontWeight: "500" }} >Details</Button>
                     </Link>
                 </TableCell>
             </TableRow>
@@ -514,7 +514,6 @@ const Projects = () => {
                                 onPageChange={handleChangePage}
                                 onRowsPerPageChange={handleChangeRowsPerPage}
                             />
-
                         </Paper>
                     </Box>
                 </Container>

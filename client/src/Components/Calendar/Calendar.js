@@ -70,7 +70,7 @@ const Calendar = () => {
 
     return (
         <>
-            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7' }}>
+            <div className='' style={{ backgroundColor: '#f7f7f7' }}>
                 <section className="content-header">
                     <div className="container-fluid">
                         <div className='row align-items-center'>

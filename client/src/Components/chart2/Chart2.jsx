@@ -12,7 +12,6 @@ class RangeBarChartAdvanced extends React.Component {
   componentDidMount() {
     // Typical usage (don't forget to compare props):
 
-
     axios.get(`${originURL}/tasks/alltasks`).then((res) => {
 
       let requiredData = [];
@@ -21,20 +20,15 @@ class RangeBarChartAdvanced extends React.Component {
       console.log("res.data.get",res.data.get)
       temp.map((t) => {
 
-
         if (!requiredData.find((rD) => {
           return (rD.name == t.addedby.username)
         })) {
-
-          
 
           requiredData.push({ name: t.addedby.username, data:[] })
 
         }
 
-
       })
-
 
 
       temp.map((t) => {
@@ -42,18 +36,12 @@ class RangeBarChartAdvanced extends React.Component {
         let dateToAdd = new Date(t.date)
 
         dateToAdd.setDate(dateToAdd.getDate() + 1);
-
-
-            
-
+          
           requiredData.find((tem) => tem.name == t.addedby.username).data.push({x:t.selectProject.projectname,y:[new Date(t.date).getTime(),dateToAdd.getTime()]})
         
-
         }
 
-
       )
-
 
       this.setState({series:requiredData})
     });

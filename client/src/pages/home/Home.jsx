@@ -14,13 +14,13 @@ const Dashboard = () => {
   return (
     <div
       className="content-wrapper"
-      style={{ backgroundColor: "#f7f7f7", height: "90vh", paddingTop: "50px", paddingLeft: "30px", paddingRight: "30px" }}
+      style={{ backgroundColor: "#f7f7f7", paddingTop: "50px", paddingLeft: "30px", paddingRight: "30px" }}
     >
       {/* <Sidebar /> */}
       <div className="homeContainer">
         {/* <Navbar /> */}
         <div className="widgets d-flex">
-          <Widget type="user" />
+          <Widget type="user"/>
           <Widget type="project" />
           <Widget type="earning" />
           <Widget type="balance" />
@@ -28,13 +28,13 @@ const Dashboard = () => {
         <br />
         <br />
 
-        <div className="charts">
+        <div className="charts" style={{ backgroundColor: "white", borderRadius: "10px", paddingTop: "20px" }}>
           {/* <Featured /> */}
           {/* <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} /> */}
 
           <div className="d-flex justify-content-center">
 
-            <h4>Projects Timeline</h4>
+            <h4 style={{ color: "#a0a0a0", fontWeight: "600" }}>Projects Timeline</h4>
 
           </div>
           <RangeBarChart></RangeBarChart>
@@ -45,24 +45,23 @@ const Dashboard = () => {
         <br />
         <br />
 
-        <div className="charts">
+        <div className="charts" style={{ backgroundColor: "white", borderRadius: "10px", paddingTop: "20px" }}>
           {/* <Featured /> */}
           {/* <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} /> */}
           <div className="d-flex justify-content-center">
 
-<h4>Summary</h4>
+            <h4 style={{ color: "#a0a0a0", fontWeight: "600" }}>Summary</h4>
 
-</div>
+          </div>
           <RangeBarChartAdvanced></RangeBarChartAdvanced>
-
 
         </div>
         <br />
-        <div className="listContainer">
+        <br />
+        <br />
+        <br />
 
-          <div className="listTitle">Latest Transactions</div>
-          {/* <Table /> */}
-        </div>
+
       </div>
     </div>
   );

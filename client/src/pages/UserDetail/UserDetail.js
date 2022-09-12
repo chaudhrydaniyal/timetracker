@@ -356,7 +356,7 @@ const UserDetail = () => {
                         }}
                         style={{ textDecoration: "none" }}
                     >
-                        <Button style={{ backgroundColor: "gray", color: "white", fontWeight: "500" }} variant="success">Details</Button>
+                        <Button style={{ backgroundColor: "#0096FF", color: "white", fontWeight: "500" }} variant="success">Details</Button>
                     </Link>
                 </TableCell>
             </TableRow>
@@ -418,7 +418,7 @@ const UserDetail = () => {
                         style={{ textDecoration: "none" }}
 
                     >
-                        <Button style={{ backgroundColor: "gray", color: "white", fontWeight: "500" }} variant="success">Details</Button>
+                        <Button style={{ backgroundColor: "#0096FF", color: "white", fontWeight: "500" }} variant="success">Details</Button>
                     </Link>
                 </TableCell>
             </TableRow>
@@ -427,7 +427,7 @@ const UserDetail = () => {
 
     return (
         <>
-            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', height: "90vh", paddingTop: "50px" }}>
+            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', paddingTop: "50px" }}>
                 <Container style={{ marginTop: "20px", marginBottom: "80px" }}>
                     <Box sx={{ width: "95%" }}>
                         <Paper sx={{ width: "100%", mb: 2, padding: "30px", paddingBottom: "70px" }}>
@@ -695,6 +695,7 @@ const UserDetail = () => {
                         </Paper>
                     </Box>
                 </Container>
+                <br />
             </div>
         </>
     );
