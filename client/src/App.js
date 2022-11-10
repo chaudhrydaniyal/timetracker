@@ -13,10 +13,8 @@ import CalendarDetails from "./Components/Calendar/CalendarDetails";
 import "./index.css"
 import DataManagement from "./Components/DATA Management/DataManagement";
 import { Navigate } from "react-router-dom";
-
 import { Context } from "./Context/Context";
 import { Suspense, useContext } from "react";
-
 import Login from "./pages/Login/Login";
 import Projects from "./pages/Projects/Projects";
 import Users from "./pages/Users/Users";
@@ -25,6 +23,8 @@ import ProjectDetail from "./pages/ProjectDetail/ProjectDetail";
 import UserDetail from "./pages/UserDetail/UserDetail";
 import TaskDetail from "./pages/TaskDetail/TaskDetail";
 import Dashboard from "./pages/home/Home";
+import AssignTasks from "./pages/AssignTasks/AssignTasks";
+import TasksAssigned from "./pages/TasksAssigned/TasksAssigned";
 
 function App() {
 
@@ -49,11 +49,14 @@ function App() {
                 <Route path='/users' element={<Users />}></Route>
                 <Route path="/users/userdetail" element={<UserDetail />} />
                 <Route path='/dailytasks' element={<DailyTasks />}></Route>
+                <Route path='/assigntasks' element={<AssignTasks />}></Route>
+                <Route path='/tasksassigned' element={<TasksAssigned />}></Route>
+
+
                 <Route path="/dailytasks/taskdetail" element={<TaskDetail />} />
                 <Route path="/calendar/:id" element={<CalendarDetails />}></Route>
                 <Route path="/datamanagement" element={<DataManagement />} />
                 <Route path="/dashboard" element={<Dashboard />} />
-
               </Routes>
               <Footer />
             </>

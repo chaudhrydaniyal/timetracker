@@ -23,5 +23,4 @@ router.get("/:id",verifyUser,singleUser)
 router.put("/:id", verifyUser,updateUser)
 
 
-
 module.exports = router;

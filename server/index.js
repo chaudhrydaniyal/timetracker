@@ -10,6 +10,8 @@ const authRoute = require('./Routes/Auth/auth')
 const usersRoute = require('./Routes/users')
 const cookieparser = require("cookie-parser");
 const projectRoute = require('./Routes/Admin/Project/Project')
+const projectPhaseRoute = require('./Routes/Admin/Project/ProjectPhases')
+
 const taskRoute = require('./Routes/Admin/tasks/tasks')
 const cors = require("cors")
 env.config()
@@ -40,6 +42,7 @@ app.post("/upload", upload.single("file"), (req, res) => {
 });
 //Routes
 // app.use(require("./Routes/holiday"));
+app.use('/projectphase',projectPhaseRoute)
 app.use('/auth',authRoute)
 app.use('/projects',projectRoute)
 app.use('/users',usersRoute)
