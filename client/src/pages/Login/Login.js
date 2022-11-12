@@ -10,18 +10,18 @@ import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
+
   const { user, isFetching, dispatch } = useContext(Context)
+
   const username = useRef();
   const password = useRef();
   let navigate = useNavigate()
-  const handleClick = async(e) => {
+
+  const handleClick = async (e) => {
     e.preventDefault();
     await loginCall({ username: username.current.value, password: password.current.value }, dispatch)
     navigate("/dashboard")
-  } 
-
-  console.log("Context", user)
-
+  }
 
   return (
     <>
@@ -42,12 +42,12 @@ const Login = () => {
             <Form>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Username</Form.Label>
-                <Form.Control type="email" placeholder="Enter username"  ref={username} required/>
+                <Form.Control type="email" placeholder="Enter username" ref={username} required />
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password"  ref={password} required/>
+                <Form.Control type="password" placeholder="Password" ref={password} required />
               </Form.Group>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Button variant="success" type="submit" className="px-5 mt-5" onClick={handleClick} >

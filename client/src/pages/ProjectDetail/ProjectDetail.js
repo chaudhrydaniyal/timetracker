@@ -94,9 +94,9 @@ const ProjectDetail = () => {
   );
   const [showProjectEdit, setShowProjectEdit] = useState(false);
   const [PhaseModel, setPhaseModel] = useState(false);
-  const [modelPhaseDetail,setModelPhaseDetail] = useState('');
-  const [modelStartDate,setModelStartDate] = useState('')
-  const [modelEndDate,setModelEndDate] = useState('')
+  const [modelPhaseDetail, setModelPhaseDetail] = useState('');
+  const [modelStartDate, setModelStartDate] = useState('')
+  const [modelEndDate, setModelEndDate] = useState('')
 
   const handleCloseProjectEdit = () => setShowProjectEdit(false);
   const handleShowProjectEdit = () => setShowProjectEdit(true);
@@ -106,9 +106,9 @@ const ProjectDetail = () => {
 
   return (
     <>
-      <div 
-         style={{
-      marginBottom:"100px"
+      <div
+        style={{
+          marginBottom: "130px"
         }}>
         <div
           className="content-wrapper"
@@ -433,117 +433,117 @@ const ProjectDetail = () => {
                           </div>
                         </div>
                       </Card>
-                      
-                  <Modal
-                    style={{ marginTop: "18vh" }}
-                    show={PhaseModel}
-                    onHide={handleCloseModelPhase}
-                    animation={false}
-                  >
-                    <Modal.Header closeButton>
-                      <Modal.Title>Add Phases</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <div className="d-flex justify-content-center">
-                        <div style={{ width: "80%" }}>
-                         
-                          <input
-                          value={modelPhaseDetail}
-                            placeholder="Phase detail"
-                            style={{ width: "100%" }}
-                            onChange={(e) => setModelPhaseDetail(e.target.value)}
-                          ></input>
-                          <br />
-                          <br />
-                          <label>Estimated Start Date:</label> &nbsp;
-                          <input
-                          // value={modelStartDate}
-                            type="date"
 
-                            // defaultValue={moment(
-                            //   new Date(modelStartDate)
-                            // ).format("YYYY-MM-DD")}
-
-                            onSelect={(e) => {
-                              // setProjectStartDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
-                              setModelStartDate(new Date(e.target.value));
-                            }}
-                          />
-                          <br />
-                          <br />
-                          <label>Estimated End Date:</label> &nbsp;
-                          <input
-                          // value={modelEndDate}
-                            type="date"
-
-                            // defaultValue={moment(
-                            //   new Date(modelEndDate)
-                            // ).format("YYYY-MM-DD")}
-
-                            onSelect={(e) => {
-                              // setProjectEndDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
-                              setModelEndDate(new Date(e.target.value));
-                            }}
-                          />
-                          <br />
-                          <br />
-                       
-                         
-                        </div>
-                      </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button
-                        style={{
-                          marginLeft: "auto",
-                          backgroundColor: "gray",
-                          color: "white",
-                          fontWeight: "700",
-                        }}
-                        variant="secondary"
-                        onClick={handleCloseModelPhase}
+                      <Modal
+                        style={{ marginTop: "18vh" }}
+                        show={PhaseModel}
+                        onHide={handleCloseModelPhase}
+                        animation={false}
                       >
-                        Close
-                      </Button>
-                      &nbsp; &nbsp;
-                      <Button
-                        style={{
-                          backgroundColor: "#0F52BA",
-                          color: "white",
-                          fontWeight: "700",
-                        }}
-                        variant="primary"
-                        onClick={() => {
-                          try {
-                            axios.post(`${originURL}/projectphase/addprojectphase`, {
-                              phase: modelPhaseDetail,
-                              ExpectedStartDate: modelStartDate,
-                              ExpectedEndDate: modelEndDate,
-                              project: propDetail._id,
+                        <Modal.Header closeButton>
+                          <Modal.Title>Add Phases</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <div className="d-flex justify-content-center">
+                            <div style={{ width: "80%" }}>
+
+                              <input
+                                value={modelPhaseDetail}
+                                placeholder="Phase detail"
+                                style={{ width: "100%" }}
+                                onChange={(e) => setModelPhaseDetail(e.target.value)}
+                              ></input>
+                              <br />
+                              <br />
+                              <label>Estimated Start Date:</label> &nbsp;
+                              <input
+                                // value={modelStartDate}
+                                type="date"
+
+                                // defaultValue={moment(
+                                //   new Date(modelStartDate)
+                                // ).format("YYYY-MM-DD")}
+
+                                onSelect={(e) => {
+                                  // setProjectStartDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
+                                  setModelStartDate(new Date(e.target.value));
+                                }}
+                              />
+                              <br />
+                              <br />
+                              <label>Estimated End Date:</label> &nbsp;
+                              <input
+                                // value={modelEndDate}
+                                type="date"
+
+                                // defaultValue={moment(
+                                //   new Date(modelEndDate)
+                                // ).format("YYYY-MM-DD")}
+
+                                onSelect={(e) => {
+                                  // setProjectEndDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
+                                  setModelEndDate(new Date(e.target.value));
+                                }}
+                              />
+                              <br />
+                              <br />
+
+
+                            </div>
+                          </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <Button
+                            style={{
+                              marginLeft: "auto",
+                              backgroundColor: "gray",
+                              color: "white",
+                              fontWeight: "700",
+                            }}
+                            variant="secondary"
+                            onClick={handleCloseModelPhase}
+                          >
+                            Close
+                          </Button>
+                          &nbsp; &nbsp;
+                          <Button
+                            style={{
+                              backgroundColor: "#0F52BA",
+                              color: "white",
+                              fontWeight: "700",
+                            }}
+                            variant="primary"
+                            onClick={() => {
+                              try {
+                                axios.post(`${originURL}/projectphase/addprojectphase`, {
+                                  phase: modelPhaseDetail,
+                                  ExpectedStartDate: modelStartDate,
+                                  ExpectedEndDate: modelEndDate,
+                                  project: propDetail._id,
 
 
 
-                              // dateCreated: moment(new Date).format("dddd, MMMM Do YYYY"),
+                                  // dateCreated: moment(new Date).format("dddd, MMMM Do YYYY"),
 
 
-                            });
+                                });
 
-                           
-                            setUpdate2(!update2);
 
-                            handleCloseModelPhase();
-                          } catch (err) {
-                            console.log(err);
-                          }
-                        }}
-                      >
-                        Save 
-                      </Button>
-                    </Modal.Footer>
-                  </Modal>
-                      
+                                setUpdate2(!update2);
+
+                                handleCloseModelPhase();
+                              } catch (err) {
+                                console.log(err);
+                              }
+                            }}
+                          >
+                            Save
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+
                     </div>
-                    
+
 
                     {/* left items */}
                     <div>
@@ -679,14 +679,14 @@ const ProjectDetail = () => {
                       {/* <h4>Project Phases</h4> */}
                     </div>
                     <br></br>
-                     <Container fluid>
-                    
+                    <Container fluid>
+
                       {/* flex */}
                       <div className="cardflex ">
                         {/* flex items */}
                         {/* right items */}
                         <div style={{ width: "100%" }}>
-                          <Card style={{ height: "340px" }}>
+                          <Card style={{ minHeight: "340px" }}>
                             <div className="d-flex align-items-center">
                               <div style={{ width: "100%" }}>
                                 {" "}
@@ -697,25 +697,25 @@ const ProjectDetail = () => {
                                   <div>
                                     {JSON.parse(localStorage.getItem("user"))
                                       .isAdmin && (
-                                      <Button
-                                        style={{
-                                          marginLeft: "auto",
-                                          marginRight: "10px",
-                                          backgroundColor: "#0F52BA",
-                                          color: "white",
-                                          fontWeight: "700",
-                                          marginBottom:'5%'
-                                          // alignItems: "self-end",
-                                          // flex: "display",
-                                        }}
-                                        onClick={hanldeShowPhaseModel}
-                                      >
-                                        {" "}
-                                        &nbsp;&nbsp;&nbsp;
-                                        <i class="bi bi-pencil-square mb-1"></i>{" "}
-                                        &nbsp;ADD  &nbsp;&nbsp;&nbsp;
-                                      </Button>
-                                    )}
+                                        <Button
+                                          style={{
+                                            marginLeft: "auto",
+                                            marginRight: "10px",
+                                            backgroundColor: "#0F52BA",
+                                            color: "white",
+                                            fontWeight: "700",
+                                            marginBottom: '5%'
+                                            // alignItems: "self-end",
+                                            // flex: "display",
+                                          }}
+                                          onClick={hanldeShowPhaseModel}
+                                        >
+                                          {" "}
+                                          &nbsp;&nbsp;&nbsp;
+                                          <i class="bi bi-pencil-square mb-1"></i>{" "}
+                                          &nbsp;ADD  &nbsp;&nbsp;&nbsp;
+                                        </Button>
+                                      )}
                                   </div>
                                 </div>
                               </div>
@@ -730,53 +730,53 @@ const ProjectDetail = () => {
                                     className: "py-2",
                                   }}
                                 >
-                                 
+
                                 </div>
                               </div>
-                              
-                              <Container>
-                               
-                    <div className="d-flex justify-content-end ">
-                  
 
-                      
-                    </div>
-                      <Row className="my-3">
-                        <Table striped bordered hover>
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th style={{textAlign:"center"}}>Phase Details</th>
-                              <th style={{textAlign:"center"}}>Estimated Start Date</th>
-                              <th style={{textAlign:"center"}}>Estimated End Date</th>
-                         
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {projectPhases &&
-                              projectPhases.map((d, i) => {
-                                return (
-                                 
-                                    <tr >
-                                      <th style={{textAlign:"center"}}>{i+1}</th>
-                                      <td style={{textAlign:"center"}}>{d.phase}</td>
-                                      <td style={{textAlign:"center"}}>{d. ExpectedStartDate}</td>
-                                      <td style={{textAlign:"center"}}>{d.ExpectedEndDate}</td>
-                                      {/* <td>{d.end}</td>
+                              <Container>
+
+                                <div className="d-flex justify-content-end ">
+
+
+
+                                </div>
+                                <Row className="my-3">
+                                  <Table striped bordered hover>
+                                    <thead>
+                                      <tr>
+                                        <th>#</th>
+                                        <th style={{ textAlign: "center" }}>Phase Details</th>
+                                        <th style={{ textAlign: "center" }}>Estimated Start Date</th>
+                                        <th style={{ textAlign: "center" }}>Estimated End Date</th>
+
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {projectPhases &&
+                                        projectPhases.map((d, i) => {
+                                          return (
+
+                                            <tr >
+                                              <th style={{ textAlign: "center" }}>{i + 1}</th>
+                                              <td style={{ textAlign: "center" }}>{d.phase}</td>
+                                              <td style={{ textAlign: "center" }}>{(moment(d.ExpectedStartDate).format('d-MM-yyyy'))}</td>
+                                              <td style={{ textAlign: "center" }}>{(moment(d.ExpectedEndDate).format('d-MM-yyyy'))}</td>
+                                              {/* <td>{d.end}</td>
                                       <td>{d.status}</td> */}
-                                      {/* <td><i class="fa fa-trash-can" aria-hidden="true" style={{color:'red'}} onClick={()=>removeitem(i)}></i></td> */}
-                                    </tr>
-                                 
-                                );
-                              })}
-                          </tbody>
-                        </Table>
-                      </Row>
-                    </Container>
-                  </div>
-              
-               
-                            
+                                              {/* <td><i class="fa fa-trash-can" aria-hidden="true" style={{color:'red'}} onClick={()=>removeitem(i)}></i></td> */}
+                                            </tr>
+
+                                          );
+                                        })}
+                                    </tbody>
+                                  </Table>
+                                </Row>
+                              </Container>
+                            </div>
+
+
+
                           </Card>
                         </div>
                       </div>
@@ -784,8 +784,8 @@ const ProjectDetail = () => {
 
 
 
-                    
-                    
+
+
 
                     {/* </Paper> */}
                     {/* </Box> */}

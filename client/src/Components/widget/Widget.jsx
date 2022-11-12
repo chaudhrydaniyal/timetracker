@@ -75,9 +75,10 @@ const Widget = ({ type }) => {
       break;
     case "earning":
       data = {
-        title: "EARNINGS",
+        title: "ASSIGNED TASKS",
         isMoney: true,
-        link: "View net earnings",
+        link: "View assigned tasks",
+        linkURL:"/tasksassigned",
         icon: (
           <MonetizationOnOutlinedIcon
             className="icon"

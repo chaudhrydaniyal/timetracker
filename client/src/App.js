@@ -25,6 +25,7 @@ import TaskDetail from "./pages/TaskDetail/TaskDetail";
 import Dashboard from "./pages/home/Home";
 import AssignTasks from "./pages/AssignTasks/AssignTasks";
 import TasksAssigned from "./pages/TasksAssigned/TasksAssigned";
+import AssignedTaskDetail from "./pages/TaskDetail/assignedTaskDetail";
 
 function App() {
 
@@ -52,6 +53,7 @@ function App() {
                 <Route path='/assigntasks' element={<AssignTasks />}></Route>
                 <Route path='/tasksassigned' element={<TasksAssigned />}></Route>
 
+                <Route path='/tasksassigned/detail' element={<AssignedTaskDetail />}></Route>
 
                 <Route path="/dailytasks/taskdetail" element={<TaskDetail />} />
                 <Route path="/calendar/:id" element={<CalendarDetails />}></Route>

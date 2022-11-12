@@ -37,6 +37,9 @@ const Header = () => {
             </li>
           </ul>
 
+
+          &nbsp; &nbsp; &nbsp;{JSON.parse(localStorage.getItem("user")) &&<h4 style={{marginTop:"8px"}}> {JSON.parse(localStorage.getItem("user")).details.username}</h4>}
+
           {/* <!-- Right navbar links --> */}
           <ul className="navbar-nav ml-auto mr-5">
             {/* <!-- Navbar Search --> */}

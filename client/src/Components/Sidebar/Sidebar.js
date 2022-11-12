@@ -81,14 +81,19 @@ const Sidebar = () => {
                 </Link>
               </li>
 
-              <li className="nav-item">
-                <Link to="/assigntasks" className="nav-link">
-                  <i className="nav-icon  fa-solid fa-user"></i>
-                  <p>
-                    Assign Tasks
-                  </p>
-                </Link>
-              </li>
+
+
+
+                <li className="nav-item">
+                  <Link to="/assigntasks" className="nav-link">
+                    <i className="nav-icon  fa-solid fa-user"></i>
+                    <p>
+                      Assign Tasks
+                    </p>
+                  </Link>
+                </li>
+
+
 
 
               <li className="nav-item">

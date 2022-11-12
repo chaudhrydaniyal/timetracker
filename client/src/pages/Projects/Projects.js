@@ -319,7 +319,7 @@ const Projects = () => {
                         }}
                         style={{ textDecoration: "none" }}
                     >
-                        <Button style={{ backgroundColor: "#0096FF", color: "white", fontWeight: "500" }} >Details</Button>
+                        <Button style={{ backgroundColor: "#0096FF", color: "white", fontWeight: "500", height:"30px" }} >Details</Button>
                     </Link>
                 </TableCell>
             </TableRow>

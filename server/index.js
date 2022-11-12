@@ -13,6 +13,10 @@ const projectRoute = require('./Routes/Admin/Project/Project')
 const projectPhaseRoute = require('./Routes/Admin/Project/ProjectPhases')
 
 const taskRoute = require('./Routes/Admin/tasks/tasks')
+
+const assignedTasksRoute = require('./Routes/Admin/tasks/assignedTasks')
+
+
 const cors = require("cors")
 env.config()
 app.use(cors());
@@ -43,6 +47,7 @@ app.post("/upload", upload.single("file"), (req, res) => {
 //Routes
 // app.use(require("./Routes/holiday"));
 app.use('/projectphase',projectPhaseRoute)
+app.use('/assigntask',assignedTasksRoute)
 app.use('/auth',authRoute)
 app.use('/projects',projectRoute)
 app.use('/users',usersRoute)

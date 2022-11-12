@@ -22,15 +22,23 @@ const assignedTasks = mongoose.Schema({
         type: Date,
     },
 
-    selectPhase: {
+    phase: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'projectphases'
+    },
+
+    project: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'projects'
     },
 
     assignedTo:
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
+    },
+    status: {
+        type: String,
     },
 
 }, { timestamps: true },)

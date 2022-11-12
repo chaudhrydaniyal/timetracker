@@ -32,7 +32,8 @@ var moment = require('moment'); // require
 
 const DailyTasks = () => {
 
-    const [requestedProperties, setRequestedProperties] = useState([]);
+    const [assignedTasks, setAssignedTasks] = useState([]);
+
     const [tasks, setTasks] = useState([]);
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("name");
@@ -46,20 +47,12 @@ const DailyTasks = () => {
     const [taskDate, setTaskDate] = useState(new Date());
     const [taskStartTime, setTaskStartTime] = useState("");
     const [timeTaken, setTimeTaken] = useState("");
-
-
     const [taskEndTime, setTaskEndTime] = useState("");
     const [taskProject, setTaskProject] = useState("");
     const [show, setShow] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
-
     const [update, setUpdate] = useState(false);
     const [projectPhase, setProjectPhase] = useState("");
-
-
-
-
-
 
 
     // *****************   Edit task    *********************************
@@ -74,12 +67,10 @@ const DailyTasks = () => {
     const [taskProjectEdit, setTaskProjectEdit] = useState("");
     const [projectPhaseEdit, setProjectPhaseEdit] = useState("");
     const [taskIdEdit, setTaskIdEdit] = useState("");
+    const [assignedTaskDetail, setAssignedTaskDetail] = useState({});
 
 
-
-
-
-
+    const [tasksTab, setTasksTab] = useState(false)
 
 
 
@@ -97,12 +88,26 @@ const DailyTasks = () => {
 
     useEffect(() => {
 
+
         axios.get(`${originURL}/tasks/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
             setTasks(res.data.task);
         });
 
+
         axios.get(`${originURL}/projects/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
             setProjects(res.data.finduser);
+        });
+
+
+    }, [update]);
+
+
+
+    useEffect(() => {
+
+
+        axios.get(`${originURL}/assigntask/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+            setAssignedTasks(res.data.task);
         });
 
 
@@ -125,7 +130,6 @@ const DailyTasks = () => {
 
         console.log("order", order)
 
-
         return order === "desc"
             ? (a, b) => descendingComparator(a, b, orderBy)
             : (a, b) => -descendingComparator(a, b, orderBy);
@@ -134,7 +138,9 @@ const DailyTasks = () => {
     // This method is created for cross-browser compatibility, if you don't
     // need to support IE11, you can use Array.prototype.sort() directly
     function stableSort(array, comparator) {
+
         const stabilizedThis = array.map((el, index) => [el, index]);
+
         stabilizedThis.sort((a, b) => {
 
             const order = comparator(a[0], b[0]);
@@ -142,11 +148,13 @@ const DailyTasks = () => {
             if (order !== 0) {
                 return order;
             }
+
             return a[1] - b[1];
 
         });
 
         return stabilizedThis.map((el) => el[0]);
+
     }
 
     const headCells = [
@@ -302,12 +310,12 @@ const DailyTasks = () => {
                         }}
                         style={{ textDecoration: "none" }}
                     >
-                        <Button style={{ backgroundColor: "transparent", color: "black", padding:"3px" }} 
-                        title="Details"><i class="bi bi-card-text"></i></Button>
+                        <Button style={{ backgroundColor: "transparent", color: "black", padding: "3px" }}
+                            title="Details"><i class="bi bi-card-text"></i></Button>
                     </Link>
 
 
-                    <Button style={{ backgroundColor: "transparent", color: "black", padding:"2px" }}  
+                    <Button style={{ backgroundColor: "transparent", color: "black", padding: "2px" }}
                         onClick={() => {
 
                             console.log(props.description, "descriptions")
@@ -344,8 +352,8 @@ const DailyTasks = () => {
 
                         setUpdate(!update)
 
-                    }} style={{ backgroundColor: "transparent", color: "red" , padding:"2px"}}
-                    title="Delete"
+                    }} style={{ backgroundColor: "transparent", color: "red", padding: "2px" }}
+                        title="Delete"
                     ><i class="bi bi-trash"></i></Button>
 
 
@@ -396,140 +404,257 @@ const DailyTasks = () => {
                                     <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Add Task</Button>{' '}
                                 </div>
                                 <br />
-                                <Modal style={{ marginTop: "15vh" }} show={show} onHide={handleClose} animation={false}>
+                                <Modal style={{ marginTop: "10vh" }} show={show} onHide={handleClose} animation={false}>
                                     <Modal.Header closeButton>
                                         <Modal.Title>Add Task</Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body>
 
-                                        <div className="d-flex justify-content-center">
-                                            <div style={{ width: "80%" }} >
+                                        <div class="container">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a data-toggle="tab" href="#home" onClick={() => { setTasksTab(false) }}>Additional Tasks</a></li>
+                                                &nbsp;
+                                                &nbsp;
+                                                &nbsp;
+                                                <li><a data-toggle="tab" href="#menu1" onClick={() => { setTasksTab(true) }}>Assigned Tasks</a></li>
+                                            </ul>
 
-                                                <label >Date:</label> &nbsp;
-                                                <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
-                                                    setTaskDate(new Date(e.target.value))
-                                                }}
-                                                />
-                                                <br /><br />
-
-                                                <label>Select The Project:</label><br />
-
-
-                                                <select onClick={(e) => { setTaskProject(e.target.value) }} style={{ width: "100%" }}>
-
-                                                    {projects && projects.map((p) => (<option value={`${p._id}`}>{p.projectname}</option>))}
-
-                                                </select>
+                                            <div class="tab-content">
 
                                                 <br />
 
-                                                <label>Project Phase:</label><br />
+                                                <div id="home" class="tab-pane in active">
+
+                                                    <h5>Additional Tasks</h5>
+                                                    <div className="d-flex justify-content-center">
+                                                        <div style={{ width: "80%" }} >
+
+                                                            <label >Date:</label> &nbsp;
+                                                            <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
+                                                                setTaskDate(new Date(e.target.value))
+                                                            }}
+                                                            />
+                                                            <br /><br />
+
+                                                            <label>Select The Project:</label><br />
+
+                                                            <select onClick={(e) => { setTaskProject(e.target.value) }} style={{ width: "100%" }}>
+
+                                                                {projects && projects.map((p) => (<option value={`${p._id}`}>{p.projectname}</option>))}
+
+                                                            </select>
+
+                                                            <br />
+
+                                                            <label>Project Phase:</label><br />
 
 
-                                                <select onClick={(e) => { setProjectPhase(e.target.value) }} style={{ width: "100%" }}>
+                                                            <select onClick={(e) => { setProjectPhase(e.target.value) }} style={{ width: "100%" }}>
 
-                                                    <option value='Analysis'>Analysis</option>
-                                                    <option value='Configuration'>Configuration</option>
-                                                    <option value='Customization'>Customization</option>
-                                                    <option value='Development'>Development</option>
-                                                    <option value='Design'>Design</option>
-                                                    <option value='Testing'>Testing</option>
-                                                    <option value='Training'>Training</option>
+                                                                <option value='Analysis'>Analysis</option>
+                                                                <option value='Configuration'>Configuration</option>
+                                                                <option value='Customization'>Customization</option>
+                                                                <option value='Development'>Development</option>
+                                                                <option value='Design'>Design</option>
+                                                                <option value='Testing'>Testing</option>
+                                                                <option value='Training'>Training</option>
 
-                                                </select>
+                                                            </select>
 
-                                                <br /><br />
+                                                            <br /><br />
 
-                                                <input placeholder="Task title" style={{ width: "100%" }} onChange={(e) => setTaskTitle(e.target.value)}></input>
-                                                <br /><br />
+                                                            <input placeholder="Task title" style={{ width: "100%" }} onChange={(e) => setTaskTitle(e.target.value)}></input>
+                                                            <br /><br />
 
-                                                <textarea placeholder="Task Description" style={{ width: "100%" }} onChange={(e) => setTaskDescription(e.target.value)}></textarea>
-                                                <br /><br />
+                                                            <textarea placeholder="Task Description" style={{ width: "100%" }} onChange={(e) => setTaskDescription(e.target.value)}></textarea>
+                                                            <br /><br />
 
-                                                <label for="appt">Start Time: &nbsp;</label>
-                                                <input type="time" id="appt" name="appt" onChange={(e) => {
-
-
-                                                    setTaskStartTime(e.target.value)
-
-                                                    let start = e.target.value.split(":")
-                                                    let startInMin = (parseInt(start[0]) * 60) + parseInt(start[1])
+                                                            <label for="appt">Start Time: &nbsp;</label>
+                                                            <input type="time" id="appt" name="appt" onChange={(e) => {
 
 
-                                                    let end = taskEndTime.split(":")
+                                                                setTaskStartTime(e.target.value)
 
-                                                    let endInMin = (parseInt(end[0]) * 60) + parseInt(end[1])
-                                                    console.log(endInMin, startInMin)
-
-
-                                                    setTimeTaken(endInMin - startInMin)
+                                                                let start = e.target.value.split(":")
+                                                                let startInMin = (parseInt(start[0]) * 60) + parseInt(start[1])
 
 
-                                                }}></input>
-                                                &nbsp;&nbsp;
+                                                                let end = taskEndTime.split(":")
 
-                                                <br />
-                                                <label for="appt">End Time:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                                <input type="time" id="appt" name="appt" onChange={(e) => {
+                                                                let endInMin = (parseInt(end[0]) * 60) + parseInt(end[1])
+                                                                console.log(endInMin, startInMin)
 
 
-                                                    setTaskEndTime(e.target.value)
+                                                                setTimeTaken(endInMin - startInMin)
 
-                                                    let start = taskStartTime.split(":")
-                                                    let startInMin = (parseInt(start[0]) * 60) + parseInt(start[1])
 
-                                                    let end = e.target.value.split(":")
+                                                            }}></input>
+                                                            &nbsp;&nbsp;
 
-                                                    let endInMin = (parseInt(end[0]) * 60) + parseInt(end[1])
+                                                            <br />
+                                                            <label for="appt">End Time:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                                            <input type="time" id="appt" name="appt" onChange={(e) => {
 
-                                                    console.log(endInMin, startInMin)
 
-                                                    setTimeTaken(endInMin - startInMin)
+                                                                setTaskEndTime(e.target.value)
 
-                                                }
-                                                }></input>
+                                                                let start = taskStartTime.split(":")
+                                                                let startInMin = (parseInt(start[0]) * 60) + parseInt(start[1])
 
-                                                <br /><br />
+                                                                let end = e.target.value.split(":")
 
-                                                <label>Total Time:&nbsp;</label>{
+                                                                let endInMin = (parseInt(end[0]) * 60) + parseInt(end[1])
 
-                                                    Math.trunc(timeTaken / 60)} hours and {timeTaken % 60
+                                                                console.log(endInMin, startInMin)
 
-                                                } mins
+                                                                setTimeTaken(endInMin - startInMin)
 
-                                            </div></div>
+                                                            }
+                                                            }></input>
+
+                                                            <br /><br />
+
+                                                            <label>Total Time:&nbsp;</label>{
+
+                                                                Math.trunc(timeTaken / 60)} hours and {timeTaken % 60
+
+                                                            } mins
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="menu1" class="tab-pane fade">
+                                                    <h5>Assigned Tasks</h5>
+
+                                                    <div className="d-flex justify-content-center">
+
+                                                        <div style={{ width: "80%" }} >
+
+                                                            <label >Date:</label> &nbsp;
+                                                            <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
+                                                                setTaskDate(new Date(e.target.value))
+                                                            }}
+                                                            />
+                                                            <br /><br />
+
+                                                            <label>Select The Task:</label><br />
+
+                                                            <select onClick={(e) => { setAssignedTaskDetail(assignedTasks.filter((a) => a._id == e.target.value)[0]) }} style={{ width: "100%" }}>
+
+                                                                {assignedTasks && assignedTasks.map((p) => (<option value={`${p._id}`}>{p.title}</option>))}
+
+                                                            </select>
+
+                                                            <br />
+                                                            <br />
+
+                                                            <label>Project:</label><br />
+
+                                                            {assignedTaskDetail.project && assignedTaskDetail.project.projectname}
+
+                                                            <br />
+                                                            <br />
+
+                                                            <label>Expected Start Date:</label><br />
+
+                                                            {assignedTaskDetail.project && assignedTaskDetail.startDate}
+
+                                                            <br />
+                                                            <br />
+
+                                                            <label>Expected End Date:</label><br />
+
+                                                            {assignedTaskDetail.project && assignedTaskDetail.endDate}
+
+                                                            <br />
+                                                            <br />
+
+
+                                                            <label>Status:</label><br />
+
+                                                            <select onClick={(e) => { setProjectPhase(e.target.value) }} style={{ width: "100%" }}>
+
+                                                                <option value='InProgress'>In Progress</option>
+                                                                <option value='Completed'>Completed</option>
+
+                                                            </select>
+
+                                                            <br />
+                                                            <br />
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     </Modal.Body>
-                                    <Modal.Footer>
-                                        <Button style={{ marginLeft: "auto", backgroundColor: "gray", color: "white", fontWeight: "700" }} variant="secondary" onClick={handleClose}>
-                                            Close
-                                        </Button>
-                                        &nbsp;
-                                        &nbsp;
 
-                                        <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
-                                            try {
-                                                axios.post(`${originURL}/tasks/addtask`, {
-                                                    date: taskDate,
-                                                    title: taskTitle,
-                                                    description: taskDescription,
-                                                    selectProject: taskProject,
-                                                    startTime: taskStartTime,
-                                                    endTime: taskEndTime,
-                                                    addedby: JSON.parse(localStorage.getItem("user")).details._id,
-                                                    projectPhase: projectPhase
-                                                })
+                                    {!tasksTab &&
 
-                                                handleClose()
-                                                setUpdate(!update)
+                                        <Modal.Footer>
+                                            <Button style={{ marginLeft: "auto", backgroundColor: "gray", color: "white", fontWeight: "700" }} variant="secondary" onClick={handleClose}>
+                                                Close
+                                            </Button>
+                                            &nbsp;
+                                            &nbsp;
+                                            <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
+                                                try {
+                                                    axios.post(`${originURL}/tasks/addtask`, {
+                                                        date: taskDate,
+                                                        title: taskTitle,
+                                                        description: taskDescription,
+                                                        selectProject: taskProject,
+                                                        startTime: taskStartTime,
+                                                        endTime: taskEndTime,
+                                                        addedby: JSON.parse(localStorage.getItem("user")).details._id,
+                                                        projectPhase: projectPhase
+                                                    })
 
-                                            } catch (err) {
-                                                console.log(err)
-                                            }
-                                        }}>
-                                            Add Task
-                                        </Button>
-                                    </Modal.Footer>
+                                                    handleClose()
+                                                    setUpdate(!update)
+
+                                                } catch (err) {
+                                                    console.log(err)
+                                                }
+                                            }}>
+                                                Add Task
+                                            </Button>
+                                        </Modal.Footer>}
+
+
+                                    {tasksTab &&
+
+                                        <Modal.Footer>
+                                            <Button style={{ marginLeft: "auto", backgroundColor: "gray", color: "white", fontWeight: "700" }} variant="secondary" onClick={handleClose}>
+                                                Close
+                                            </Button>
+                                            &nbsp;
+                                            &nbsp;
+                                            <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
+                                                try {
+                                                    axios.post(`${originURL}/tasks/addtask`, {
+                                                        date: taskDate,
+                                                        title: assignedTaskDetail.title,
+                                                        description: assignedTaskDetail.description,
+                                                        selectProject: assignedTaskDetail.project._id,
+                                                        startTime: '09:00',
+                                                        endTime: '17:30',
+                                                        addedby: JSON.parse(localStorage.getItem("user")).details._id,
+                                                        projectPhase: assignedTaskDetail.phase
+                                                    })
+
+                                                    handleClose()
+                                                    setUpdate(!update)
+
+                                                } catch (err) {
+                                                    console.log(err)
+                                                }
+                                            }}>
+                                                Add Task (Assigned)
+                                            </Button>
+                                        </Modal.Footer>}
+
                                 </Modal>
 
                                 <Modal style={{ marginTop: "15vh" }} show={showEdit} onHide={handleCloseEdit} animation={false}>

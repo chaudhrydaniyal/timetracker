@@ -248,7 +248,7 @@ const Users = () => {
                         }}
                        style={{textDecoration: "none",}}
                     >
-                        <Button  style={{ backgroundColor:"#0096FF", color:"white",fontWeight:"500"  }} variant="success">Details</Button>
+                        <Button  style={{ backgroundColor:"#0096FF", color:"white",fontWeight:"500", height:"30px"  }} variant="success">Details</Button>
                     </Link>
                 </TableCell>
 

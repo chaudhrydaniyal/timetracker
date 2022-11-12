@@ -44,9 +44,11 @@ const AssignTasks = () => {
     const [taskTitle, setTaskTitle] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
     const [taskDate, setTaskDate] = useState(new Date());
+    const [expectedTaskStartDate, setExpectedTaskStartDate] = useState(new Date());
+    const [expectedTaskEndDate, setExpectedTaskEndDate] = useState(new Date());
+
     const [taskStartTime, setTaskStartTime] = useState("");
     const [timeTaken, setTimeTaken] = useState("");
-
 
     const [taskEndTime, setTaskEndTime] = useState("");
     const [taskUser, setTaskUser] = useState("");
@@ -57,9 +59,6 @@ const AssignTasks = () => {
 
     const [update, setUpdate] = useState(false);
     const [projectPhase, setProjectPhase] = useState("");
-
-
-
 
 
 
@@ -81,13 +80,6 @@ const AssignTasks = () => {
     const [users, setUsers] = useState([]);
 
     const [projectPhases, setProjectPhases] = useState([]);
-
-
-
-
-
-
-
 
 
 
@@ -125,8 +117,8 @@ const AssignTasks = () => {
 
     useEffect(() => {
 
-        axios.get(`${originURL}/tasks/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
-            setTasks(res.data.task);
+        axios.get(`${originURL}/assigntask/alltasks`).then((res) => {
+            setTasks(res.data.get);
         });
 
         axios.get(`${originURL}/projects/${taskUser}`).then((res) => {
@@ -183,12 +175,7 @@ const AssignTasks = () => {
     }
 
     const headCells = [
-        {
-            id: "date",
-            numeric: false,
-            disablePadding: false,
-            label: "Date",
-        },
+   
 
         {
             id: "title",
@@ -198,24 +185,45 @@ const AssignTasks = () => {
             extended: true,
         },
         {
-            id: "startTime",
+            id: "project",
             numeric: false,
             disablePadding: false,
-            label: "Start Time",
+            label: `Project`,
+        },
+        {
+            id: "assignedTo",
+            numeric: false,
+            disablePadding: false,
+            label: `Assigned To`,
+        },
+        {
+            id: "startDate",
+            numeric: false,
+            disablePadding: false,
+            label: "Start Date",
 
         },
         {
-            id: "endTime",
+            id: "endDate",
             numeric: true,
             disablePadding: false,
-            label: "End Time",
+            label: "End Date",
         },
         {
-            id: "Action",
+            id: "status",
             numeric: true,
             disablePadding: false,
-            label: `Actions`,
+            label: `Status`,
         },
+        {
+            id: "action",
+            numeric: true,
+            disablePadding: false,
+            label: `Action`,
+        },
+
+  
+    
     ];
 
     function EnhancedTableHead(props) {
@@ -240,7 +248,7 @@ const AssignTasks = () => {
                             align={headCell.numeric ? "right" : "left"}
                             padding={headCell.disablePadding ? "none" : "normal"}
                             sortDirection={orderBy === headCell.id ? order : false}
-                            width={headCell.extended === true ? "20%" : "5%"}
+                            width={headCell.extended === true ? "15%" : "10%"}
                         >
                             <TableSortLabel
                                 active={orderBy === headCell.id}
@@ -294,7 +302,7 @@ const AssignTasks = () => {
 
 
     const TableRowCustom = (props) => {
-        const { _id, date, title, startTime, endTime } = props;
+        const { _id, date, title, assignedTo, startDate,project, endDate } = props;
         const labelId = props.labelId;
         const index = props.index
         const rowsPerPage = props.rowsPerPage;
@@ -322,25 +330,31 @@ const AssignTasks = () => {
                 selected={isItemSelected}
             >
                 {/* <TableCell align="left">{rowsPerPage * page + index + 1}</TableCell> */}
-                <TableCell align="left">{moment(new Date(date)).format("dddd, MMMM Do YYYY")}</TableCell>
+                {/* <TableCell align="left">{moment(new Date(date)).format("dddd, MMMM Do YYYY")}</TableCell> */}
                 <TableCell align="left">{title}</TableCell>
+                <TableCell align="left">{project.projectname}</TableCell>
+
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
-                <TableCell align="left">{startTime}</TableCell>
-                <TableCell align="right">{endTime}</TableCell>
+                <TableCell align="left">{assignedTo.username}</TableCell>
+
+                <TableCell align="left">{startDate}</TableCell>
+                <TableCell align="right">{endDate}</TableCell>
+                <TableCell align="right">Pending</TableCell>
+
                 <TableCell align="right">
                     <Link
-                        to="/dailytasks/taskdetail"
+                        to="/tasksassigned/detail"
                         state={{
                             item: props
                         }}
                         style={{ textDecoration: "none" }}
                     >
-                        <Button style={{ backgroundColor: "transparent", color: "black", padding:"3px" }} 
-                        title="Details"><i class="bi bi-card-text"></i></Button>
+                        <Button style={{ backgroundColor: "transparent", color: "black", padding: "3px" }}
+                            title="Details"><i class="bi bi-card-text"></i></Button>
                     </Link>
 
 
-                    <Button style={{ backgroundColor: "transparent", color: "black", padding:"2px" }}  
+                    {/* <Button style={{ backgroundColor: "transparent", color: "black", padding: "2px" }}
                         onClick={() => {
 
                             console.log(props.description, "descriptions")
@@ -355,30 +369,20 @@ const AssignTasks = () => {
                             setTaskProjectEdit(props.projectname)
                             setProjectPhaseEdit(props.projectPhase)
                             handleShowEdit()
-                            let start = props.startTime.split(":")
-                            let startInMin = (parseInt(start[0]) * 60) + parseInt(start[1])
-
-
-                            let end = props.endTime.split(":")
-
-                            let endInMin = (parseInt(end[0]) * 60) + parseInt(end[1])
-                            console.log(endInMin, startInMin)
-
-
-                            setTimeTaken(endInMin - startInMin)
+ 
 
                         }}
                         title="Edit"
                     >                 <i class="bi bi-pencil-square"></i>
-                    </Button>
+                    </Button> */}
 
                     <Button onClick={() => {
                         axios.delete(`${originURL}/tasks/${props._id}`)
 
                         setUpdate(!update)
 
-                    }} style={{ backgroundColor: "transparent", color: "red" , padding:"2px"}}
-                    title="Delete"
+                    }} style={{ backgroundColor: "transparent", color: "red", padding: "2px" }}
+                        title="Delete"
                     ><i class="bi bi-trash"></i></Button>
 
 
@@ -390,21 +394,16 @@ const AssignTasks = () => {
     return (
 
         <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', paddingTop: "50px" }}>
-
-
-
-
             <Container style={{ marginTop: "20px", marginBottom: "50px" }}>
                 <Box sx={{ width: "95%" }}>
                     <Paper className="p-4" sx={{ width: "100%", mb: 2 }}>
-
                         <TableContainer >
                             <div className="d-flex ml-3 mt-3 mb-1">
                                 <h3
                                     className="mr-5"
                                     style={{ marginTop: "0px", marginBottom: "0px" }}
                                 >
-                                    Assign Tasks
+                                    Assigned Tasks History
                                 </h3>
                                 <div
                                     style={{
@@ -418,7 +417,7 @@ const AssignTasks = () => {
                                         onChange={(e) => {
                                             setFilteredRequestedProperties(e.target.value);
                                         }}
-                                        className="form-control "
+                                        className="form-control"
                                         placeholder="Search"
                                         style={{
                                             width: "500px",
@@ -433,9 +432,9 @@ const AssignTasks = () => {
                                     <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Assign Task</Button>{' '}
                                 </div>
                                 <br />
-                                <Modal style={{ marginTop: "15vh" }} show={show} onHide={handleClose} animation={false}>
+                                <Modal style={{ marginTop: "10vh" }} show={show} onHide={handleClose} animation={false}>
                                     <Modal.Header closeButton>
-                                        <Modal.Title>Add Task</Modal.Title>
+                                        <Modal.Title>Assign Task</Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body>
 
@@ -449,12 +448,13 @@ const AssignTasks = () => {
                                                 />
                                                 <br /><br />
 
-                                                
+
                                                 <label>Select The User:</label><br />
 
 
-                                                <select onClick={(e) => { setTaskUser(e.target.value)
-                                                setUpdate(!update)
+                                                <select onClick={(e) => {
+                                                    setTaskUser(e.target.value)
+                                                    setUpdate(!update)
                                                 }} style={{ width: "100%" }}>
 
                                                     {users && users.map((p) => (<option value={`${p._id}`}>{p.username}</option>))}
@@ -464,11 +464,10 @@ const AssignTasks = () => {
                                                 <br />
 
                                                 <label>Select The Project:</label><br />
-
-
-                                                <select onClick={(e) => { setTaskProject(e.target.value) 
-                                                setUpdate(!update)
-                                                 }} style={{ width: "100%" }}>
+                                                <select onClick={(e) => {
+                                                    setTaskProject(e.target.value)
+                                                    setUpdate(!update)
+                                                }} style={{ width: "100%" }}>
 
                                                     {projects && projects.map((p) => (<option value={`${p._id}`}>{p.projectname}</option>))}
 
@@ -496,55 +495,21 @@ const AssignTasks = () => {
                                                 <br /><br />
 
                                                 <label for="appt">Expected Start Date: &nbsp;</label>
-                                                <input type="time" id="appt" name="appt" onChange={(e) => {
-
-
-                                                    setTaskStartTime(e.target.value)
-
-                                                    let start = e.target.value.split(":")
-                                                    let startInMin = (parseInt(start[0]) * 60) + parseInt(start[1])
-
-
-                                                    let end = taskEndTime.split(":")
-
-                                                    let endInMin = (parseInt(end[0]) * 60) + parseInt(end[1])
-                                                    console.log(endInMin, startInMin)
-
-
-                                                    setTimeTaken(endInMin - startInMin)
-
-
-                                                }}></input>
+                                                <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
+                                                    setExpectedTaskStartDate(new Date(e.target.value))
+                                                }}
+                                                />
                                                 &nbsp;&nbsp;
 
                                                 <br />
-                                                <label for="appt">Expected End Time:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                                <input type="time" id="appt" name="appt" onChange={(e) => {
-
-
-                                                    setTaskEndTime(e.target.value)
-
-                                                    let start = taskStartTime.split(":")
-                                                    let startInMin = (parseInt(start[0]) * 60) + parseInt(start[1])
-
-                                                    let end = e.target.value.split(":")
-
-                                                    let endInMin = (parseInt(end[0]) * 60) + parseInt(end[1])
-
-                                                    console.log(endInMin, startInMin)
-
-                                                    setTimeTaken(endInMin - startInMin)
-
-                                                }
-                                                }></input>
+                                                <label for="appt">Expected End Date:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                                <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
+                                                    setExpectedTaskEndDate(new Date(e.target.value))
+                                                }}/>
 
                                                 <br /><br />
 
-                                                <label>Total Time:&nbsp;</label>{
-
-                                                    Math.trunc(timeTaken / 60)} hours and {timeTaken % 60
-
-                                                } mins
+                                         
 
                                             </div></div>
 
@@ -558,15 +523,15 @@ const AssignTasks = () => {
 
                                         <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
                                             try {
-                                                axios.post(`${originURL}/tasks/addtask`, {
+                                                axios.post(`${originURL}/assigntask/task`, {
                                                     date: taskDate,
                                                     title: taskTitle,
                                                     description: taskDescription,
-                                                    selectProject: taskProject,
-                                                    startTime: taskStartTime,
-                                                    endTime: taskEndTime,
-                                                    addedby: JSON.parse(localStorage.getItem("user")).details._id,
-                                                    projectPhase: projectPhase
+                                                    project: taskProject,
+                                                    phase:projectPhase,
+                                                    startDate: expectedTaskStartDate,
+                                                    endDate: expectedTaskEndDate,
+                                                    assignedTo:taskUser
                                                 })
 
                                                 handleClose()
@@ -576,14 +541,14 @@ const AssignTasks = () => {
                                                 console.log(err)
                                             }
                                         }}>
-                                            Add Task
+                                            Assign Task
                                         </Button>
                                     </Modal.Footer>
                                 </Modal>
 
                                 <Modal style={{ marginTop: "15vh" }} show={showEdit} onHide={handleCloseEdit} animation={false}>
                                     <Modal.Header closeButton>
-                                        <Modal.Title>Edit Task</Modal.Title>
+                                        <Modal.Title>Edit Task Assigned</Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body>
 
@@ -591,40 +556,30 @@ const AssignTasks = () => {
                                             <div style={{ width: "80%" }} >
 
                                                 <label >Date:</label> &nbsp;
-                                                <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date(taskDateEdit)).format("YYYY-MM-DD")} onChange={(e) => {
+                                                {/* <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date(taskDateEdit)).format("YYYY-MM-DD")} onChange={(e) => {
                                                     setTaskDateEdit(new Date(e.target.value))
                                                 }}
                                                 />
-                                                <br /><br />
+                                                <br /><br /> */}
+                                                <br />
 
-                                                <label>Select The Project:</label><br />
+                                                <label>Project:</label><br />
 
 
-                                                <select value={taskProjectEdit} onClick={(e) => { setTaskProjectEdit(e.target.value) }} style={{ width: "100%" }}>
-
+                                                {/*  <select value={taskProjectEdit} onClick={(e) => { setTaskProjectEdit(e.target.value) }} style={{ width: "100%" }}>
                                                     {projects && projects.map((p) => (<option value={`${p._id}`}>{p.projectname}</option>))}
-
-                                                </select>
+                                                </select> */}
 
                                                 <br />
 
                                                 <label>Project Phase:</label><br />
 
 
-                                                <select
+                                                {/* <select
                                                     value={projectPhaseEdit} onClick={(e) => { setProjectPhaseEdit(e.target.value) }} style={{ width: "100%" }}>
+                                                   {projectPhases && projectPhases.map((p) => (<option value={`${p._id}`}>{p.phase}</option>))}
+                                                </select> */}
 
-                                                    <option value='Analysis'>Analysis</option>
-                                                    <option value='Configuration'>Configuration</option>
-                                                    <option value='Customization'>Customization</option>
-                                                    <option value='Development'>Development</option>
-                                                    <option value='Design'>Design</option>
-                                                    <option value='Testing'>Testing</option>
-                                                    <option value='Training'>Training</option>
-
-                                                </select>
-
-                                                <br /><br />
 
 
                                                 <input value={taskTitleEdit} style={{ width: "100%" }} onChange={(e) => setTaskTitleEdit(e.target.value)}></input>
@@ -632,57 +587,6 @@ const AssignTasks = () => {
 
                                                 <textarea value={taskDescriptionEdit} style={{ width: "100%" }} onChange={(e) => setTaskDescriptionEdit(e.target.value)}></textarea>
                                                 <br /><br />
-
-
-                                                <label for="appt">Start Time: &nbsp;</label>
-                                                <input type="time" id="appt" value={taskStartTimeEdit} name="appt" onChange={(e) => {
-
-
-                                                    setTaskStartTimeEdit(e.target.value)
-
-                                                    let start = e.target.value.split(":")
-                                                    let startInMin = (parseInt(start[0]) * 60) + parseInt(start[1])
-
-
-                                                    let end = taskEndTimeEdit.split(":")
-
-                                                    let endInMin = (parseInt(end[0]) * 60) + parseInt(end[1])
-                                                    console.log(endInMin, startInMin)
-
-
-                                                    setTimeTaken(endInMin - startInMin)
-
-
-                                                }}></input>
-                                                &nbsp;&nbsp;
-                                                <br />
-                                                <label for="appt">End Time:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                                <input type="time" id="appt" name="appt" value={taskEndTimeEdit} onChange={(e) => {
-
-
-                                                    setTaskEndTimeEdit(e.target.value)
-
-                                                    let start = taskStartTimeEdit.split(":")
-                                                    let startInMin = (parseInt(start[0]) * 60) + parseInt(start[1])
-
-                                                    let end = e.target.value.split(":")
-
-                                                    let endInMin = (parseInt(end[0]) * 60) + parseInt(end[1])
-
-                                                    console.log(endInMin, startInMin)
-
-                                                    setTimeTaken(endInMin - startInMin)
-
-                                                }
-                                                }></input>
-
-                                                <br /><br />
-                                                <label>Total Time:&nbsp;</label>{
-
-                                                    Math.trunc(timeTaken / 60)} hours and {timeTaken % 60
-
-
-                                                } mins
 
                                             </div></div>
 
@@ -743,10 +647,10 @@ const AssignTasks = () => {
                                                 (b.title
                                                     .toLowerCase()
                                                     .includes(filteredRequestedProperties.toLowerCase()) ||
-                                                    b.description.toLowerCase().includes(
+                                                    b.assignedTo.username.toLowerCase().includes(
                                                         filteredRequestedProperties.toLowerCase()
                                                     ) ||
-                                                    b.date
+                                                    b.project.projectname
                                                         .toLowerCase()
                                                         .includes(filteredRequestedProperties.toLowerCase())) && (
                                                     <TableRowCustom
@@ -760,7 +664,6 @@ const AssignTasks = () => {
                                                 )
                                             );
                                         })}
-
                                     {emptyRows > 0 && (
                                         <TableRow
                                             style={{
@@ -770,7 +673,6 @@ const AssignTasks = () => {
                                             <TableCell colSpan={6} />
                                         </TableRow>
                                     )}
-
                                 </TableBody>
                             </Table>
                         </TableContainer>{" "}
