@@ -24,11 +24,12 @@ componentDidMount() {
   // Typical usage (don't forget to compare props):
 
 
-  axios.get(`${originURL}/projects/allprojects`).then( (res) => {
+  axios.get(`${originURL}/projects/allprojects/${JSON.parse(localStorage.getItem("user")).details._id}`).then( (res) => {
 
     let dataToAdd = [];
 
-    let temp = res.data.get;
+    let temp = res.data.get.filter(f=>f.projectname != "Others");
+
     temp.map((t)=>{
 
       dataToAdd.push({x:t.projectname,

@@ -26,7 +26,11 @@ const taskSchema = mongoose.Schema({
    },
    projectPhase: {
       type: String
-   }
+   },
+   status: {
+      type: String
+   },
+
 
 }, { timestamps: true },)
 

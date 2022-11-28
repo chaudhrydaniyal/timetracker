@@ -2,7 +2,7 @@ const express = require("express")
 require("../Connection/connection");
 const bcrypt = require("bcrypt")
 const router = express.Router();
-const {allUsers,deleteUser,singleUser,updateUser} = require('../Controllers/users')
+const {allUsers,teamMembers, deleteUser,singleUser,updateUser, addTeamMember} = require('../Controllers/users')
 const {verifyAdmin,verifyUser} = require('../Utils/VerifyAdmin/Verify')
 
 
@@ -10,6 +10,17 @@ const {verifyAdmin,verifyUser} = require('../Utils/VerifyAdmin/Verify')
 
 
 router.get("/allusers" ,allUsers)
+
+router.put("/addTeamMembers/:id" ,addTeamMember)
+
+
+router.put("/:id",updateUser)
+
+router.get("/teamMembers/:id" ,teamMembers)
+
+
+
+
 //for deleting an employeee
 
 router.delete('/:id',verifyUser, deleteUser)
@@ -20,7 +31,6 @@ router.get("/:id",verifyUser,singleUser)
 
 ///updating Employee DATA 
 
-router.put("/:id", verifyUser,updateUser)
 
 
 module.exports = router;

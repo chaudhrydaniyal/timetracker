@@ -40,6 +40,20 @@ const getPhases = async (req, res, next) => {
 
 
 
+const DeletePhase = async (req, res, next) => {
+  try {
+
+      const deletePhase = await projectphases.deleteOne({ _id: req.params.id });
+
+      deletePhase && res.status(200).json({ message: "Sucessfully deleted project", deletePhase })
+  }
+  catch (error) {
+      console.log("error adding task", error);
+      next(error)
+  }
+}
+
+
 
 
 // Assigns project to user
@@ -112,18 +126,7 @@ const getAll = async (req, res, next) => {
 };
 
 
-const DeleteProject = async (req, res, next) => {
-  try {
 
-      const deleteProject = await Projects.deleteOne({ _id: req.params.id });
-
-      deleteProject && res.status(200).json({ message: "Sucessfully deleted project", deleteProject })
-  }
-  catch (error) {
-      console.log("error adding task", error);
-      next(error)
-  }
-}
 
 module.exports = {
   AddPhase,
@@ -131,5 +134,5 @@ module.exports = {
   updateProject,
   single,
   EditProject,
-  DeleteProject
+  DeletePhase
 };

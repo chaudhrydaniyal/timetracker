@@ -34,6 +34,7 @@ import { Col, Row } from "react-bootstrap";
 import img1 from "../../Assets/DataTables img/1.jpg";
 import img2 from "../../Assets/DataTables img/2.jpg";
 import avatar from "../../Assets/img/avatar.jpg";
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 import { useNavigate } from "react-router-dom";
 
@@ -68,10 +69,31 @@ const ProjectDetail = () => {
 
   useEffect(() => {
 
+
+    const arr1 = [
+      {id: 3, date: new Date(2022, 1, 24)},
+      {id: 5, date: new Date(2027, 1, 24)},
+      {id: 2, date: new Date(2023, 1, 24)},
+    ];
+    
+    // ✅ Sort in Ascending order (low to high)
+    const sortedAsc = arr1.sort(
+      (objA, objB) => Number(objA.date) - Number(objB.date),
+    );
+    
+    console.log("sortedAsc",sortedAsc);
+
     axios.get(`${originURL}/projectphase/getprojectphases/${propDetail._id}`).then((res) => {
 
-      setProjectPhases(res.data.phases)
+    
 
+
+      setProjectPhases(res.data.phases.sort(
+        (objA, objB) => Number(new Date(objA.ExpectedStartDate)) - Number(new Date(objB.ExpectedStartDate)),
+      ))
+
+     
+            
     });
 
   }, [update2]);
@@ -94,6 +116,8 @@ const ProjectDetail = () => {
   );
   const [showProjectEdit, setShowProjectEdit] = useState(false);
   const [PhaseModel, setPhaseModel] = useState(false);
+  const [PhaseEditModel, setPhaseEditModel] = useState(false);
+
   const [modelPhaseDetail, setModelPhaseDetail] = useState('');
   const [modelStartDate, setModelStartDate] = useState('')
   const [modelEndDate, setModelEndDate] = useState('')
@@ -108,7 +132,7 @@ const ProjectDetail = () => {
     <>
       <div
         style={{
-          marginBottom: "130px"
+          marginBottom: "170px"
         }}>
         <div
           className="content-wrapper"
@@ -123,30 +147,33 @@ const ProjectDetail = () => {
               <Paper className="p-4" sx={{ width: "100%", mb: 2 }}>
                 {/* {JSON.stringify(propDetail)} */}
                 <div className="d-flex">
-                  <h4>Project Details</h4>
-                  {JSON.parse(localStorage.getItem("user")).isAdmin && (
-                    <>
-                      <Button
-                        style={{
-                          marginLeft: "auto",
-                          marginRight: "10px",
-                          backgroundColor: "#0F52BA",
-                          color: "white",
-                          fontWeight: "700",
-                        }}
-                        onClick={handleShowProjectEdit}
-                      >
-                        {" "}
-                        &nbsp;&nbsp;&nbsp;
-                        <i class="bi bi-pencil-square mb-1"></i> &nbsp;Edit
-                        &nbsp;&nbsp;&nbsp;
-                      </Button>{" "}
-                      {/* <Button style={{ marginRight: "10px", backgroundColor: "red", color: "white", fontWeight: "700" }} onClick={() => {
+                  <h3 className="ml-3">Project Details</h3>
+                  {JSON.parse(localStorage.getItem("user")).isAdmin &&
+                    (
+                      <>
+                        <Button
+                          style={{
+                            marginLeft: "auto",
+                            marginRight: "10px",
+                            backgroundColor: "#0F52BA",
+                            color: "white",
+                            fontWeight: "700",
+                          }}
+                          onClick={handleShowProjectEdit}
+                        >
+                          {" "}
+                          &nbsp;&nbsp;&nbsp;
+                          <i class="bi bi-pencil-square mb-1"></i> &nbsp;Edit
+                          &nbsp;&nbsp;&nbsp;
+                        </Button>{" "}
+                        {/* <Button style={{ marginRight: "10px", backgroundColor: "red", color: "white", fontWeight: "700" }} onClick={() => {
                         axios.delete(`${originURL}/projects/${propDetail._id}`)
                         navigate("/projects");             
                     }}> <i class="bi bi-trash mb-1"></i> &nbsp;Delete</Button>{' '} */}
-                    </>
-                  )}
+                      </>
+                    )
+
+                  }
                 </div>
                 <br></br>
                 <Container fluid>
@@ -275,20 +302,20 @@ const ProjectDetail = () => {
                   </Modal>
 
                   {/* flex */}
-                  <div className="cardflex ">
+                  <div className="cardflex " >
                     {/* flex items */}
                     {/* right items */}
-                    <div style={{ width: "75%" }}>
-                      <Card style={{ height: "340px" }}>
+                    <div style={{ width: "100%" }}>
+                      <Card style={{ width: "95%", height: "340px" }}>
                         <div className="d-flex align-items-center">
                           <div>
                             {" "}
-                            <h3
+                            <h4
                               className="px-3 py-2"
                               style={{ paddingBottom: 0, marginBottom: 0 }}
                             >
                               Overview
-                            </h3>
+                            </h4>
                           </div>
                         </div>
                         <hr className="p-0 m-0" />
@@ -471,7 +498,7 @@ const ProjectDetail = () => {
                               />
                               <br />
                               <br />
-                              <label>Estimated End Date:</label> &nbsp;
+                              <label>Estimated End Date:</label> &nbsp;&nbsp;&nbsp;
                               <input
                                 // value={modelEndDate}
                                 type="date"
@@ -514,26 +541,153 @@ const ProjectDetail = () => {
                             }}
                             variant="primary"
                             onClick={() => {
-                              try {
-                                axios.post(`${originURL}/projectphase/addprojectphase`, {
-                                  phase: modelPhaseDetail,
-                                  ExpectedStartDate: modelStartDate,
-                                  ExpectedEndDate: modelEndDate,
-                                  project: propDetail._id,
+                              if (modelPhaseDetail == "") {
+                                NotificationManager.error("Write the phase title")
+
+                              }
+                              else {
+                                try {
+                                  axios.post(`${originURL}/projectphase/addprojectphase`, {
+                                    phase: modelPhaseDetail,
+                                    ExpectedStartDate: modelStartDate,
+                                    ExpectedEndDate: modelEndDate,
+                                    project: propDetail._id,
 
 
 
-                                  // dateCreated: moment(new Date).format("dddd, MMMM Do YYYY"),
+                                    // dateCreated: moment(new Date).format("dddd, MMMM Do YYYY"),
 
 
-                                });
+                                  });
 
 
-                                setUpdate2(!update2);
+                                  setUpdate2(!update2);
 
-                                handleCloseModelPhase();
-                              } catch (err) {
-                                console.log(err);
+                                  handleCloseModelPhase();
+                                  NotificationManager.success("Project phase added successfully")
+
+                                }
+                                catch (err) {
+                                  console.log(err);
+                                }
+                              }
+                            }}
+                          >
+                            Save
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+
+
+                      <Modal
+                        style={{ marginTop: "18vh" }}
+                        show={PhaseEditModel}
+                        onHide={handleCloseModelPhase}
+                        animation={false}
+                      >
+                        <Modal.Header closeButton>
+                          <Modal.Title>Add Phases</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <div className="d-flex justify-content-center">
+                            <div style={{ width: "80%" }}>
+
+                              <input
+                                value={modelPhaseDetail}
+                                placeholder="Phase detail"
+                                style={{ width: "100%" }}
+                                onChange={(e) => setModelPhaseDetail(e.target.value)}
+                              ></input>
+                              <br />
+                              <br />
+                              <label>Estimated Start Date:</label> &nbsp;
+                              <input
+                                // value={modelStartDate}
+                                type="date"
+
+                                // defaultValue={moment(
+                                //   new Date(modelStartDate)
+                                // ).format("YYYY-MM-DD")}
+
+                                onSelect={(e) => {
+                                  // setProjectStartDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
+                                  setModelStartDate(new Date(e.target.value));
+                                }}
+                              />
+                              <br />
+                              <br />
+                              <label>Estimated End Date:</label> &nbsp;&nbsp;&nbsp;
+                              <input
+                                // value={modelEndDate}
+                                type="date"
+
+                                // defaultValue={moment(
+                                //   new Date(modelEndDate)
+                                // ).format("YYYY-MM-DD")}
+
+                                onSelect={(e) => {
+                                  // setProjectEndDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
+                                  setModelEndDate(new Date(e.target.value));
+                                }}
+                              />
+                              <br />
+                              <br />
+
+
+                            </div>
+                          </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <Button
+                            style={{
+                              marginLeft: "auto",
+                              backgroundColor: "gray",
+                              color: "white",
+                              fontWeight: "700",
+                            }}
+                            variant="secondary"
+                            onClick={handleCloseModelPhase}
+                          >
+                            Close
+                          </Button>
+                          &nbsp; &nbsp;
+                          <Button
+                            style={{
+                              backgroundColor: "#0F52BA",
+                              color: "white",
+                              fontWeight: "700",
+                            }}
+                            variant="primary"
+                            onClick={() => {
+                              if (modelPhaseDetail == "") {
+                                NotificationManager.error("Write the phase title")
+
+                              }
+                              else {
+                                try {
+                                  axios.post(`${originURL}/projectphase/addprojectphase`, {
+                                    phase: modelPhaseDetail,
+                                    ExpectedStartDate: modelStartDate,
+                                    ExpectedEndDate: modelEndDate,
+                                    project: propDetail._id,
+
+
+
+                                    // dateCreated: moment(new Date).format("dddd, MMMM Do YYYY"),
+
+
+                                  });
+
+
+                                  setUpdate2(!update2);
+
+                                  handleCloseModelPhase();
+                                  NotificationManager.success("Project phase added successfully")
+
+                                }
+                                catch (err) {
+                                  console.log(err);
+                                }
                               }
                             }}
                           >
@@ -679,111 +833,113 @@ const ProjectDetail = () => {
                       {/* <h4>Project Phases</h4> */}
                     </div>
                     <br></br>
-                    <Container fluid>
 
-                      {/* flex */}
-                      <div className="cardflex ">
-                        {/* flex items */}
-                        {/* right items */}
-                        <div style={{ width: "100%" }}>
-                          <Card style={{ minHeight: "340px" }}>
-                            <div className="d-flex align-items-center">
-                              <div style={{ width: "100%" }}>
-                                {" "}
-                                <div className="d-flex justify-content-between">
-                                  <div>
-                                    <h4>Project Phases</h4>
-                                  </div>
-                                  <div>
-                                    {JSON.parse(localStorage.getItem("user"))
-                                      .isAdmin && (
-                                        <Button
-                                          style={{
-                                            marginLeft: "auto",
-                                            marginRight: "10px",
-                                            backgroundColor: "#0F52BA",
-                                            color: "white",
-                                            fontWeight: "700",
-                                            marginBottom: '5%'
-                                            // alignItems: "self-end",
-                                            // flex: "display",
-                                          }}
-                                          onClick={hanldeShowPhaseModel}
-                                        >
-                                          {" "}
-                                          &nbsp;&nbsp;&nbsp;
-                                          <i class="bi bi-pencil-square mb-1"></i>{" "}
-                                          &nbsp;ADD  &nbsp;&nbsp;&nbsp;
-                                        </Button>
-                                      )}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <hr className="p-0 m-0" />
-                            <div className="px-3 my-3">
+                    {/* flex */}
+                    <div className="cardflex ">
+                      {/* flex items */}
+                      {/* right items */}
+                      <div style={{ width: "100%" }}>
+                        <Card style={{ minHeight: "340px" }}>
+                          <div className="d-flex align-items-center">
+                            <div style={{ width: "100%" }}>
+                              {" "}
                               <div className="d-flex justify-content-between">
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    className: "py-2",
-                                  }}
+                                <div>
+                                  <h4 className="px-3 py-2">Project Phases</h4>
+                                </div>
+                                <div className="px-3 py-2"
                                 >
-
+                                  {JSON.parse(localStorage.getItem("user"))
+                                    .isAdmin && (
+                                      <Button
+                                        style={{
+                                          marginLeft: "auto",
+                                          marginRight: "10px",
+                                          backgroundColor: "#0F52BA",
+                                          color: "white",
+                                          fontWeight: "700",
+                                          marginBottom: '5%'
+                                          // alignItems: "self-end",
+                                          // flex: "display",
+                                        }}
+                                        onClick={hanldeShowPhaseModel}
+                                      >
+                                        {" "}
+                                        &nbsp;&nbsp;&nbsp;
+                                        <i class="bi bi-pencil-square mb-1"></i>{" "}
+                                        &nbsp;ADD  &nbsp;&nbsp;&nbsp;
+                                      </Button>
+                                    )}
                                 </div>
                               </div>
+                            </div>
+                          </div>
+                          <hr className="p-0 m-0" />
+                          <div className="px-3 my-3">
+                            <div className="d-flex justify-content-between">
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  className: "py-2",
+                                }}
+                              >
 
-                              <Container>
-
-                                <div className="d-flex justify-content-end ">
-
-
-
-                                </div>
-                                <Row className="my-3">
-                                  <Table striped bordered hover>
-                                    <thead>
-                                      <tr>
-                                        <th>#</th>
-                                        <th style={{ textAlign: "center" }}>Phase Details</th>
-                                        <th style={{ textAlign: "center" }}>Estimated Start Date</th>
-                                        <th style={{ textAlign: "center" }}>Estimated End Date</th>
-
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {projectPhases &&
-                                        projectPhases.map((d, i) => {
-                                          return (
-
-                                            <tr >
-                                              <th style={{ textAlign: "center" }}>{i + 1}</th>
-                                              <td style={{ textAlign: "center" }}>{d.phase}</td>
-                                              <td style={{ textAlign: "center" }}>{(moment(d.ExpectedStartDate).format('d-MM-yyyy'))}</td>
-                                              <td style={{ textAlign: "center" }}>{(moment(d.ExpectedEndDate).format('d-MM-yyyy'))}</td>
-                                              {/* <td>{d.end}</td>
-                                      <td>{d.status}</td> */}
-                                              {/* <td><i class="fa fa-trash-can" aria-hidden="true" style={{color:'red'}} onClick={()=>removeitem(i)}></i></td> */}
-                                            </tr>
-
-                                          );
-                                        })}
-                                    </tbody>
-                                  </Table>
-                                </Row>
-                              </Container>
+                              </div>
                             </div>
 
+                            <Container>
+
+                              <div className="d-flex justify-content-end ">
 
 
-                          </Card>
-                        </div>
+
+                              </div>
+                              <Row className="my-3">
+                                <Table striped bordered hover>
+                                  <thead>
+                                    <tr>
+                                      <th>#</th>
+                                      <th style={{ textAlign: "center" }}>Phase Details</th>
+                                      <th style={{ textAlign: "center" }}>Estimated Start Date</th>
+                                      <th style={{ textAlign: "center" }}>Estimated End Date</th>
+                                      <th style={{ textAlign: "center" }}>Delete</th>
+
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {projectPhases &&
+                                      projectPhases.map((d, i) => {
+                                        return (
+
+                                          <tr >
+                                            <th style={{ textAlign: "center" }}>{i + 1}</th>
+                                            <td style={{ textAlign: "center" }}>{d.phase}</td>
+                                            <td style={{ textAlign: "center" }}>{(moment(d.ExpectedStartDate).format('D-MMM-yyyy'))}</td>
+                                            <td style={{ textAlign: "center" }}>{(moment(d.ExpectedEndDate).format('D-MMM-yyyy'))}</td>
+                                            <td style={{ textAlign: "center" }}><Button onClick={async () => {
+                                              await axios.delete(`${originURL}/projectphase/${d._id}`).then(() => {
+                                                setUpdate2(!update2)
+                                              })
+                                            }} style={{ backgroundColor: "transparent", color: "red", padding: "2px" }}
+                                              title="Delete"
+                                            ><i class="bi bi-trash"></i></Button>
+                                            </td>
+                                          </tr>
+
+                                        );
+                                      })}
+                                  </tbody>
+                                </Table>
+                              </Row>
+                            </Container>
+                          </div>
+
+
+
+                        </Card>
                       </div>
-                    </Container>
-
-
-
+                    </div>
 
 
 
@@ -795,6 +951,8 @@ const ProjectDetail = () => {
             </Box>
           </Container>
         </div>
+        <NotificationContainer />
+
       </div>
     </>
   );

@@ -3,15 +3,18 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/esm/Button";
 import { Container, Form } from "react-bootstrap";
 import "./login.css";
-import { Context } from "../../Context/Context"
-import { useRef, useContext } from "react";
+// import { Context } from "../../Context/Context"
+import { useRef } from "react";
+import axios from "axios";
+
 import { loginCall } from './apicalls'
 import { useNavigate } from "react-router-dom";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
+import originURL from "../../url";
 
-const Login = () => {
+const Login = ({setAuth}) => {
 
-  const { user, isFetching, dispatch } = useContext(Context)
 
   const username = useRef();
   const password = useRef();
@@ -19,8 +22,24 @@ const Login = () => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    await loginCall({ username: username.current.value, password: password.current.value }, dispatch)
-    navigate("/dashboard")
+
+    var  loginres = false
+
+    try {
+
+     loginres =  await axios.post(`${originURL}/auth/login`, { username: username.current.value, password: password.current.value })
+
+     localStorage.setItem('user', JSON.stringify(loginres.data));
+      
+     setAuth(loginres)
+      
+  } catch (error) {
+           
+
+  }
+    !loginres &&  NotificationManager.error("username or password not correct")
+
+    loginres && navigate("/dashboard")
   }
 
   return (
@@ -57,6 +76,8 @@ const Login = () => {
             </Form>
           </Card.Body>
         </Card>
+        <NotificationContainer />
+
       </Container>
     </>
   );

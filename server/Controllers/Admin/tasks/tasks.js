@@ -13,7 +13,8 @@ const AddTask = async (req, res, next) => {
             startTime: req.body.startTime,
             endTime: req.body.endTime,
             addedby: req.body.addedby,
-            projectPhase: req.body.projectPhase
+            projectPhase: req.body.projectPhase,
+            status: req.body.status
         })
         await addtask.save()
         addtask && res.status(200).json({ message: "Sucessfully Added task", addtask })
@@ -36,7 +37,8 @@ const UpdateTask = async (req, res, next) => {
             startTime: req.body.startTime,
             endTime: req.body.endTime,
             addedby: req.body.addedby,
-            projectPhase: req.body.projectPhase
+            projectPhase: req.body.projectPhase,
+            status:req.body.status,
         })
         //   await addtask.save()
         updateTask && res.status(200).json({ message: "Sucessfully Added task", updateTask })
@@ -62,18 +64,43 @@ const DeleteTask = async (req, res, next) => {
 
 
 
+// //only admin can access
+
+// const getAll = async (req, res, next) => {
+//     try {
+//         const get = await Tasks.find({})
+//             .populate('selectProject')
+//             .populate('addedby')
+//         get && res.status(200).json({ message: "All Task", get })
+//     } catch (error) {
+//         next(error)
+//     }
+// }
+
+
+
+
+
 //only admin can access
 
 const getAll = async (req, res, next) => {
     try {
-        const get = await Tasks.find({})
+        var get = await Tasks.find({})
             .populate('selectProject')
             .populate('addedby')
+
+        get = get.filter(f=>f.selectProject.supervisor==req.params.id || f.selectProject.assignTo.includes(req.params.id))    
+
+
         get && res.status(200).json({ message: "All Task", get })
     } catch (error) {
         next(error)
     }
 }
+
+
+
+
 
 //get specific users with their tasks
 

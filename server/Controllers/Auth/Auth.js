@@ -11,6 +11,7 @@ const AddUser = async(req,res,next) =>{
 
         const newUser = new User({
             firstname: req.body.firstname,
+            fullname: req.body.fullname,
             lastname: req.body.lastname,
             username: req.body.username,
             email: req.body.email,
@@ -68,8 +69,41 @@ const login = async(req,res,next) =>{
 }
 
 
+//update a user
+const updateUser = async (req, res, next) => {
+
+  const salt = bcrypt.genSaltSync(10);
+  const hashpassword = bcrypt.hashSync(req.body.password, salt);
+
+
+  try {
+    // const find = await User.findById(req.body.id);
+
+    // console.log("find", find)
+    // if (!find) {
+    //   next(createError(404, "User not found"))
+    // }
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { $set: {username:req.body.username,
+      password:hashpassword,
+      fullname:req.body.fullname,
+      role:req.body.role
+      } },
+      // { new: true }
+    );
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    console.log("update user error", err)
+    next(err);
+  }
+}
+
+
+
 
 module.exports  = {
     AddUser,
     login,
+    updateUser
 }

@@ -17,6 +17,12 @@ const projects = mongoose.model(
         ref: "user"
       }
     ],
+    supervisor: 
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+      }
+    ,
 
   }, { timestamps: true })
 

@@ -12,7 +12,7 @@ class RangeBarChartAdvanced extends React.Component {
   componentDidMount() {
     // Typical usage (don't forget to compare props):
 
-    axios.get(`${originURL}/tasks/alltasks`).then((res) => {
+    axios.get(`${originURL}/tasks/alltasks/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
 
       let requiredData = [];
 

@@ -5,16 +5,16 @@ import Footer from './Components/Footer/Footer';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import EmployeeLeaves from './Components/Pages/EmpLeaves/EmployeeLeaves'
 import EmpAttendance from './Components/Pages/EmpAttendance/EmpAttendance';
-import EmpHolidays from './Components/Pages/EmpHolidays/EmpHolidays'
-import AllEmployees from './Components/Employee Data/All Employees/AllEmployees';
-import Calendar from './Components/Calendar/Calendar';
-import EmpDetails from "./Components/Employee Data/Emp Detail/EmpDetails";
+// import EmpHolidays from './Components/Pages/EmpHolidays/EmpHolidays'
+import AllEmployees from './Components/EmployeeData/All Employees/AllEmployees';
+// import Calendar from './Components/Calendar/Calendar';
+// import EmpDetails from "./Components/EmployeeData/EmpDetail/EmpDetails";
 import CalendarDetails from "./Components/Calendar/CalendarDetails";
 import "./index.css"
 import DataManagement from "./Components/DATA Management/DataManagement";
 import { Navigate } from "react-router-dom";
-import { Context } from "./Context/Context";
-import { Suspense, useContext } from "react";
+// import { Context } from "./Context/Context";
+// import {  useContext } from "react";
 import Login from "./pages/Login/Login";
 import Projects from "./pages/Projects/Projects";
 import Users from "./pages/Users/Users";
@@ -26,35 +26,49 @@ import Dashboard from "./pages/home/Home";
 import AssignTasks from "./pages/AssignTasks/AssignTasks";
 import TasksAssigned from "./pages/TasksAssigned/TasksAssigned";
 import AssignedTaskDetail from "./pages/TaskDetail/assignedTaskDetail";
+import { useEffect } from "react";
 
 function App() {
 
-  const context = useContext(Context)
+
+  const [auth, setAuth] = React.useState(false);
+
+   
+  useEffect(() => {
+
+    setAuth(JSON.parse(localStorage.getItem('user')))    
+
+
+
+  }, []);
+
+
+
+
+
 
   return (
     <>
       <BrowserRouter>
         {
-          context.user ?
+          auth ?
             <>
               <Sidebar />
-              <Header />
+              <Header setAuth={setAuth} />
               <Routes>
                 <Route path='/Leaves' element={< EmployeeLeaves />} />
                 <Route path='/attendance' element={<EmpAttendance />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/projects/projectdetail" element={<ProjectDetail />} />
                 <Route path='/allemployees' element={<AllEmployees />} />
-                <Route path='/employee/:id' element={<EmpDetails />} />
+                {/* <Route path='/employee/:id' element={<EmpDetails />} /> */}
                 <Route path='/users' element={<Users />}></Route>
                 <Route path='/users' element={<Users />}></Route>
                 <Route path="/users/userdetail" element={<UserDetail />} />
                 <Route path='/dailytasks' element={<DailyTasks />}></Route>
                 <Route path='/assigntasks' element={<AssignTasks />}></Route>
                 <Route path='/tasksassigned' element={<TasksAssigned />}></Route>
-
                 <Route path='/tasksassigned/detail' element={<AssignedTaskDetail />}></Route>
-
                 <Route path="/dailytasks/taskdetail" element={<TaskDetail />} />
                 <Route path="/calendar/:id" element={<CalendarDetails />}></Route>
                 <Route path="/datamanagement" element={<DataManagement />} />
@@ -66,7 +80,7 @@ function App() {
             <div  style={{backgroundColor: '#f7f7f7'}}>
               <Routes>
                 <Route path="/" element={<Navigate to="/login" />} />
-                <Route path='/login' element={< Login />} />
+                <Route path='/login' element={< Login setAuth={setAuth} />} />
               </Routes>
             </div>
         }

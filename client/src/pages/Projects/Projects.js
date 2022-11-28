@@ -27,6 +27,8 @@ import { Container } from "react-bootstrap";
 import originURL from "../../url";
 import { Button } from "@mui/material";
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import Badge from 'react-bootstrap/Badge';
 
 import { styled } from '@mui/material/styles';
 
@@ -50,48 +52,53 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
 const Projects = () => {
     const [requestedProperties, setRequestedProperties] = useState([]);
-
-
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("name");
-
     const [filteredRequestedProperties, setFilteredRequestedProperties] = useState("");
-
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-
     const [projectName, setProjectName] = useState("");
     const [projectManager, setProjectManager] = useState("");
-
     const [projectDescription, setProjectDescription] = useState("");
-
     const [projects, setProjects] = useState([]);
     const [projectStartDate, setProjectStartDate] = useState("");
     const [projectEndDate, setProjectEndDate] = useState("");
-
     const [allocatedWorkingDays, setAllocatedWorkingDays] = useState("");
-
-
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [update, setUpdate] = useState(false);
-
     const item = useLocation();
 
 
-    console.log("testvalue", item)
-
     const propDetail = item.state || {}
 
-
     useEffect(() => {
-        axios.get(`${originURL}/projects/allprojects`).then((res) => {
-            setProjects(res.data.get);
-        });
+
+
+        {
+
+
+
+        
+
+            if (JSON.parse(localStorage.getItem("user")).isAdmin) {
+
+                axios.get(`${originURL}/projects/allprojects/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+                    setProjects(res.data.get);
+                });
+            } else {
+
+
+                axios.get(`${originURL}/projects/userprojects/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+                    setProjects(res.data.get);
+                });
+
+            }
+
+
+        }
 
 
     }, [update]);
@@ -301,13 +308,36 @@ const Projects = () => {
                     {moment(new Date(projectEndDate)).format("dddd, MMMM Do YYYY")}
 
                 </TableCell>
-                <TableCell align="left">
+                {/* <TableCell align="left">
                     {
-                    Math.round((((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime())))*100)
+                        Math.round((((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime()))) * 100)
                     }%
                     <BorderLinearProgress variant="determinate" value={
-                    (((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime())))*100
-                } />
+                        (((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime()))) * 100
+                    } />
+
+                </TableCell> */}
+
+<TableCell align="left">
+
+{                        (((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime()))) * 100 <= 100 ?
+
+<>
+                    {
+                        Math.round((((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime()))) * 100)
+                    }%
+                    <BorderLinearProgress variant="determinate" value={
+                        (((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime()))) * 100
+                    } 
+                
+                    
+                    
+/> </>:  <div className="d-flex justify-content-center"> <Badge style={{width:"100px", height:"20px"}} pill bg="danger"  >
+overdue
+                            </Badge>
+                            
+                            </div>
+                            }
 
                 </TableCell>
 
@@ -319,7 +349,7 @@ const Projects = () => {
                         }}
                         style={{ textDecoration: "none" }}
                     >
-                        <Button style={{ backgroundColor: "#0096FF", color: "white", fontWeight: "500", height:"30px" }} >Details</Button>
+                        <Button style={{ backgroundColor: "#0096FF", color: "white", fontWeight: "500", height: "28px" }} >Details</Button>
                     </Link>
                 </TableCell>
             </TableRow>
@@ -370,7 +400,8 @@ const Projects = () => {
                                         JSON.parse(localStorage.getItem("user")).isAdmin &&
                                         <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
                                             <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Add Project</Button>{' '}
-                                        </div>}
+                                        </div>
+                                    } 
                                     <br />
                                     <Modal style={{ marginTop: "18vh" }} show={show} onHide={handleClose} animation={false}>
                                         <Modal.Header closeButton>
@@ -379,17 +410,17 @@ const Projects = () => {
                                         <Modal.Body>
                                             <div className="d-flex justify-content-center">
                                                 <div style={{ width: "80%" }} >
-                                                    <input placeholder="Project name" style={{ width: "100%" }} onChange={(e) => setProjectName(e.target.value)}></input>
+                                                    <input placeholder="Project Name" style={{ width: "100%" }} onChange={(e) => setProjectName(e.target.value)}></input>
                                                     <br /><br />
 
                                                     <input placeholder="Project Manager" style={{ width: "100%" }} onChange={(e) => setProjectManager(e.target.value)}></input>
                                                     <br /><br />
 
                                                     <label >Start Date:</label> &nbsp;
-                                                    <input type="date" defaultValue={
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input style={{ marginLeft: "auto" }} type="date" defaultValue={
                                                         // moment(new Date).format("YYYY-MM-DD")
                                                         new Date
-
 
                                                     } onSelect={(e) => {
                                                         // setProjectStartDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
@@ -400,15 +431,15 @@ const Projects = () => {
                                                     <br /><br />
 
                                                     <label >Estimated End Date:</label> &nbsp;
-                                                    <input type="date" defaultValue={
+                                                    <input style={{ marginLeft: "auto" }} type="date" defaultValue={
                                                         // moment(new Date).format("YYYY-MM-DD")
                                                         new Date
+                                                    }
+                                                        onSelect={(e) => {
+                                                            // setProjectEndDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
+                                                            setProjectEndDate(new Date(e.target.value))
 
-                                                    } onSelect={(e) => {
-                                                        // setProjectEndDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
-                                                        setProjectEndDate(new Date(e.target.value))
-
-                                                    }}
+                                                        }}
                                                     />
                                                     <br /><br />
 
@@ -425,22 +456,35 @@ const Projects = () => {
                                             </Button>
                                             &nbsp; &nbsp;
                                             <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
-                                                try {
-                                                    axios.post(`${originURL}/projects/addproject`, {
-                                                        projectname: projectName,
-                                                        description: projectDescription,
-                                                        dateCreated: moment(new Date).format("dddd, MMMM Do YYYY"),
-                                                        projectStartDate: projectStartDate,
-                                                        projectEndDate: projectEndDate,
-                                                        allocatedWorkingDays: allocatedWorkingDays
 
-                                                    })
+                                                if (projectName == "") {
 
-                                                    handleClose()
-                                                    setUpdate(!update)
+                                                    NotificationManager.error("Project name is required")
 
-                                                } catch (err) {
-                                                    console.log(err)
+                                                }
+                                                else {
+
+                                                    try {
+
+                                                        axios.post(`${originURL}/projects/addproject`, {
+                                                            projectname: projectName,
+                                                            description: projectDescription,
+                                                            dateCreated: moment(new Date).format("dddd, MMMM Do YYYY"),
+                                                            projectStartDate: projectStartDate,
+                                                            projectEndDate: projectEndDate,
+                                                            allocatedWorkingDays: allocatedWorkingDays,
+                                                            supervisor:`${JSON.parse(localStorage.getItem("user")).details._id}`
+                                                        })
+
+                                                        handleClose()
+                                                        setUpdate(!update)
+
+                                                        NotificationManager.success("Project added successfully")
+
+                                                    } catch (err) {
+                                                        console.log(err)
+                                                    }
+
                                                 }
                                             }}>
 
@@ -517,6 +561,7 @@ const Projects = () => {
                         </Paper>
                     </Box>
                 </Container>
+                <NotificationContainer />
             </div>
         </>
     );

@@ -1,21 +1,23 @@
 import { Button } from 'mdbreact';
 import React from 'react'
-import { useContext } from "react";
-import { Context } from "../../Context/Context"
+// import { useContext } from "react";
+// import { Context } from "../../Context/Context"
 import { useNavigate } from "react-router-dom";
 
 
 // import '../../dist/css/adminlte.min.css'
 // import 'font-awesome/css/font-awesome.min.css';
 
-const Header = () => {
+const Header = ({ setAuth }) => {
 
-  const { user, dispatch } = useContext(Context)
+  // const { user, dispatch } = useContext(Context)
 
   const navigate = useNavigate()
 
   const handleLogout = async () => {
-    await dispatch({ type: "LOGOUT" })
+    // await dispatch({ type: "LOGOUT" })
+    localStorage.setItem("user",null)
+    setAuth(null)
     navigate("/")
 
   }
@@ -38,7 +40,11 @@ const Header = () => {
           </ul>
 
 
-          &nbsp; &nbsp; &nbsp;{JSON.parse(localStorage.getItem("user")) &&<h4 style={{marginTop:"8px"}}> {JSON.parse(localStorage.getItem("user")).details.username}</h4>}
+
+          {/* {user.details.username} */}
+
+          &nbsp; &nbsp; &nbsp;{JSON.parse(localStorage.getItem("user")) && JSON.parse(localStorage.getItem("user")).details && <h4 style={{ marginTop: "8px" }}> {JSON.parse(localStorage.getItem("user")).details.username}</h4>}
+
 
           {/* <!-- Right navbar links --> */}
           <ul className="navbar-nav ml-auto mr-5">

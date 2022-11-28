@@ -26,11 +26,17 @@ import axios from "axios";
 import { Container } from "react-bootstrap";
 import originURL from "../../url";
 import { Button } from "@mui/material";
+import { Card } from "react-bootstrap";
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
+var moment = require("moment"); // require
+
 
 const UserDetail = () => {
     const item = useLocation();
     const propDetail = item.state.item;
 
+    console.log("userdetailpropdetail", propDetail)
 
     const [assignedProjects, setAssignedProjects] = useState([]);
     const [order, setOrder] = React.useState("asc");
@@ -45,17 +51,21 @@ const UserDetail = () => {
     const [assignedProject, setAssignedProject] = useState("")
     const [update, setUpdate] = useState(false);
     const [tasks, setTasks] = useState([]);
-
+    const [editUsername, setEditUsername] = useState(propDetail.username);
+    const [editFullname, setEditfullname] = useState(propDetail.fullname);
+    const [editPassword, setEditPassword] = useState("");
+    const [editRole, setEditRole] = useState(propDetail.role);
 
 
     useEffect(() => {
+
         axios.get(`${originURL}/projects/${propDetail._id}`).then((res) => {
             console.log(res.data)
             setAssignedProjects(res.data.finduser);
         });
 
 
-        axios.get(`${originURL}/projects/allprojects`).then((res) => {
+        axios.get(`${originURL}/projects/allprojects/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
             setProjects(res.data.get);
         });
 
@@ -64,12 +74,13 @@ const UserDetail = () => {
             setTasks(res.data.task);
         });
 
-
     }, [update]);
 
 
 
     const [show, setShow] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -215,6 +226,22 @@ const UserDetail = () => {
             disablePadding: false,
             label: "End Time",
         },
+
+        {
+            id: "status",
+            numeric: false,
+            disablePadding: false,
+            label: "status",
+            extended: false,
+        },
+
+        {
+            id: "accept/reject",
+            numeric: true,
+            disablePadding: false,
+            label: "Accept/Reject",
+            extended: false,
+        },
         {
             id: "Details",
             numeric: true,
@@ -356,7 +383,7 @@ const UserDetail = () => {
                         }}
                         style={{ textDecoration: "none" }}
                     >
-                        <Button style={{ backgroundColor: "#0096FF", color: "white", fontWeight: "500", height:"30px" }} variant="success">Details</Button>
+                        <Button style={{ backgroundColor: "#0096FF", color: "white", fontWeight: "500", height: "28px" }} variant="success">Details</Button>
                     </Link>
                 </TableCell>
             </TableRow>
@@ -365,7 +392,7 @@ const UserDetail = () => {
 
 
     const TableRowCustomForTimesheet = (props) => {
-        const { _id, date, title, startTime, endTime } = props;
+        const { _id, date, title, startTime, endTime, status } = props;
 
         const labelId = props.labelId;
         const index = props.index
@@ -373,15 +400,15 @@ const UserDetail = () => {
         const rowsPerPage = props.rowsPerPage;
         const page = props.page;
 
-        const status = "Paid";
-        const statusVariant =
-            status === "Paid"
-                ? "white"
-                : status === "Due"
-                    ? "warning"
-                    : status === "Canceled"
-                        ? "danger"
-                        : "primary";
+        // const status = "Paid";
+        // const statusVariant =
+        //     status === "Paid"
+        //         ? "white"
+        //         : status === "Due"
+        //             ? "warning"
+        //             : status === "Canceled"
+        //                 ? "danger"
+        //                 : "primary";
 
         const isItemSelected = false;
 
@@ -400,6 +427,9 @@ const UserDetail = () => {
                 <TableCell align="left">{date}</TableCell>
 
                 <TableCell align="left">{title}</TableCell>
+
+
+
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
                 <TableCell align="left">{startTime}</TableCell>
                 <TableCell align="right">{endTime}</TableCell>
@@ -408,6 +438,49 @@ const UserDetail = () => {
                     {Type}
 
                 </TableCell> */}
+
+
+                <TableCell align="left">{status}</TableCell>
+
+                <TableCell align="right">
+
+                    <Button
+                        onClick={() => {
+                            try {
+                                axios.put(`${originURL}/tasks/addtask`, {
+
+                                    _id: _id,
+                                    status: "Approved"
+
+                                }).then(() => setUpdate(!update))
+
+                            } catch (err) {
+                                console.log(err)
+                            }
+                        }}
+                        style={{ backgroundColor: "#228b22", color: "white", fontSize: "11px", width: "25px", height: "15px" }} variant="success">Accept</Button>
+
+                    <br />
+                    <Button onClick={() => {
+                        try {
+                            axios.put(`${originURL}/tasks/addtask`, {
+
+                                _id: _id,
+                                status: "Rejected"
+
+                            }).then(() => setUpdate(!update))
+
+
+                        } catch (err) {
+                            console.log(err)
+                        }
+                    }}
+
+                        style={{ backgroundColor: " #960018", color: "white", fontSize: "11px", width: "25px", height: "15px" }} variant="danger">Reject</Button>
+
+                </TableCell>
+
+
 
                 <TableCell align="right">
                     <Link
@@ -418,7 +491,7 @@ const UserDetail = () => {
                         style={{ textDecoration: "none" }}
 
                     >
-                        <Button style={{ backgroundColor: "#0096FF", color: "white", fontWeight: "500", height:"30px"}} variant="success">Details</Button>
+                        <Button style={{ backgroundColor: "#0096FF", color: "white", fontWeight: "500", height: "28px" }} variant="success">Details</Button>
                     </Link>
                 </TableCell>
             </TableRow>
@@ -431,8 +504,157 @@ const UserDetail = () => {
                 <Container style={{ marginTop: "20px", marginBottom: "80px" }}>
                     <Box sx={{ width: "95%" }}>
                         <Paper sx={{ width: "100%", mb: 2, padding: "30px", paddingBottom: "70px" }}>
+                            <div style={{ width: "98%" }} className="cardflex ">
+                                <div style={{ width: "100%" }}>
+                                    <div style={{ width: "100%" }} className="d-flex align-items-center">
+                                        <div style={{ width: "95%" }}>
+                                            <h3
+                                                className="px-3 py-2"
+                                                style={{ paddingBottom: 0, marginBottom: 0 }}
+                                            >
+                                                {propDetail.fullname}
+                                            </h3>
+                                        </div>
+                                        <div>
+                                            <Button style={{ marginLeft: "auto", backgroundColor: "rgb(15, 82, 186)", color: "white" }} onClick={() => { setShowEdit(true) }} >Edit</Button>
+                                        </div>
+                                    </div>
+                                    <Modal style={{ marginTop: "20vh" }} show={showEdit} onHide={() => { setShowEdit(false) }} animation={false}>
+                                        <Modal.Header closeButton>
+                                            <Modal.Title>Edit User</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <div className="d-flex justify-content-center"><div style={{ width: "80%" }}>
 
-                            <span>{propDetail.use}</span>
+                                                <label>Full name</label>
+                                                <input value={editFullname} style={{ width: "100%" }} onChange={(e) => setEditfullname(e.target.value)}></input>
+                                                <br /><br />
+                                                <label>New Username</label>
+                                                <input value={editUsername} style={{ width: "100%" }} onChange={(e) => setEditUsername(e.target.value)}></input>
+                                                <br /><br />
+                                                <label>New Password</label>
+                                                <input value={editPassword} style={{ width: "100%" }} onChange={(e) => setEditPassword(e.target.value)}></input>
+                                                <br /><br />
+                                                <label>Role</label>
+                                                <input value={editRole} style={{ width: "100%" }} onChange={(e) => setEditRole(e.target.value)}></input>
+                                            </div>
+                                            </div>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <Button style={{ marginLeft: "auto", backgroundColor: "gray", color: "white", fontWeight: "700" }} variant="secondary" onClick={() => { setShowEdit(false) }}>
+                                                Close
+                                            </Button>
+                                            &nbsp;&nbsp;
+                                            <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
+                                                try {
+
+                                                   
+
+                                                    if (editPassword) {
+
+                                                        axios.put(`${originURL}/auth/register/${propDetail._id}`, {
+                                                            fullname: editFullname,
+                                                            username: editUsername,
+                                                            password: editPassword,
+                                                            role: editRole,
+                                                        })
+                                                        
+                                                        propDetail.username = editUsername
+                                                        propDetail.fullname = editFullname
+                                                        propDetail.role = editRole
+
+                                                        setUpdate(!update)
+                                                        setShowEdit(false)
+                                                        NotificationManager.success("User updated successfully")
+
+                                                    }
+                                                    else {
+
+                                                        NotificationManager.error("Please fill the required fields")
+
+
+                                                    }
+
+                                                }
+                                                catch (err) {
+
+                                                    console.log(err)
+
+                                                }
+                                            }}>
+
+                                                Update User
+                                            </Button>
+                                        </Modal.Footer>
+                                    </Modal>
+
+                                    <hr className="p-0 m-0" />
+
+                                    <div className="px-3 my-3">
+                                        <div className="d-flex justify-content-between">
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    className: "py-2",
+                                                }}
+                                            >
+                                                <div className="">
+                                                    <p
+                                                        style={{
+                                                            fontWeight: "bold",
+                                                            paddingBottom: 1,
+                                                            marginBottom: 1,
+                                                        }}
+                                                    >
+                                                        Role:
+                                                        <span
+                                                            className="ml-2 "
+                                                            style={{
+                                                                fontWeight: "normal",
+                                                            }}
+                                                        >
+                                                            {propDetail.role}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="d-flex justify-content-between">
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    className: "py-2",
+                                                }}
+                                            >
+                                                <div className="">
+                                                    <p
+                                                        style={{
+                                                            fontWeight: "bold",
+                                                            paddingBottom: 1,
+                                                            marginBottom: 1,
+                                                        }}
+                                                    >
+                                                        Username:
+                                                        <span
+                                                            className="ml-2 "
+                                                            style={{
+                                                                fontWeight: "normal",
+                                                            }}
+                                                        >
+                                                            {propDetail.username}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                             <TableContainer >
                                 <div className="d-flex ml-3 mt-3 mb-1">
                                     <h3
@@ -467,7 +689,8 @@ const UserDetail = () => {
                                     {JSON.parse(localStorage.getItem("user")).isAdmin &&
                                         <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
                                             <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Assign Project</Button>{' '}
-                                        </div>}
+                                        </div>
+                                    }
                                     <br />
                                     <Modal style={{ marginTop: "30vh" }} show={show} onHide={handleClose} animation={false}>
                                         <Modal.Header closeButton>
@@ -487,6 +710,8 @@ const UserDetail = () => {
                                                     style={{ width: "70%" }}
                                                 >
 
+                                                    <option value="none" selected disabled hidden>Select the Project</option>
+
                                                     {projects && projects.map((p) => (<option value={`${p._id}`}>{p.projectname}</option>))}
 
                                                 </select>
@@ -504,6 +729,13 @@ const UserDetail = () => {
 
                                             <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
                                                 try {
+                                                    
+                                                    console.log("assigned project",assignedProject)
+
+
+                                                    if (assignedProject){
+
+
                                                     axios.put(`${originURL}/projects/assignproject/${assignedProject}`, {
 
                                                         assignTo: propDetail._id
@@ -511,6 +743,11 @@ const UserDetail = () => {
                                                     })
                                                     handleClose()
                                                     setUpdate(!update)
+                                                    NotificationManager.success("Project assigned to user")
+
+                                                }else {
+                                                    NotificationManager.error("Please select the project")
+                                                }
 
                                                 } catch (err) {
                                                     console.log(err)
@@ -586,7 +823,6 @@ const UserDetail = () => {
                                 onPageChange={handleChangePage}
                                 onRowsPerPageChange={handleChangeRowsPerPage}
                             />
-
 
 
                             <TableContainer >
@@ -695,6 +931,8 @@ const UserDetail = () => {
                         </Paper>
                     </Box>
                 </Container>
+                <NotificationContainer />
+
                 <br />
             </div>
         </>

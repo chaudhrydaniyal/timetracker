@@ -295,20 +295,12 @@ const TasksAssigned = () => {
 
 
     const TableRowCustom = (props) => {
-        const { _id, date, title, startDate, endDate } = props;
+        const { _id, date, title, startDate, endDate, status } = props;
         const labelId = props.labelId;
         const index = props.index
         const rowsPerPage = props.rowsPerPage;
         const page = props.page;
-        const status = "Paid";
-        const statusVariant =
-            status === "Paid"
-                ? "white"
-                : status === "Due"
-                    ? "warning"
-                    : status === "Canceled"
-                        ? "danger"
-                        : "primary";
+
         const isItemSelected = false;
 
 
@@ -326,9 +318,30 @@ const TasksAssigned = () => {
                 <TableCell align="left">{moment(new Date(date)).format("dddd, MMMM Do YYYY")}</TableCell>
                 <TableCell align="left">{title}</TableCell>
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
-                <TableCell align="left">{startDate}</TableCell>
-                <TableCell align="right">{endDate}</TableCell>
+                <TableCell align="left">{(moment(startDate).format('D-MMM-yyyy'))}</TableCell>
+                <TableCell align="right">{(moment(endDate).format('D-MMM-yyyy'))}</TableCell>
                 <TableCell align="right">
+
+                    <div>
+                        {status == "Completed" &&
+                            <Badge pill bg="success" style={{width:"75px"}} >
+                                Completed
+                            </Badge>
+                        }
+                        {status == "Pending" &&
+                            <Badge style={{width:"75px"}} pill bg="danger"  >
+                                Pending
+                            </Badge>
+                        }
+                        {status == "InProgress" &&
+                            <Badge style={{width:"75px"}} pill bg="warning" text="dark" >
+                                In Progress
+                            </Badge>
+                        }
+                    </div>
+
+                </TableCell>
+                {/* <TableCell align="right">
 
                     <Link
                         to="/dailytasks/taskdetail"
@@ -345,7 +358,7 @@ const TasksAssigned = () => {
                         </Badge>{' '}
                     </div>
 
-                </TableCell>
+                </TableCell> */}
             </TableRow>
         );
     };

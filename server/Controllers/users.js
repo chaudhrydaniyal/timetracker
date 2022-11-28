@@ -15,6 +15,9 @@ const singleUser = async (req, res, next) => {
     next(createError(404, "Unable to find User"))
   }
 }
+
+
+
 //delete specific user
 const deleteUser = async (req, res, next) => {
   try {
@@ -28,11 +31,14 @@ const deleteUser = async (req, res, next) => {
     next(err);
   }
 }
+
+
+
 //update a user
 const updateUser = async (req, res, next) => {
+
   try {
     const find = await User.findById(req.body.id);
-
     console.log("find", find)
     if (!find) {
       next(createError(404, "User not found"))
@@ -47,7 +53,10 @@ const updateUser = async (req, res, next) => {
     console.log("update user error", err)
     next(err);
   }
+
 }
+
+
 
 //get All Employess (only access by admin)
 
@@ -59,13 +68,78 @@ const allUsers = async (req, res, next) => {
   }
 
   catch (err) {
-    console.log("Finding Users Error", error);
-    next(error)
+    console.log("Finding Users Error", err);
+    next(err)
   }
 
 }
 
+
+
+
+//get All Employess (only access by admin)
+
+const teamMembers = async (req, res, next) => {
+
+  try {
+    const supervisor = await User.find({_id: req.params.id})
+
+
+    const users = await User.find({_id: { $in: supervisor[0].teamMembers } });
+
+    console.log("supervisorTeam", users)
+
+    users && res.status(200).json({ message: "All Users", users });
+  }
+
+  catch (err) {
+    console.log("Finding Users Error", err);
+    next(err)
+  }
+
+}
+
+
+
+
+//add team member to supervisor
+const addTeamMember = async (req, res, next) => {
+
+
+
+  try {
+   
+    // const supervisor = await User.find({ _id: req.params.id });
+
+    // console.log("addTeamMember",supervisor)
+
+
+    // if (!find) {
+    //   next(createError(404, "User not found"))
+    // }
+
+
+    const updatedSupervisor = await User.findByIdAndUpdate(
+      req.params.id,
+      { $push: { teamMembers: req.body.id } }
+    
+    );
+
+
+    res.status(200).json(updatedSupervisor);
+
+  } catch (err) {
+    console.log("update user error", err)
+    next(err);
+  }
+}
+
+
+
+
 module.exports = {
+  addTeamMember,
+  teamMembers,
   allUsers,
   singleUser,
   updateUser,

@@ -4,13 +4,21 @@ import React from 'react';
 import logo from '../../Assets/img/AdminLTELogo.png'
 import { Link } from 'react-router-dom';
 
+
+// import { Context } from "../../Context/Context"
+// import { useRef, useContext } from "react";
+
 const Sidebar = () => {
+
+
+
+
   return (
     <>
       {/* <!-- Main Sidebar Container --> */}
-      <aside className="main-sidebar sidebar-dark-primary elevation-4  " style={{ position: "fixed" }}>
+      <aside className="main-sidebar sidebar-dark-primary elevation-4  " style={{ position: "fixed", color: "white" }}>
         {/* <!-- Brand Logo --> */}
-        <Link to="/" className="brand-link">
+        <Link to="/dashboard" className="brand-link mt-1">
           <img src={logo} alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{ opacity: .8 }} />
           <span className="brand-text font-weight-light">Timesheet</span>
         </Link>
@@ -42,7 +50,7 @@ const Sidebar = () => {
           <nav className="mt-2">
 
             <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-     
+
               <li className="nav-item">
                 <Link to={"/dashboard"} className="nav-link">
                   <i className="nav-icon fas fa-tachometer-alt"></i>
@@ -72,26 +80,41 @@ const Sidebar = () => {
                 </Link>
               </li>
 
-              <li className="nav-item">
-                <Link to="/users" className="nav-link">
-                  <i className="nav-icon  fa-solid fa-user"></i>
-                  <p>
-                    Users
-                  </p>
-                </Link>
-              </li>
+
+              {
+              
+              JSON.parse(localStorage.getItem("user")).isAdmin &&
 
 
+                <li className="nav-item">
+                  <Link to="/users" className="nav-link">
+                    <i className="nav-icon  fa-solid fa-user"></i>
+                    <p>
+                      Users
+                    </p>
+                  </Link>
+                </li>
+
+              }
+
+
+
+
+
+              {
+              
+              JSON.parse(localStorage.getItem("user")).isAdmin &&
 
 
                 <li className="nav-item">
                   <Link to="/assigntasks" className="nav-link">
                     <i className="nav-icon  fa-solid fa-user"></i>
                     <p>
-                      Assign Tasks
+                      Task Assignment
                     </p>
                   </Link>
                 </li>
+              }
 
 
 
@@ -100,7 +123,7 @@ const Sidebar = () => {
                 <Link to="/tasksassigned" className="nav-link">
                   <i className="nav-icon  fa-solid fa-user"></i>
                   <p>
-                    Tasks Assigned
+                    Assigned Tasks
                   </p>
                 </Link>
               </li>

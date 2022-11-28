@@ -14,7 +14,9 @@ const AssignTask = async (req, res, next) => {
             endDate: req.body.endDate,
             addedby: req.body.addedby,
             phase: req.body.phase,
-            assignedTo: req.body.assignedTo
+            assignedTo: req.body.assignedTo,
+            status: req.body.status
+
         })
         await assignTask.save()
         assignTask && res.status(200).json({ message: "Sucessfully Added task", assignTask })
@@ -63,17 +65,18 @@ const singleUser = async (req, res, next) => {
 
 
 
-const UpdateTask = async (req, res, next) => {
+const UpdateAssignedTask = async (req, res, next) => {
     try {
-        const updateTask = await Tasks.findOneAndUpdate({ _id: req.body._id }, {
-            date: req.body.date,
-            title: req.body.title,
-            description: req.body.description,
-            selectProject: req.body.selectProject,
-            startTime: req.body.startTime,
-            endTime: req.body.endTime,
-            addedby: req.body.addedby,
-            projectPhase: req.body.projectPhase
+        const updateTask = await assignedTasks.findOneAndUpdate({ _id: req.body._id }, {
+            // date: req.body.date,
+            // title: req.body.title,
+            // description: req.body.description,
+            // selectProject: req.body.selectProject,
+            // startTime: req.body.startTime,
+            // endTime: req.body.endTime,
+            // addedby: req.body.addedby,
+            // projectPhase: req.body.projectPhase
+            status: req.body.status
         })
         //   await addtask.save()
         updateTask && res.status(200).json({ message: "Sucessfully Added task", updateTask })
@@ -105,6 +108,6 @@ module.exports = {
     getAll,
     AssignTask,
     singleUser,
-    UpdateTask,
+    UpdateAssignedTask,
     DeleteTask
 }

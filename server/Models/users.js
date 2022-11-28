@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const user = mongoose.model(
   "user",
   new mongoose.Schema({
+    fullname: String,
     username: String,
     password: String,
     role:String,
@@ -12,6 +13,12 @@ const user = mongoose.model(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "projects"
+      }
+    ],
+    teamMembers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Users"
       }
     ]
   })

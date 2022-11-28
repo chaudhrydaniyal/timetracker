@@ -92,16 +92,55 @@ const single = async(req,res,next) =>{
          next(error)
       }
 }
+
+
+// //only admin can access
+
+// const getAll = async (req, res, next) => {
+//   try {
+//     const get = await Projects.find({supervisor:req.params.id}).populate("assignTo").exec();
+//     get && res.status(200).json({ message: "All Projects", get });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+
+
 //only admin can access
 
 const getAll = async (req, res, next) => {
   try {
-    const get = await Projects.find().populate("assignTo").exec();
+    const get = await Projects.find({
+      $or: [{
+        supervisor: req.params.id
+      },
+      {
+        assignTo: req.params.id
+      },
+      ]
+
+    }).populate("assignTo").exec();
     get && res.status(200).json({ message: "All Projects", get });
   } catch (error) {
     next(error);
   }
 };
+
+
+
+//view current user projects
+
+const userProjects = async (req, res, next) => {
+  try {
+    const get = await Projects.find({assignTo:req.params.id}).populate("assignTo").exec();
+    get && res.status(200).json({ message: "All Projects", get });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 
 
 const DeleteProject = async (req, res, next) => {
@@ -123,5 +162,6 @@ module.exports = {
   updateProject,
   single,
   EditProject,
-  DeleteProject
+  DeleteProject,
+  userProjects
 };

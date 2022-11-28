@@ -34,6 +34,11 @@ import { Col, Row } from "react-bootstrap";
 import img1 from "../../Assets/DataTables img/1.jpg";
 import img2 from "../../Assets/DataTables img/2.jpg";
 import "./single.css";
+var moment = require('moment');
+
+
+
+
 const TaskDetail = () => {
   const item = useLocation();
 
@@ -159,7 +164,13 @@ try{
                               }}> Date</p>
                             </div>
                             <div>
-                              <p>                                   {propDetail.date}
+                              <p>     
+                              {(moment(propDetail.date).format('D-MMM-yyyy'))}
+
+
+
+
+
                               </p>
                             </div>
                           </div>

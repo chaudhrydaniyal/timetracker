@@ -15,18 +15,29 @@ const Widget = ({ type }) => {
 
   const [projects,setProjects] = useState([])
   const [users,setUsers] = useState([])
+  const [assignedTasks,setAssignedTasks] = useState([])
+
 
 
   useEffect(() => {
-    axios.get(`${originURL}/projects/allprojects`).then((res) => {
+    axios.get(`${originURL}/projects/allprojects/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
 
       setProjects(res.data.get);
 
     })
 
-    axios.get(`${originURL}/users/allusers`).then((res) => {
-      setUsers(res.data.users);
-  });
+  //   axios.get(`${originURL}/users/allusers`).then((res) => {
+  //     setUsers(res.data.users);
+  // });
+
+  axios.get(`${originURL}/users/teamMembers/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+    setUsers(res.data.users);
+});
+
+
+  axios.get(`${originURL}/assigntask/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+    setAssignedTasks(res.data.task);
+});
 
   }, [])
 
@@ -76,7 +87,7 @@ const Widget = ({ type }) => {
     case "earning":
       data = {
         title: "ASSIGNED TASKS",
-        isMoney: true,
+        isMoney: false,
         link: "View assigned tasks",
         linkURL:"/tasksassigned",
         icon: (
@@ -108,12 +119,16 @@ const Widget = ({ type }) => {
   }
 
   return (
-    <div className="widget" style={{backgroundColor:"white" }}>
+    <div className="widget" style={{backgroundColor:"white", marginRight:"5px" }}>
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">
           {data.title=='USERS' && users.length}
           {data.title=='PROJECTS' && projects.length}
+
+          {data.title=='ASSIGNED TASKS' && assignedTasks.length}
+
+        
 
           {data.isMoney && `$${amount}`}
 

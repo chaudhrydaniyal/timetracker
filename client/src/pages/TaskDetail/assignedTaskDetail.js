@@ -34,24 +34,27 @@ import { Col, Row } from "react-bootstrap";
 import img1 from "../../Assets/DataTables img/1.jpg";
 import img2 from "../../Assets/DataTables img/2.jpg";
 import "./single.css";
+
+
+var moment = require('moment');
+
+
 const AssignedTaskDetail = () => {
+
   const item = useLocation();
-
   console.log("testvalue", item);
-
   const propDetail = item.state.item;
   console.log("propdetailsAssignedTask", propDetail)
-
   let timeTaken='8 hours and 30 mins'
-try{
+
+  try{
+
   let start = propDetail.startTime.split(":")
   let startInMin =(parseInt(start[0]) * 60) + parseInt(start[1])
-
   let end = propDetail.endTime.split(":")
-
   let endInMin = (parseInt(end[0]) * 60) + parseInt(end[1])
-
   timeTaken = `${ Math.trunc((endInMin - startInMin)/60) } hours and ${ (endInMin - startInMin) % 60 } mins`
+
 }catch{ timeTaken='8 hours and 30 mins'}
 
   const [coordinates, setCoordinates] = useState([]);
@@ -99,8 +102,6 @@ try{
                               </p>
                             </div>
                           </div>
-
-
                         </div>
                         <br />
                         <div className="d-flex align-items-center justify-content-between mt-2">
@@ -110,7 +111,9 @@ try{
                               paddingBottom: 1,
                               marginBottom: 1,
                             }}>Product Type</p> </div>
-                            <div> <p>Company Product</p> </div>
+                            <div>
+                               <p>Company Product</p>
+                            </div>
                           </div>
                           <div className="d-flex flex-column ">
                             <div>
@@ -121,7 +124,11 @@ try{
                               }}> Start Date</p>
                             </div>
                             <div>
-                              <p>    {propDetail.startDate}</p>
+                              <p>   
+                                                                
+                              {(moment(propDetail.startDate).format('D-MMM-yyyy'))}                                 
+                                                                 
+                                 </p>
                             </div>
                           </div>
                           <div className="d-flex flex-column ">
@@ -133,7 +140,10 @@ try{
                               }}> End Date</p>
                             </div>
                             <div>
-                              <p>                                   {propDetail.endDate}
+                              <p>     
+                                                                
+                              {(moment(propDetail.endDate).format('D-MMM-yyyy'))}             
+                              
                               </p>
                             </div>
                           </div>
@@ -143,10 +153,13 @@ try{
                                 fontWeight: "bold",
                                 paddingBottom: 1,
                                 marginBottom: 1,
-                              }}> Time Taken:</p>
+                              }}>
+                                 Time Taken:
+                              </p>
                             </div>
                             <div>
-                              <p>                                   {timeTaken}
+                              <p>                   
+                                {timeTaken}
                               </p>
                             </div>
                           </div>
@@ -156,10 +169,15 @@ try{
                                 fontWeight: "bold",
                                 paddingBottom: 1,
                                 marginBottom: 1,
-                              }}> Date</p>
+                              }}> 
+                              Date
+                              </p>
                             </div>
                             <div>
-                              <p>                                   {propDetail.date}
+                              <p>   
+                              
+                              {(moment(propDetail.date).format('D-MMM-yyyy'))}
+                                 
                               </p>
                             </div>
                           </div>
@@ -170,10 +188,15 @@ try{
                                 fontWeight: "bold",
                                 paddingBottom: 1,
                                 marginBottom: 1,
-                              }}> Description</p>
+                              }}> 
+                              
+                              Description
+                              
+                              </p>
                             </div>
                             <div>
-                              <p>                                   {propDetail.description}
+                              <p>     
+                                {propDetail.description}
                               </p>
                             </div>
                           </div>

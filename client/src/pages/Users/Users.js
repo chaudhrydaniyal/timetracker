@@ -35,6 +35,7 @@ const Users = () => {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [fullname, setFullname] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
@@ -54,7 +55,7 @@ const Users = () => {
 
     useEffect(() => {
 
-        axios.get(`${originURL}/users/allusers`).then((res) => {
+        axios.get(`${originURL}/users/teamMembers/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
             setUsers(res.data.users);
         });
 
@@ -110,10 +111,17 @@ const Users = () => {
             label: "No.",
         },
         {
+            id: "fullname",
+            numeric: false,
+            disablePadding: false,
+            label: "Full Name",
+            extended: true,
+        },
+        {
             id: "username",
             numeric: false,
             disablePadding: false,
-            label: "Name",
+            label: "Username",
             extended: true,
         },
         {
@@ -146,10 +154,10 @@ const Users = () => {
         } = props;
         const createSortHandler = (property) => (event) => {
             onRequestSort(event, property);
-            
+
         };
 
-    
+
 
         return (
             <TableHead>
@@ -204,7 +212,8 @@ const Users = () => {
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
     const TableRowCustom = (props) => {
-        const { _id, username, password, updatedAt, role } = props;
+
+        const { _id, username, password, updatedAt, role,fullname } = props;
 
         const labelId = props.labelId;
         const index = props.index
@@ -235,6 +244,8 @@ const Users = () => {
                 selected={isItemSelected}
             >
                 <TableCell align="left">{rowsPerPage * page + index + 1}</TableCell>
+                <TableCell align="left">{fullname}</TableCell>
+
                 <TableCell align="left">{username}</TableCell>
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
                 <TableCell align="left">  {role}</TableCell>
@@ -246,9 +257,9 @@ const Users = () => {
                         state={{
                             item: props
                         }}
-                       style={{textDecoration: "none",}}
+                        style={{ textDecoration: "none", }}
                     >
-                        <Button  style={{ backgroundColor:"#0096FF", color:"white",fontWeight:"500", height:"30px"  }} variant="success">Details</Button>
+                        <Button style={{ backgroundColor: "#0096FF", color: "white", fontWeight: "500", height: "28px" }} variant="success">Details</Button>
                     </Link>
                 </TableCell>
 
@@ -259,7 +270,7 @@ const Users = () => {
     return (
         <>
 
-            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7',height:"90vh", paddingTop: "50px" }}>
+            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', height: "90vh", paddingTop: "50px" }}>
 
                 <Container style={{ marginTop: "20px", marginBottom: "50px" }}>
 
@@ -298,45 +309,71 @@ const Users = () => {
                                     </div>
 
                                     {
-                                    JSON.parse(localStorage.getItem("user")).isAdmin &&
+                                        JSON.parse(localStorage.getItem("user")).isAdmin &&
                                         <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
-                                             <Button style={{ marginLeft: "auto", backgroundColor:"#0F52BA", color:"white", fontWeight:"700" }} variant="success" onClick={handleShow}>Add User</Button>{' '}
+                                            <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Add User</Button>{' '}
                                         </div>
                                     }
 
                                     <br />
-                                    <Modal style={{ marginTop: "30vh" }} show={show} onHide={handleClose} animation={false}>
+                                    <Modal style={{ marginTop: "20vh" }} show={show} onHide={handleClose} animation={false}>
                                         <Modal.Header closeButton>
-                                            <Modal.Title>Add User</Modal.Title>
+                                            <Modal.Title>&nbsp;&nbsp;&nbsp;Add User</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
-                                            <div className="d-flex justify-content-center"><div style={{width:"80%"}}>
+                                            <div className="d-flex justify-content-center"><div style={{ width: "80%" }}>
 
-                                            <input placeholder="username" style={{ width: "100%" }} onChange={(e) => setUsername(e.target.value)}></input>
-                                            <br /><br />
-                                            <input placeholder="password" style={{ width: "100%" }} onChange={(e) => setPassword(e.target.value)}></input>
-                                            <br /><br />
-                                            <input placeholder="role" style={{ width: "100%" }} onChange={(e) => setRole(e.target.value)}></input>
-</div></div>
+
+                                                <label>Full name:</label>
+                                                <input placeholder="full name" style={{ width: "100%" }} onChange={(e) => setFullname(e.target.value)}></input>
+                                                <br />
+                                                <br />
+
+                                                <label>Username:</label>
+                                                <input placeholder="username" style={{ width: "100%" }} onChange={(e) => setUsername(e.target.value)}></input>
+                                                <br />
+                                                <br />
+
+                                                <label>Password:</label>
+                                                <input placeholder="password" style={{ width: "100%" }} onChange={(e) => setPassword(e.target.value)}></input>
+                                                <br />
+                                                <br />
+
+                                                <label>Role:</label>
+                                                <input placeholder="role" style={{ width: "100%" }} onChange={(e) => setRole(e.target.value)}></input>
+                                                <br />
+                                                <br />
+
+
+                                            </div></div>
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <Button style={{ marginLeft: "auto", backgroundColor:"gray", color:"white", fontWeight:"700" }} variant="secondary" onClick={handleClose}>
+                                            <Button style={{ marginLeft: "auto", backgroundColor: "gray", color: "white", fontWeight: "700" }} variant="secondary" onClick={handleClose}>
                                                 Close
                                             </Button>
                                             &nbsp;&nbsp;
-                                            <Button style={{ backgroundColor:"#0F52BA", color:"white", fontWeight:"700" }} variant="primary" onClick={() => {
+                                            <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={async() => {
                                                 try {
-                                                    axios.post(`${originURL}/auth/register`, {
+
+
+                                                   const addedUser =  await axios.post(`${originURL}/auth/register`, {
                                                         username: username,
+                                                        fullname: fullname,
                                                         password: password,
                                                         role: role,
                                                         isAdmin: false
                                                     })
 
 
+                                                    axios.put(`${originURL}/users/addTeamMembers/${JSON.parse(localStorage.getItem("user")).details._id}`,
+                                                    {
+                                                        id:addedUser.data.newUser._id
+                                                    })
+
 
                                                     handleClose()
                                                     setUpdate(!update)
+                                                   
 
                                                 } catch (err) {
                                                     console.log(err)

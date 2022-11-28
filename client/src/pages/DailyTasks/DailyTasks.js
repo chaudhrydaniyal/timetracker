@@ -26,6 +26,10 @@ import axios from "axios";
 import { Container } from "react-bootstrap";
 import originURL from "../../url";
 import { Button } from "react-bootstrap";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+
+import "./DailyTasks.css"
+
 var moment = require('moment'); // require
 
 
@@ -33,7 +37,6 @@ var moment = require('moment'); // require
 const DailyTasks = () => {
 
     const [assignedTasks, setAssignedTasks] = useState([]);
-
     const [tasks, setTasks] = useState([]);
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("name");
@@ -53,6 +56,7 @@ const DailyTasks = () => {
     const [showEdit, setShowEdit] = useState(false);
     const [update, setUpdate] = useState(false);
     const [projectPhase, setProjectPhase] = useState("");
+    const [taskStatus, setTaskStatus] = useState("");
 
 
     // *****************   Edit task    *********************************
@@ -68,19 +72,16 @@ const DailyTasks = () => {
     const [projectPhaseEdit, setProjectPhaseEdit] = useState("");
     const [taskIdEdit, setTaskIdEdit] = useState("");
     const [assignedTaskDetail, setAssignedTaskDetail] = useState({});
-
+    const [projectPhases, setProjectPhases] = useState([]);
 
     const [tasksTab, setTasksTab] = useState(false)
 
 
-
-
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
     const handleCloseEdit = () => setShowEdit(false);
     const handleShowEdit = () => setShowEdit(true);
+
 
     const item = useLocation();
     const propDetail = item.state || {}
@@ -88,28 +89,32 @@ const DailyTasks = () => {
 
     useEffect(() => {
 
-
         axios.get(`${originURL}/tasks/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
             setTasks(res.data.task);
         });
-
 
         axios.get(`${originURL}/projects/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
             setProjects(res.data.finduser);
         });
 
-
     }, [update]);
-
 
 
     useEffect(() => {
 
 
+        taskProject && axios.get(`${originURL}/projectphase/getprojectphases/${taskProject}`).then((res) => {
+            setProjectPhases(res.data.phases);
+        });
+
+    }, [update]);
+
+
+    useEffect(() => {
+
         axios.get(`${originURL}/assigntask/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
             setAssignedTasks(res.data.task);
         });
-
 
     }, [update]);
 
@@ -412,11 +417,11 @@ const DailyTasks = () => {
 
                                         <div class="container">
                                             <ul class="nav nav-tabs">
-                                                <li class="active"><a data-toggle="tab" href="#home" onClick={() => { setTasksTab(false) }}>Additional Tasks</a></li>
+                                                <li className={tasksTab == false ? "tabs-active" : "tabs"}><a style={{ textDecoration: "none", color: "inherit", padding: "20px" }} data-toggle="tab" href="#home" onClick={() => { setTasksTab(false) }}>Additional Tasks</a></li>
                                                 &nbsp;
                                                 &nbsp;
                                                 &nbsp;
-                                                <li><a data-toggle="tab" href="#menu1" onClick={() => { setTasksTab(true) }}>Assigned Tasks</a></li>
+                                                <li className={tasksTab == true ? "tabs-active" : "tabs"}><a style={{ textDecoration: "none", color: "inherit", padding: "20px" }} data-toggle="tab" href="#menu1" onClick={() => { setTasksTab(true) }}>Assigned Tasks</a></li>
                                             </ul>
 
                                             <div class="tab-content">
@@ -425,7 +430,13 @@ const DailyTasks = () => {
 
                                                 <div id="home" class="tab-pane in active">
 
-                                                    <h5>Additional Tasks</h5>
+                                                    <div className="d-flex justify-content-center">
+
+                                                        <h5>Additional Tasks</h5>
+
+                                                    </div>
+
+
                                                     <div className="d-flex justify-content-center">
                                                         <div style={{ width: "80%" }} >
 
@@ -436,31 +447,29 @@ const DailyTasks = () => {
                                                             />
                                                             <br /><br />
 
-                                                            <label>Select The Project:</label><br />
+                                                            {/* <label>Select The Project:</label><br /> */}
 
-                                                            <select onClick={(e) => { setTaskProject(e.target.value) }} style={{ width: "100%" }}>
+                                                            <select onClick={(e) => {
+                                                                setTaskProject(e.target.value)
+                                                                setUpdate(!update)
+
+                                                            }} style={{ width: "100%" }}>
+                                                                <option value="none" selected disabled hidden>Select the Project</option>
 
                                                                 {projects && projects.map((p) => (<option value={`${p._id}`}>{p.projectname}</option>))}
 
                                                             </select>
+                                                            <br />
 
                                                             <br />
 
-                                                            <label>Project Phase:</label><br />
-
-
+                                                            {/* <label>Project Phase:</label><br /> */}
                                                             <select onClick={(e) => { setProjectPhase(e.target.value) }} style={{ width: "100%" }}>
+                                                                <option value="none" selected disabled hidden>Project Phase</option>
 
-                                                                <option value='Analysis'>Analysis</option>
-                                                                <option value='Configuration'>Configuration</option>
-                                                                <option value='Customization'>Customization</option>
-                                                                <option value='Development'>Development</option>
-                                                                <option value='Design'>Design</option>
-                                                                <option value='Testing'>Testing</option>
-                                                                <option value='Training'>Training</option>
+                                                                {projectPhases && projectPhases.map((p) => (<option value={`${p._id}`}>{p.phase}</option>))}
 
                                                             </select>
-
                                                             <br /><br />
 
                                                             <input placeholder="Task title" style={{ width: "100%" }} onChange={(e) => setTaskTitle(e.target.value)}></input>
@@ -516,15 +525,19 @@ const DailyTasks = () => {
 
                                                             <label>Total Time:&nbsp;</label>{
 
-                                                                Math.trunc(timeTaken / 60)} hours and {timeTaken % 60
-
-                                                            } mins
+                                                                Math.trunc(timeTaken / 60)} hours and {timeTaken % 60} mins
 
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div id="menu1" class="tab-pane fade">
-                                                    <h5>Assigned Tasks</h5>
+
+                                                    <div className="d-flex justify-content-center">
+
+                                                        <h5>Assigned Tasks</h5>
+
+                                                    </div>
+
 
                                                     <div className="d-flex justify-content-center">
 
@@ -537,9 +550,18 @@ const DailyTasks = () => {
                                                             />
                                                             <br /><br />
 
-                                                            <label>Select The Task:</label><br />
+                                                            {/* <label>Select The Task:</label><br /> */}
 
-                                                            <select onClick={(e) => { setAssignedTaskDetail(assignedTasks.filter((a) => a._id == e.target.value)[0]) }} style={{ width: "100%" }}>
+                                                            <select onClick={(e) => {
+
+                                                                setAssignedTaskDetail(assignedTasks.filter((a) => a._id == e.target.value)[0])
+                                                                console.log("assignedTaskDetail", assignedTaskDetail)
+
+
+                                                            }} style={{ width: "100%" }}>
+
+                                                                <option value="none" selected disabled hidden>Select the Task</option>
+
 
                                                                 {assignedTasks && assignedTasks.map((p) => (<option value={`${p._id}`}>{p.title}</option>))}
 
@@ -550,32 +572,32 @@ const DailyTasks = () => {
 
                                                             <label>Project:</label><br />
 
-                                                            {assignedTaskDetail.project && assignedTaskDetail.project.projectname}
+                                                            {assignedTaskDetail && assignedTaskDetail.project && assignedTaskDetail.project.projectname}
 
                                                             <br />
                                                             <br />
 
                                                             <label>Expected Start Date:</label><br />
-
-                                                            {assignedTaskDetail.project && assignedTaskDetail.startDate}
+                                                            {(moment(assignedTaskDetail && assignedTaskDetail.project && assignedTaskDetail.startDate).format('D-MMM-yyyy'))}
+                                                            {/* { moment(assignedTaskDetail && assignedTaskDetail.project && assignedTaskDetail.startDateassignedTaskDetail.startDate).format('D-MMM-yyyy')} */}
 
                                                             <br />
                                                             <br />
 
                                                             <label>Expected End Date:</label><br />
 
-                                                            {assignedTaskDetail.project && assignedTaskDetail.endDate}
-
+                                                            {/* { moment(assignedTaskDetail && assignedTaskDetail.project && assignedTaskDetail.startDateassignedTaskDetail.endDate).format('D-MMM-yyyy')} */}
+                                                            {(moment(assignedTaskDetail && assignedTaskDetail.project && assignedTaskDetail.endDate).format('D-MMM-yyyy'))}
                                                             <br />
                                                             <br />
 
 
                                                             <label>Status:</label><br />
 
-                                                            <select onClick={(e) => { setProjectPhase(e.target.value) }} style={{ width: "100%" }}>
-
-                                                                <option value='InProgress'>In Progress</option>
-                                                                <option value='Completed'>Completed</option>
+                                                            <select placeholder="Status" onClick={(e) => { setTaskStatus(e.target.value) }} style={{ width: "100%" }}>
+                                                                {assignedTaskDetail && assignedTaskDetail.status == "InProgress" ? <option selected value='InProgress'>In Progress</option> : <option value='InProgress'>In Progress</option>}
+                                                                {assignedTaskDetail && assignedTaskDetail.status == "Pending" ? <option selected value='Pending'>Pending</option> : <option value='Pending'>Pending</option>}
+                                                                {assignedTaskDetail && assignedTaskDetail.status == "Completed" ? <option selected value='Completed'>Completed</option> : <option value='Completed'>Completed</option>}
 
                                                             </select>
 
@@ -599,6 +621,14 @@ const DailyTasks = () => {
                                             &nbsp;
                                             &nbsp;
                                             <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
+                                                
+                                                if ( taskTitle == "" || taskProject == "" ) {
+
+                                                    NotificationManager.error("fill the required fields")
+
+                                                }
+                                                else{
+
                                                 try {
                                                     axios.post(`${originURL}/tasks/addtask`, {
                                                         date: taskDate,
@@ -614,13 +644,18 @@ const DailyTasks = () => {
                                                     handleClose()
                                                     setUpdate(!update)
 
+                                                    NotificationManager.success("Task added successfully")
+
+
                                                 } catch (err) {
                                                     console.log(err)
                                                 }
+                                            }
                                             }}>
                                                 Add Task
                                             </Button>
-                                        </Modal.Footer>}
+                                        </Modal.Footer>
+                                    }
 
 
                                     {tasksTab &&
@@ -641,13 +676,24 @@ const DailyTasks = () => {
                                                         startTime: '09:00',
                                                         endTime: '17:30',
                                                         addedby: JSON.parse(localStorage.getItem("user")).details._id,
-                                                        projectPhase: assignedTaskDetail.phase
+                                                        projectPhase: assignedTaskDetail.phase,
+                                                        status: taskStatus
+                                                    })
+
+                                                    axios.put(`${originURL}/assigntask/task`, {
+                                                        _id: assignedTaskDetail._id,
+                                                        status: taskStatus
                                                     })
 
                                                     handleClose()
                                                     setUpdate(!update)
 
+                                                    NotificationManager.success("Task added successfully")
+
+
                                                 } catch (err) {
+                                                    NotificationManager.error("fill the required fields")
+
                                                     console.log(err)
                                                 }
                                             }}>
@@ -863,6 +909,8 @@ const DailyTasks = () => {
                 </Box>
             </Container>
             <br />
+
+            <NotificationContainer />
         </div>
     );
 };

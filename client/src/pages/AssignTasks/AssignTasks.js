@@ -26,6 +26,9 @@ import axios from "axios";
 import { Container } from "react-bootstrap";
 import originURL from "../../url";
 import { Button } from "react-bootstrap";
+import Badge from 'react-bootstrap/Badge';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 var moment = require('moment'); // require
 
 
@@ -60,6 +63,9 @@ const AssignTasks = () => {
     const [update, setUpdate] = useState(false);
     const [projectPhase, setProjectPhase] = useState("");
 
+    const [taskStatus, setTaskStatus] = useState("");
+
+
 
 
 
@@ -75,6 +81,8 @@ const AssignTasks = () => {
     const [taskProjectEdit, setTaskProjectEdit] = useState("");
     const [projectPhaseEdit, setProjectPhaseEdit] = useState("");
     const [taskIdEdit, setTaskIdEdit] = useState("");
+
+
 
 
     const [users, setUsers] = useState([]);
@@ -95,7 +103,8 @@ const AssignTasks = () => {
 
     useEffect(() => {
 
-        axios.get(`${originURL}/users/allusers`).then((res) => {
+ 
+        axios.get(`${originURL}/users/teamMembers/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
             setUsers(res.data.users);
         });
 
@@ -175,7 +184,7 @@ const AssignTasks = () => {
     }
 
     const headCells = [
-   
+
 
         {
             id: "title",
@@ -222,8 +231,8 @@ const AssignTasks = () => {
             label: `Action`,
         },
 
-  
-    
+
+
     ];
 
     function EnhancedTableHead(props) {
@@ -302,20 +311,12 @@ const AssignTasks = () => {
 
 
     const TableRowCustom = (props) => {
-        const { _id, date, title, assignedTo, startDate,project, endDate } = props;
+        const { _id, date, title, assignedTo, startDate, project, endDate, status } = props;
         const labelId = props.labelId;
         const index = props.index
         const rowsPerPage = props.rowsPerPage;
         const page = props.page;
-        const status = "Paid";
-        const statusVariant =
-            status === "Paid"
-                ? "white"
-                : status === "Due"
-                    ? "warning"
-                    : status === "Canceled"
-                        ? "danger"
-                        : "primary";
+
         const isItemSelected = false;
 
 
@@ -337,10 +338,33 @@ const AssignTasks = () => {
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
                 <TableCell align="left">{assignedTo.username}</TableCell>
 
-                <TableCell align="left">{startDate}</TableCell>
-                <TableCell align="right">{endDate}</TableCell>
-                <TableCell align="right">Pending</TableCell>
+                <TableCell align="left">{(moment(startDate).format('D-MMM-yyyy'))}</TableCell>
+                <TableCell align="right">{(moment(endDate).format('D-MMM-yyyy'))}</TableCell>
+                <TableCell align="right">
 
+
+
+                    <div>
+                        {status == "Completed" &&
+                            <Badge style={{ width: "75px" }} pill bg="success" >
+                                Completed
+                            </Badge>
+                        }
+
+                        {status == "Pending" &&
+                            <Badge style={{ width: "75px" }} pill bg="danger"  >
+                                Pending
+                            </Badge>
+                        }
+
+                        {status == "InProgress" &&
+                            <Badge style={{ width: "75px" }} pill bg="warning" text="dark" >
+                                In Progress
+                            </Badge>
+                        }
+                    </div>
+
+                </TableCell>
                 <TableCell align="right">
                     <Link
                         to="/tasksassigned/detail"
@@ -376,14 +400,17 @@ const AssignTasks = () => {
                     >                 <i class="bi bi-pencil-square"></i>
                     </Button> */}
 
-                    <Button onClick={() => {
+
+
+
+                    {/* <Button onClick={() => {
                         axios.delete(`${originURL}/tasks/${props._id}`)
 
                         setUpdate(!update)
 
                     }} style={{ backgroundColor: "transparent", color: "red", padding: "2px" }}
                         title="Delete"
-                    ><i class="bi bi-trash"></i></Button>
+                    ><i class="bi bi-trash"></i></Button> */}
 
 
                 </TableCell>
@@ -403,7 +430,7 @@ const AssignTasks = () => {
                                     className="mr-5"
                                     style={{ marginTop: "0px", marginBottom: "0px" }}
                                 >
-                                    Assigned Tasks History
+                                    Previous Assigned Tasks
                                 </h3>
                                 <div
                                     style={{
@@ -429,11 +456,17 @@ const AssignTasks = () => {
                                     ></input>
                                 </div>
                                 <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
-                                    <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Assign Task</Button>{' '}
+
+                                    {JSON.parse(localStorage.getItem("user")).isAdmin &&
+
+                                        <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Assign Task</Button>
+                                    }
                                 </div>
                                 <br />
-                                <Modal style={{ marginTop: "10vh" }} show={show} onHide={handleClose} animation={false}>
+                                <Modal style={{ marginTop: "3vh" }} show={show} onHide={handleClose} animation={false}>
                                     <Modal.Header closeButton>
+
+
                                         <Modal.Title>Assign Task</Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body>
@@ -442,14 +475,14 @@ const AssignTasks = () => {
                                             <div style={{ width: "80%" }} >
 
                                                 <label >Date:</label> &nbsp;
-                                                <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
+                                                <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date).format("D-MMM-yyyy")} onChange={(e) => {
                                                     setTaskDate(new Date(e.target.value))
                                                 }}
                                                 />
                                                 <br /><br />
 
 
-                                                <label>Select The User:</label><br />
+                                                {/* <label>Select The User:</label><br /> */}
 
 
                                                 <select onClick={(e) => {
@@ -457,32 +490,44 @@ const AssignTasks = () => {
                                                     setUpdate(!update)
                                                 }} style={{ width: "100%" }}>
 
+                                                    <option value="none" selected disabled hidden>Select the User</option>
+
+
                                                     {users && users.map((p) => (<option value={`${p._id}`}>{p.username}</option>))}
 
                                                 </select>
 
                                                 <br />
+                                                <br />
 
-                                                <label>Select The Project:</label><br />
+
+                                                {/* <label>Select The Project:</label><br /> */}
+
+
                                                 <select onClick={(e) => {
                                                     setTaskProject(e.target.value)
                                                     setUpdate(!update)
-                                                }} style={{ width: "100%" }}>
+                                                }}
+                                                    style={{ width: "100%" }}>
+
+                                                    <option value="" selected disabled hidden>Select the Project</option>
+
 
                                                     {projects && projects.map((p) => (<option value={`${p._id}`}>{p.projectname}</option>))}
 
                                                 </select>
 
                                                 <br />
+                                                <br />
 
-                                                <label>Project Phase:</label><br />
+
+                                                {/* <label>Project Phase:</label><br /> */}
 
 
                                                 <select onClick={(e) => { setProjectPhase(e.target.value) }} style={{ width: "100%" }}>
+                                                    <option value="" selected disabled hidden>Project Phase</option>
 
                                                     {projectPhases && projectPhases.map((p) => (<option value={`${p._id}`}>{p.phase}</option>))}
-
-
 
                                                 </select>
 
@@ -495,7 +540,7 @@ const AssignTasks = () => {
                                                 <br /><br />
 
                                                 <label for="appt">Expected Start Date: &nbsp;</label>
-                                                <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
+                                                <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date).format("D-MMM-yyyy")} onChange={(e) => {
                                                     setExpectedTaskStartDate(new Date(e.target.value))
                                                 }}
                                                 />
@@ -503,15 +548,26 @@ const AssignTasks = () => {
 
                                                 <br />
                                                 <label for="appt">Expected End Date:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                                <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date).format("YYYY-MM-DD")} onChange={(e) => {
+                                                <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date).format("D-MMM-yyyy")} onChange={(e) => {
                                                     setExpectedTaskEndDate(new Date(e.target.value))
-                                                }}/>
+                                                }} />
 
                                                 <br /><br />
 
-                                         
+                                                <label for="appt">Status: &nbsp;&nbsp;&nbsp;&nbsp;</label>
 
-                                            </div></div>
+                                                <select onClick={(e) => { setTaskStatus(e.target.value) }} style={{ width: "100%" }}>
+
+                                                    <option value='InProgress'>In Progress</option>
+                                                    <option value='Pending'>Pending</option>
+                                                    <option value='Completed'>Completed</option>
+
+                                                </select>
+
+                                                <br /><br />
+
+                                            </div>
+                                        </div>
 
                                     </Modal.Body>
                                     <Modal.Footer>
@@ -521,24 +577,52 @@ const AssignTasks = () => {
                                         &nbsp;
                                         &nbsp;
 
+
+
+
                                         <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
-                                            try {
-                                                axios.post(`${originURL}/assigntask/task`, {
-                                                    date: taskDate,
-                                                    title: taskTitle,
-                                                    description: taskDescription,
-                                                    project: taskProject,
-                                                    phase:projectPhase,
-                                                    startDate: expectedTaskStartDate,
-                                                    endDate: expectedTaskEndDate,
-                                                    assignedTo:taskUser
-                                                })
 
-                                                handleClose()
-                                                setUpdate(!update)
+                                            if (taskTitle == "" || taskProject == "" || taskUser == "") {
+                                                NotificationManager.error("Fill the required fields")
 
-                                            } catch (err) {
-                                                console.log(err)
+                                            }
+                                            else {
+
+                                                try {
+                                                    axios.post(`${originURL}/assigntask/task`, projectPhase ? {
+                                                        date: taskDate,
+                                                        title: taskTitle,
+                                                        description: taskDescription,
+                                                        project: taskProject,
+                                                        phase: projectPhase,
+                                                        startDate: expectedTaskStartDate,
+                                                        endDate: expectedTaskEndDate,
+                                                        assignedTo: taskUser,
+                                                        status: taskStatus
+                                                    } :
+
+                                                        {
+                                                            date: taskDate,
+                                                            title: taskTitle,
+                                                            description: taskDescription,
+                                                            project: taskProject,
+                                                            startDate: expectedTaskStartDate,
+                                                            endDate: expectedTaskEndDate,
+                                                            assignedTo: taskUser,
+                                                            status: taskStatus
+                                                        }
+
+
+                                                    )
+
+                                                    handleClose()
+                                                    setUpdate(!update)
+                                                    NotificationManager.success("Task assigned successfully")
+
+
+                                                } catch (err) {
+                                                    console.log(err)
+                                                }
                                             }
                                         }}>
                                             Assign Task
@@ -688,6 +772,7 @@ const AssignTasks = () => {
                     </Paper>
                 </Box>
             </Container>
+            <NotificationContainer />
             <br />
         </div>
     );
