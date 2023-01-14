@@ -43,14 +43,14 @@ const DailyTasks = () => {
     const [filteredRequestedProperties, setFilteredRequestedProperties] = useState("");
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(25);
     const [projects, setProjects] = useState("")
     const [taskTitle, setTaskTitle] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
     const [taskDate, setTaskDate] = useState(new Date());
-    const [taskStartTime, setTaskStartTime] = useState("");
-    const [timeTaken, setTimeTaken] = useState("");
-    const [taskEndTime, setTaskEndTime] = useState("");
+    const [taskStartTime, setTaskStartTime] = useState("09:00");
+    const [timeTaken, setTimeTaken] = useState("510");
+    const [taskEndTime, setTaskEndTime] = useState("17:30");
     const [taskProject, setTaskProject] = useState("");
     const [show, setShow] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
@@ -89,11 +89,11 @@ const DailyTasks = () => {
 
     useEffect(() => {
 
-        axios.get(`${originURL}/tasks/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+        axios.get(`${originURL}/tasks/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`).then((res) => {
             setTasks(res.data.task);
         });
 
-        axios.get(`${originURL}/projects/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+        axios.get(`${originURL}/projects/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`).then((res) => {
             setProjects(res.data.finduser);
         });
 
@@ -112,7 +112,7 @@ const DailyTasks = () => {
 
     useEffect(() => {
 
-        axios.get(`${originURL}/assigntask/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+        axios.get(`${originURL}/assigntask/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`).then((res) => {
             setAssignedTasks(res.data.task);
         });
 
@@ -330,7 +330,6 @@ const DailyTasks = () => {
                             setTaskDescriptionEdit(props.description)
                             setTaskDateEdit(props.date)
                             setTaskStartTimeEdit(props.startTime)
-                            // const [timeTaken, setTimeTaken] = useState("");
                             setTaskEndTimeEdit(props.endTime)
                             setTaskProjectEdit(props.projectname)
                             setProjectPhaseEdit(props.projectPhase)
@@ -479,7 +478,7 @@ const DailyTasks = () => {
                                                             <br /><br />
 
                                                             <label for="appt">Start Time: &nbsp;</label>
-                                                            <input type="time" id="appt" name="appt" onChange={(e) => {
+                                                            <input type="time" value={taskStartTime} id="appt" name="appt" onChange={(e) => {
 
 
                                                                 setTaskStartTime(e.target.value)
@@ -502,9 +501,10 @@ const DailyTasks = () => {
 
                                                             <br />
                                                             <label for="appt">End Time:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                                            <input type="time" id="appt" name="appt" onChange={(e) => {
+                                                            <input value={taskEndTime} type="time" id="appt" name="appt" onChange={(e) => {
 
-
+ 
+console.log("TimeChanged",e.target.value)
                                                                 setTaskEndTime(e.target.value)
 
                                                                 let start = taskStartTime.split(":")
@@ -517,6 +517,8 @@ const DailyTasks = () => {
                                                                 console.log(endInMin, startInMin)
 
                                                                 setTimeTaken(endInMin - startInMin)
+
+                                                                console.log("TimeTaken",endInMin - startInMin)
 
                                                             }
                                                             }></input>
@@ -637,7 +639,7 @@ const DailyTasks = () => {
                                                         selectProject: taskProject,
                                                         startTime: taskStartTime,
                                                         endTime: taskEndTime,
-                                                        addedby: JSON.parse(localStorage.getItem("user")).details._id,
+                                                        addedby: JSON.parse(localStorage.getItem("timesheet_user437")).details._id,
                                                         projectPhase: projectPhase
                                                     })
 
@@ -675,7 +677,7 @@ const DailyTasks = () => {
                                                         selectProject: assignedTaskDetail.project._id,
                                                         startTime: '09:00',
                                                         endTime: '17:30',
-                                                        addedby: JSON.parse(localStorage.getItem("user")).details._id,
+                                                        addedby: JSON.parse(localStorage.getItem("timesheet_user437")).details._id,
                                                         projectPhase: assignedTaskDetail.phase,
                                                         status: taskStatus
                                                     })
@@ -826,7 +828,7 @@ const DailyTasks = () => {
                                                     selectProject: taskProjectEdit,
                                                     startTime: taskStartTimeEdit,
                                                     endTime: taskEndTimeEdit,
-                                                    addedby: JSON.parse(localStorage.getItem("user")).details._id,
+                                                    addedby: JSON.parse(localStorage.getItem("timesheet_user437")).details._id,
                                                     projectPhase: projectPhaseEdit
                                                 })
 
@@ -897,7 +899,7 @@ const DailyTasks = () => {
                             </Table>
                         </TableContainer>{" "}
                         <TablePagination
-                            rowsPerPageOptions={[5, 10, 25]}
+                            rowsPerPageOptions={[25, 50, 100]}
                             component="div"
                             count={tasks.length}
                             rowsPerPage={rowsPerPage}

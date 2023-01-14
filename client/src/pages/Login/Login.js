@@ -29,7 +29,7 @@ const Login = ({setAuth}) => {
 
      loginres =  await axios.post(`${originURL}/auth/login`, { username: username.current.value, password: password.current.value })
 
-     localStorage.setItem('user', JSON.stringify(loginres.data));
+     localStorage.setItem('timesheet_user437', JSON.stringify(loginres.data));
       
      setAuth(loginres)
       

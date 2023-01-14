@@ -55,7 +55,7 @@ const Users = () => {
 
     useEffect(() => {
 
-        axios.get(`${originURL}/users/teamMembers/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+        axios.get(`${originURL}/users/teamMembers/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`).then((res) => {
             setUsers(res.data.users);
         });
 
@@ -309,7 +309,7 @@ const Users = () => {
                                     </div>
 
                                     {
-                                        JSON.parse(localStorage.getItem("user")).isAdmin &&
+                                        JSON.parse(localStorage.getItem("timesheet_user437")).isAdmin &&
                                         <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
                                             <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Add User</Button>{' '}
                                         </div>
@@ -365,7 +365,7 @@ const Users = () => {
                                                     })
 
 
-                                                    axios.put(`${originURL}/users/addTeamMembers/${JSON.parse(localStorage.getItem("user")).details._id}`,
+                                                    axios.put(`${originURL}/users/addTeamMembers/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`,
                                                     {
                                                         id:addedUser.data.newUser._id
                                                     })

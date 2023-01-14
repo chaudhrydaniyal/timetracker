@@ -27,7 +27,7 @@ import { Container } from "react-bootstrap";
 import originURL from "../../url";
 import { Button } from "@mui/material";
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Badge from 'react-bootstrap/Badge';
 
 import { styled } from '@mui/material/styles';
@@ -57,7 +57,7 @@ const Projects = () => {
     const [filteredRequestedProperties, setFilteredRequestedProperties] = useState("");
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(25);
     const [projectName, setProjectName] = useState("");
     const [projectManager, setProjectManager] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
@@ -81,17 +81,17 @@ const Projects = () => {
 
 
 
-        
 
-            if (JSON.parse(localStorage.getItem("user")).isAdmin) {
 
-                axios.get(`${originURL}/projects/allprojects/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+            if (JSON.parse(localStorage.getItem("timesheet_user437")).isAdmin) {
+
+                axios.get(`${originURL}/projects/allprojects/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`).then((res) => {
                     setProjects(res.data.get);
                 });
             } else {
 
 
-                axios.get(`${originURL}/projects/userprojects/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+                axios.get(`${originURL}/projects/userprojects/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`).then((res) => {
                     setProjects(res.data.get);
                 });
 
@@ -318,26 +318,39 @@ const Projects = () => {
 
                 </TableCell> */}
 
-<TableCell align="left">
+                <TableCell align="left">
 
-{                        (((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime()))) * 100 <= 100 ?
+                    {(((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime()))) * 100 <= 100 ?
 
-<>
-                    {
-                        Math.round((((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime()))) * 100)
-                    }%
-                    <BorderLinearProgress variant="determinate" value={
-                        (((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime()))) * 100
-                    } 
-                
-                    
-                    
-/> </>:  <div className="d-flex justify-content-center"> <Badge style={{width:"100px", height:"20px"}} pill bg="danger"  >
-overdue
-                            </Badge>
-                            
-                            </div>
+                        <>
+                            {
+                                Math.round((((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime()))) * 100)
+                            }%
+                            <BorderLinearProgress variant="determinate" value={
+                                (((new Date().getTime()) - (new Date(projectStartDate).getTime())) / ((new Date(projectEndDate).getTime()) - (new Date(projectStartDate).getTime()))) * 100
                             }
+
+
+
+                            /> </> : <>
+
+                            {projectEndDate ?
+
+                                <div className="d-flex justify-content-center">
+                                    <Badge style={{ width: "100px", height: "20px" }} pill bg="danger"  >
+                                        overdue
+                                    </Badge>
+                                </div>
+
+                                :
+                                <div className="d-flex justify-content-center">
+                                    <Badge style={{ width: "100px", height: "20px" }} pill bg="success"  >
+                                        In Progress
+                                    </Badge>
+                                </div>}
+                        </>
+                            
+                    }
 
                 </TableCell>
 
@@ -357,11 +370,10 @@ overdue
     };
 
     return (
-        <>
 
-            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', height: "90vh", paddingTop: "50px" }}>
-                <Container style={{ marginTop: "20px", marginBottom: "50px" }}>
-                    <Box sx={{ width: "95%" }}>
+            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', height: "90%", paddingTop: "50px"  }}>
+                <Container style={{ marginTop: "20px", marginBottom: "80px" }}>
+                    <Box sx={{ width: "95%"}}>
                         <Paper className="p-4" sx={{ width: "100%", mb: 2 }}>
                             <TableContainer >
                                 <div className="d-flex ml-3 mt-3 mb-1">
@@ -397,11 +409,11 @@ overdue
 
 
                                     {
-                                        JSON.parse(localStorage.getItem("user")).isAdmin &&
+                                        JSON.parse(localStorage.getItem("timesheet_user437")).isAdmin &&
                                         <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
                                             <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Add Project</Button>{' '}
                                         </div>
-                                    } 
+                                    }
                                     <br />
                                     <Modal style={{ marginTop: "18vh" }} show={show} onHide={handleClose} animation={false}>
                                         <Modal.Header closeButton>
@@ -425,8 +437,7 @@ overdue
                                                     } onSelect={(e) => {
                                                         // setProjectStartDate(moment(new Date(e.target.value)).format("dddd, MMMM Do YYYY"))
                                                         setProjectStartDate(new Date(e.target.value))
-
-                                                    }}
+                                                    }}                                                    
                                                     />
                                                     <br /><br />
 
@@ -473,7 +484,7 @@ overdue
                                                             projectStartDate: projectStartDate,
                                                             projectEndDate: projectEndDate,
                                                             allocatedWorkingDays: allocatedWorkingDays,
-                                                            supervisor:`${JSON.parse(localStorage.getItem("user")).details._id}`
+                                                            supervisor: `${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`
                                                         })
 
                                                         handleClose()
@@ -550,7 +561,7 @@ overdue
                                 </Table>
                             </TableContainer>{" "}
                             <TablePagination
-                                rowsPerPageOptions={[5, 10, 25]}
+                                rowsPerPageOptions={[25, 50, 100]}
                                 component="div"
                                 count={projects.length}
                                 rowsPerPage={rowsPerPage}
@@ -563,7 +574,6 @@ overdue
                 </Container>
                 <NotificationContainer />
             </div>
-        </>
     );
 };
 

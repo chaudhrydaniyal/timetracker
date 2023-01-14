@@ -148,7 +148,7 @@ const ProjectDetail = () => {
                 {/* {JSON.stringify(propDetail)} */}
                 <div className="d-flex">
                   <h3 className="ml-3">Project Details</h3>
-                  {JSON.parse(localStorage.getItem("user")).isAdmin &&
+                  {JSON.parse(localStorage.getItem("timesheet_user437")).isAdmin &&
                     (
                       <>
                         <Button
@@ -306,7 +306,7 @@ const ProjectDetail = () => {
                     {/* flex items */}
                     {/* right items */}
                     <div style={{ width: "100%" }}>
-                      <Card style={{ width: "95%", height: "340px" }}>
+                      <Card style={{ width: "95%", height: "auto" }}>
                         <div className="d-flex align-items-center">
                           <div>
                             {" "}
@@ -704,7 +704,7 @@ const ProjectDetail = () => {
                       <Card
                         className="cardcustomization"
                         style={{
-                          height: "340px",
+                          height: "auto",
                           width: "250px",
                           overflowY: "auto",
                         }}
@@ -839,7 +839,7 @@ const ProjectDetail = () => {
                       {/* flex items */}
                       {/* right items */}
                       <div style={{ width: "100%" }}>
-                        <Card style={{ minHeight: "340px" }}>
+                        <Card style={{ minHeight: "auto" }}>
                           <div className="d-flex align-items-center">
                             <div style={{ width: "100%" }}>
                               {" "}
@@ -849,7 +849,7 @@ const ProjectDetail = () => {
                                 </div>
                                 <div className="px-3 py-2"
                                 >
-                                  {JSON.parse(localStorage.getItem("user"))
+                                  {JSON.parse(localStorage.getItem("timesheet_user437"))
                                     .isAdmin && (
                                       <Button
                                         style={{

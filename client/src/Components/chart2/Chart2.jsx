@@ -12,7 +12,7 @@ class RangeBarChartAdvanced extends React.Component {
   componentDidMount() {
     // Typical usage (don't forget to compare props):
 
-    axios.get(`${originURL}/tasks/alltasks/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+    axios.get(`${originURL}/tasks/alltasks/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`).then((res) => {
 
       let requiredData = [];
 
@@ -241,7 +241,7 @@ class RangeBarChartAdvanced extends React.Component {
 
 
       <div id="chart" style={{backgroundColor:"white"}}>
-        <ReactApexChart options={this.state.options} series={this.state.series} type="rangeBar" height={450} />
+        <ReactApexChart options={this.state.options} series={this.state.series} type="rangeBar" height={this.state.series[0] ? this.state.series[0].data.length * 30 : 300} />
       </div>
 
 

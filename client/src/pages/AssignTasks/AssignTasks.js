@@ -104,7 +104,7 @@ const AssignTasks = () => {
     useEffect(() => {
 
  
-        axios.get(`${originURL}/users/teamMembers/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+        axios.get(`${originURL}/users/teamMembers/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`).then((res) => {
             setUsers(res.data.users);
         });
 
@@ -457,7 +457,7 @@ const AssignTasks = () => {
                                 </div>
                                 <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
 
-                                    {JSON.parse(localStorage.getItem("user")).isAdmin &&
+                                    {JSON.parse(localStorage.getItem("timesheet_user437")).isAdmin &&
 
                                         <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Assign Task</Button>
                                     }
@@ -692,7 +692,7 @@ const AssignTasks = () => {
                                                     selectProject: taskProjectEdit,
                                                     startTime: taskStartTimeEdit,
                                                     endTime: taskEndTimeEdit,
-                                                    addedby: JSON.parse(localStorage.getItem("user")).details._id,
+                                                    addedby: JSON.parse(localStorage.getItem("timesheet_user437")).details._id,
                                                     projectPhase: projectPhaseEdit
                                                 })
 

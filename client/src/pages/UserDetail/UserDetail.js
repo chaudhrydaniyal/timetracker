@@ -46,7 +46,7 @@ const UserDetail = () => {
     const [pageForTimesheet, setPageForTimesheet] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [rowsPerPageForTimesheet, setRowsPerPageForTimesheet] = React.useState(5);
+    const [rowsPerPageForTimesheet, setRowsPerPageForTimesheet] = React.useState(25);
     const [projects, setProjects] = useState([])
     const [assignedProject, setAssignedProject] = useState("")
     const [update, setUpdate] = useState(false);
@@ -65,7 +65,7 @@ const UserDetail = () => {
         });
 
 
-        axios.get(`${originURL}/projects/allprojects/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+        axios.get(`${originURL}/projects/allprojects/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`).then((res) => {
             setProjects(res.data.get);
         });
 
@@ -267,7 +267,6 @@ const UserDetail = () => {
         return (
             <TableHead>
                 <TableRow>
-
                     {headCellsForTimesheet.map((headCell) => (
                         <TableCell
                             key={headCell.id}
@@ -424,7 +423,7 @@ const UserDetail = () => {
             >
 
                 {/* <TableCell align="left">{rowsPerPage * page + index + 1}</TableCell> */}
-                <TableCell align="left">{date}</TableCell>
+                <TableCell align="left">{moment(new Date(date)).format("dddd, MMMM Do YYYY")}</TableCell>
 
                 <TableCell align="left">{title}</TableCell>
 
@@ -501,9 +500,9 @@ const UserDetail = () => {
     return (
         <>
             <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', paddingTop: "50px" }}>
-                <Container style={{ marginTop: "20px", marginBottom: "80px" }}>
+                <Container style={{ marginTop: "20px", marginBottom:"40px",  height:"90%"}}>
                     <Box sx={{ width: "95%" }}>
-                        <Paper sx={{ width: "100%", mb: 2, padding: "30px", paddingBottom: "70px" }}>
+                        <Paper sx={{ width: "100%", mb: 2, padding: "30px", paddingBottom: "20px" }}>
                             <div style={{ width: "98%" }} className="cardflex ">
                                 <div style={{ width: "100%" }}>
                                     <div style={{ width: "100%" }} className="d-flex align-items-center">
@@ -515,8 +514,30 @@ const UserDetail = () => {
                                                 {propDetail.fullname}
                                             </h3>
                                         </div>
-                                        <div>
-                                            <Button style={{ marginLeft: "auto", backgroundColor: "rgb(15, 82, 186)", color: "white" }} onClick={() => { setShowEdit(true) }} >Edit</Button>
+                                        <div className="d-flex">
+                                            <Button style={{ marginLeft: "auto", backgroundColor: "rgb(15, 82, 186)", fontWeight: "700", color: "white" }} onClick={() => { setShowEdit(true) }} >Edit</Button>
+                                            <Button style={{ backgroundColor: "red", color: "white", fontWeight: "700", marginLeft:"10px" }} variant="primary" onClick={() => {
+                                                try {
+
+                                                        axios.put(`${originURL}/auth/register/${propDetail._id}`, {
+
+                                                            activeUser:false,
+                                                            password:""
+                                                       
+                                                        })
+                                          
+                                                        setUpdate(!update)
+                                                  
+                                                }
+                                                catch (err) {
+
+                                                    console.log(err)
+
+                                                }
+                                            }}>
+
+                                                Deactivate
+                                            </Button>
                                         </div>
                                     </div>
                                     <Modal style={{ marginTop: "20vh" }} show={showEdit} onHide={() => { setShowEdit(false) }} animation={false}>
@@ -557,6 +578,7 @@ const UserDetail = () => {
                                                             username: editUsername,
                                                             password: editPassword,
                                                             role: editRole,
+                                                            activeUser: true
                                                         })
                                                         
                                                         propDetail.username = editUsername
@@ -686,7 +708,7 @@ const UserDetail = () => {
                                             }}
                                         ></input>
                                     </div>
-                                    {JSON.parse(localStorage.getItem("user")).isAdmin &&
+                                    {JSON.parse(localStorage.getItem("timesheet_user437")).isAdmin &&
                                         <div className='d-flex justify-content-between align-items-center ps-3 pe-3'>
                                             <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Assign Project</Button>{' '}
                                         </div>
@@ -878,7 +900,6 @@ const UserDetail = () => {
                                     />
                                     <TableBody>
                                         {
-
                                             stableSort(tasks, getComparator(order, orderBy))
                                                 .slice(pageForTimesheet * rowsPerPageForTimesheet, pageForTimesheet * rowsPerPageForTimesheet + rowsPerPageForTimesheet)
                                                 .map((b, index) => {
@@ -920,7 +941,7 @@ const UserDetail = () => {
                                 </Table>
                             </TableContainer>{" "}
                             <TablePagination
-                                rowsPerPageOptions={[5, 10, 25]}
+                                rowsPerPageOptions={[25, 50, 100]}
                                 component="div"
                                 count={tasks.length}
                                 rowsPerPage={rowsPerPageForTimesheet}

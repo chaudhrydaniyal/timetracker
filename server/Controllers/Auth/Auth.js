@@ -88,7 +88,9 @@ const updateUser = async (req, res, next) => {
       { $set: {username:req.body.username,
       password:hashpassword,
       fullname:req.body.fullname,
-      role:req.body.role
+      role:req.body.role,
+      activeUser: req.body.activeUser
+
       } },
       // { new: true }
     );

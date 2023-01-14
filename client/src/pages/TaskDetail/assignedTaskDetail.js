@@ -76,7 +76,7 @@ const AssignedTaskDetail = () => {
                 <div className="cardflex ">
 
                   <div style={{ width: "75%" }}>
-                    <Card style={{ minHeight: '240px' }}>
+                    <Card style={{ minHeight: 'auto' }}>
                       <h3 className="px-3 py-2">Overview</h3>
                       <div className="px-3" >
                         <div className="d-flex justify-content-between">
@@ -206,7 +206,7 @@ const AssignedTaskDetail = () => {
                   </div>
 
                   <div>
-                    <Card className="cardcustomization" style={{ height: '240px' }}>
+                    <Card className="cardcustomization" style={{ height: 'auto' }}>
                       <h5 className="text-center">User</h5>
                       <div className="flexusers">
                         <div className="my-2 d-flex w-100">
@@ -226,7 +226,7 @@ const AssignedTaskDetail = () => {
                                   fontSize: "13px",
                                 }}
                               >
-                                {JSON.parse(localStorage.getItem("user")).details.username}
+                                {JSON.parse(localStorage.getItem("timesheet_user437")).details.username}
                               </p>
                             </div>
                             <div>
@@ -237,7 +237,7 @@ const AssignedTaskDetail = () => {
                                   fontSize: "13px",
                                 }}
                               >
-                                {JSON.parse(localStorage.getItem("user")).details.role}
+                                {JSON.parse(localStorage.getItem("timesheet_user437")).details.role}
                               </p>
                             </div>
                           </div>

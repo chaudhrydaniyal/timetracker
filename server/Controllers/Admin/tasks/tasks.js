@@ -106,7 +106,7 @@ const getAll = async (req, res, next) => {
 
 const singleUser = async (req, res, next) => {
     try {
-        const task = await Tasks.find({ addedby: req.params.id })
+        const task = await Tasks.find({ addedby: req.params.id }).sort({ _id: -1 })
         if (!task) {
             next(createError(404, "Task not found"))
         }

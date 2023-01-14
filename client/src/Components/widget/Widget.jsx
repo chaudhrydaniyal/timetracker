@@ -20,7 +20,7 @@ const Widget = ({ type }) => {
 
 
   useEffect(() => {
-    axios.get(`${originURL}/projects/allprojects/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+    axios.get(`${originURL}/projects/allprojects/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`).then((res) => {
 
       setProjects(res.data.get);
 
@@ -30,12 +30,12 @@ const Widget = ({ type }) => {
   //     setUsers(res.data.users);
   // });
 
-  axios.get(`${originURL}/users/teamMembers/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+  axios.get(`${originURL}/users/teamMembers/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`).then((res) => {
     setUsers(res.data.users);
 });
 
 
-  axios.get(`${originURL}/assigntask/${JSON.parse(localStorage.getItem("user")).details._id}`).then((res) => {
+  axios.get(`${originURL}/assigntask/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`).then((res) => {
     setAssignedTasks(res.data.task);
 });
 

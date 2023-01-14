@@ -83,7 +83,7 @@ const Sidebar = () => {
 
               {
               
-              JSON.parse(localStorage.getItem("user")).isAdmin &&
+              JSON.parse(localStorage.getItem("timesheet_user437")).isAdmin &&
 
 
                 <li className="nav-item">
@@ -103,7 +103,7 @@ const Sidebar = () => {
 
               {
               
-              JSON.parse(localStorage.getItem("user")).isAdmin &&
+              JSON.parse(localStorage.getItem("timesheet_user437")).isAdmin &&
 
 
                 <li className="nav-item">
@@ -128,6 +128,18 @@ const Sidebar = () => {
                 </Link>
               </li>
 
+              {
+              
+              JSON.parse(localStorage.getItem("timesheet_user437")).isAdmin &&
+              <li className="nav-item">
+                <Link to="/timesheet" className="nav-link">
+                  <i className="nav-icon  fa-solid fa-user"></i>
+                  <p>
+                    TimeSheet
+                  </p>
+                </Link>
+              </li>
+}
 
             </ul>
 

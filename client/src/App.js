@@ -27,6 +27,7 @@ import AssignTasks from "./pages/AssignTasks/AssignTasks";
 import TasksAssigned from "./pages/TasksAssigned/TasksAssigned";
 import AssignedTaskDetail from "./pages/TaskDetail/assignedTaskDetail";
 import { useEffect } from "react";
+import TimeSheet from "./pages/UserDetail/TimeSheet";
 
 function App() {
 
@@ -36,7 +37,7 @@ function App() {
    
   useEffect(() => {
 
-    setAuth(JSON.parse(localStorage.getItem('user')))    
+    setAuth(JSON.parse(localStorage.getItem('timesheet_user437')))    
 
 
 
@@ -73,6 +74,7 @@ function App() {
                 <Route path="/calendar/:id" element={<CalendarDetails />}></Route>
                 <Route path="/datamanagement" element={<DataManagement />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/timesheet" element={<TimeSheet/>}/>
               </Routes>
               <Footer />
             </>

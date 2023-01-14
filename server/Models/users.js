@@ -7,6 +7,8 @@ const user = mongoose.model(
     fullname: String,
     username: String,
     password: String,
+    activeUser:Boolean,
+
     role:String,
     isAdmin:Boolean,
     currentProjects: [

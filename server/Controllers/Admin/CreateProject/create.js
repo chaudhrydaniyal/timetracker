@@ -12,7 +12,9 @@ const AddProject = async (req, res, next) => {
       deadline: req.body.deadline,
       projectStartDate: req.body.projectStartDate,
       projectEndDate: req.body.projectEndDate,
-      allocatedWorkingDays: req.body.allocatedWorkingDays
+      allocatedWorkingDays: req.body.allocatedWorkingDays,
+      supervisor:req.body.supervisor
+
     });
     const response = await add.save();
     response && res.status(200).json({ message: "success", response });

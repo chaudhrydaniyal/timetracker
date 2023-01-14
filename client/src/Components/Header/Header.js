@@ -16,7 +16,7 @@ const Header = ({ setAuth }) => {
 
   const handleLogout = async () => {
     // await dispatch({ type: "LOGOUT" })
-    localStorage.setItem("user",null)
+    localStorage.setItem("timesheet_user437",null)
     setAuth(null)
     navigate("/")
 
@@ -31,19 +31,19 @@ const Header = ({ setAuth }) => {
             <li className="nav-item">
               <a className="nav-link" data-widget="pushmenu" href="/" role="button"><i className="fas fa-bars"></i></a>
             </li>
-            <li className="nav-item d-none d-sm-inline-block">
+            {/* {/* <li className="nav-item d-none d-sm-inline-block">
               <a href="../../index3.html" className="nav-link">Home</a>
-            </li>
+            </li> */}
             <li className="nav-item d-none d-sm-inline-block">
-              <a href="/" className="nav-link">Contact</a>
-            </li>
+              <a className="nav-link">User-Name:</a>
+            </li> 
           </ul>
 
 
 
           {/* {user.details.username} */}
 
-          &nbsp; &nbsp; &nbsp;{JSON.parse(localStorage.getItem("user")) && JSON.parse(localStorage.getItem("user")).details && <h4 style={{ marginTop: "8px" }}> {JSON.parse(localStorage.getItem("user")).details.username}</h4>}
+          {JSON.parse(localStorage.getItem("timesheet_user437")) && JSON.parse(localStorage.getItem("timesheet_user437")).details && <h5 style={{ marginTop: "0.5%" ,color:'green'}}> {JSON.parse(localStorage.getItem("timesheet_user437")).details.username}</h5>}
 
 
           {/* <!-- Right navbar links --> */}
