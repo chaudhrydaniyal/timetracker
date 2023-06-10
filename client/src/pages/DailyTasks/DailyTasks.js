@@ -81,6 +81,7 @@ const DailyTasks = () => {
     const handleShow = () => setShow(true);
     const handleCloseEdit = () => setShowEdit(false);
     const handleShowEdit = () => setShowEdit(true);
+    
 
 
     const item = useLocation();
@@ -96,6 +97,7 @@ const DailyTasks = () => {
         axios.get(`${originURL}/projects/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`).then((res) => {
             setProjects(res.data.finduser);
         });
+        document.title="DailyTasks"
 
     }, [update]);
 
@@ -181,14 +183,28 @@ const DailyTasks = () => {
             id: "startTime",
             numeric: false,
             disablePadding: false,
-            label: "Start Time",
+            label: "Start",
 
         },
         {
             id: "endTime",
             numeric: true,
             disablePadding: false,
-            label: "End Time",
+            label: "End",
+        },
+        {
+            id: "accept/reject",
+            numeric: true,
+            disablePadding: false,
+            label: "Accept/Reject",
+            extended: false,
+          },
+        {
+            id: "remarks",
+            numeric: false,
+            disablePadding: false,
+            label: "Remarks",
+            // extended:true
         },
         {
             id: "Action",
@@ -212,7 +228,7 @@ const DailyTasks = () => {
         };
 
         return (
-            <TableHead>
+            <TableHead style={{}}>
                 <TableRow>
                     {headCells.map((headCell) => (
                         <TableCell
@@ -226,7 +242,7 @@ const DailyTasks = () => {
                                 active={orderBy === headCell.id}
                                 direction={orderBy === headCell.id ? order : "asc"}
                                 onClick={createSortHandler(headCell.id)}
-                                style={{ fontWeight: "600" }}
+                                style={{ fontWeight: "700" }}
                             >
                                 {headCell.label}
                                 {"orderBy" === headCell.id ? (
@@ -274,18 +290,18 @@ const DailyTasks = () => {
 
 
     const TableRowCustom = (props) => {
-        const { _id, date, title, startTime, endTime } = props;
+        const { _id, date, title, startTime, endTime,remarks,status } = props;
         const labelId = props.labelId;
         const index = props.index
         const rowsPerPage = props.rowsPerPage;
         const page = props.page;
-        const status = "Paid";
+        const newstatus = "Paid";
         const statusVariant =
-            status === "Paid"
+            newstatus === "Paid"
                 ? "white"
-                : status === "Due"
+                : newstatus === "Due"
                     ? "warning"
-                    : status === "Canceled"
+                    : newstatus === "Canceled"
                         ? "danger"
                         : "primary";
         const isItemSelected = false;
@@ -307,6 +323,9 @@ const DailyTasks = () => {
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
                 <TableCell align="left">{startTime}</TableCell>
                 <TableCell align="right">{endTime}</TableCell>
+                <TableCell align="right">{status}</TableCell>
+                <TableCell align="right" style={{textAlign:'center'}}>{remarks}</TableCell>
+                
                 <TableCell align="right">
                     <Link
                         to="/dailytasks/taskdetail"
@@ -369,12 +388,12 @@ const DailyTasks = () => {
     return (
 
         <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', paddingTop: "50px" }}>
-            <Container style={{ marginTop: "20px", marginBottom: "50px" }}>
-                <Box sx={{ width: "95%" }}>
-                    <Paper className="p-4" sx={{ width: "100%", mb: 2 }}>
+            <Container style={{ marginTop: "50px", marginBottom: "50px" }}>
+                <Box >
+                    <Paper sx={{ width: "100%", mb: 2 }}>
 
-                        <TableContainer >
-                            <div className="d-flex ml-3 mt-3 mb-1">
+                        <TableContainer style={{padding:"0px"}} >
+                            <div className="d-flex pt-3 pl-3 pr-3" style={{ borderTopLeftRadius:"5px",  borderTopRightRadius:"5px"  }}>
                                 <h3
                                     className="mr-5"
                                     style={{ marginTop: "0px", marginBottom: "0px" }}
@@ -408,7 +427,7 @@ const DailyTasks = () => {
                                     <Button style={{ marginLeft: "auto", backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="success" onClick={handleShow}>Add Task</Button>{' '}
                                 </div>
                                 <br />
-                                <Modal style={{ marginTop: "10vh" }} show={show} onHide={handleClose} animation={false}>
+                                <Modal style={{ marginTop: "1vh", }} show={show} onHide={handleClose} animation={false} >
                                     <Modal.Header closeButton>
                                         <Modal.Title>Add Task</Modal.Title>
                                     </Modal.Header>
@@ -477,7 +496,7 @@ const DailyTasks = () => {
                                                             <textarea placeholder="Task Description" style={{ width: "100%" }} onChange={(e) => setTaskDescription(e.target.value)}></textarea>
                                                             <br /><br />
 
-                                                            <label for="appt">Start Time: &nbsp;</label>
+                                                            <label for="appt">Start: &nbsp;</label>
                                                             <input type="time" value={taskStartTime} id="appt" name="appt" onChange={(e) => {
 
 
@@ -500,7 +519,7 @@ const DailyTasks = () => {
                                                             &nbsp;&nbsp;
 
                                                             <br />
-                                                            <label for="appt">End Time:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                                            <label for="appt">End:&nbsp;&nbsp;&nbsp;&nbsp;</label>
                                                             <input value={taskEndTime} type="time" id="appt" name="appt" onChange={(e) => {
 
  
@@ -622,7 +641,7 @@ console.log("TimeChanged",e.target.value)
                                             </Button>
                                             &nbsp;
                                             &nbsp;
-                                            <Button style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
+                                            <Button  style={{ backgroundColor: "#0F52BA", color: "white", fontWeight: "700" }} variant="primary" onClick={() => {
                                                 
                                                 if ( taskTitle == "" || taskProject == "" ) {
 
@@ -640,7 +659,8 @@ console.log("TimeChanged",e.target.value)
                                                         startTime: taskStartTime,
                                                         endTime: taskEndTime,
                                                         addedby: JSON.parse(localStorage.getItem("timesheet_user437")).details._id,
-                                                        projectPhase: projectPhase
+                                                        projectPhase: projectPhase,
+                                                        company: '6450ef2696037c2ad66388a0'
                                                     })
 
                                                     handleClose()
@@ -758,7 +778,7 @@ console.log("TimeChanged",e.target.value)
                                                 <br /><br />
 
 
-                                                <label for="appt">Start Time: &nbsp;</label>
+                                                <label for="appt">Start: &nbsp;</label>
                                                 <input type="time" id="appt" value={taskStartTimeEdit} name="appt" onChange={(e) => {
 
 
@@ -780,7 +800,7 @@ console.log("TimeChanged",e.target.value)
                                                 }}></input>
                                                 &nbsp;&nbsp;
                                                 <br />
-                                                <label for="appt">End Time:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                                <label for="appt">End:&nbsp;&nbsp;&nbsp;&nbsp;</label>
                                                 <input type="time" id="appt" name="appt" value={taskEndTimeEdit} onChange={(e) => {
 
 

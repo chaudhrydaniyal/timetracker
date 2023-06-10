@@ -1,7 +1,7 @@
 const dotenv = require('dotenv')
 const mongoose = require("mongoose");
 const path = require("path")
-const url = "mongodb://localhost:27017/timesheetCreativeTeam"
+const url = "mongodb://127.0.0.1:27017/timesheetCreativeTeam"
 //env
 
 

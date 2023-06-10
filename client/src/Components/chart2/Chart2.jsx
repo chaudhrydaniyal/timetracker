@@ -22,6 +22,7 @@ class RangeBarChartAdvanced extends React.Component {
 
         if (!requiredData.find((rD) => {
           return (rD.name == t.addedby.username)
+          
         })) {
 
           requiredData.push({ name: t.addedby.username, data:[] })

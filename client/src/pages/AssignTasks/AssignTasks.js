@@ -65,6 +65,8 @@ const AssignTasks = () => {
 
     const [taskStatus, setTaskStatus] = useState("");
 
+    const [frequency,setFrequency] = useState("")
+
 
 
 
@@ -107,6 +109,7 @@ const AssignTasks = () => {
         axios.get(`${originURL}/users/teamMembers/${JSON.parse(localStorage.getItem("timesheet_user437")).details._id}`).then((res) => {
             setUsers(res.data.users);
         });
+        document.title='AssignedTasks'
 
     }, [update]);
 
@@ -126,13 +129,21 @@ const AssignTasks = () => {
 
     useEffect(() => {
 
-        axios.get(`${originURL}/assigntask/alltasks`).then((res) => {
-            setTasks(res.data.get);
-        });
+      
+
+        
 
         axios.get(`${originURL}/projects/${taskUser}`).then((res) => {
             setProjects(res.data.finduser);
         });
+
+
+        axios.get(`${originURL}/assigntask/alltasks/`).then((res) => {
+
+
+            setTasks(res.data.get);
+        });
+
 
 
 
@@ -338,8 +349,8 @@ const AssignTasks = () => {
                 {/* <TableCell align="right">{ShortDescription}</TableCell> */}
                 <TableCell align="left">{assignedTo.username}</TableCell>
 
-                <TableCell align="left">{(moment(startDate).format('D-MMM-yyyy'))}</TableCell>
-                <TableCell align="right">{(moment(endDate).format('D-MMM-yyyy'))}</TableCell>
+                <TableCell align="left">{(moment(startDate).format('D-MMM-yyyy h:mm:ss a'))}</TableCell>
+                <TableCell align="right">{(moment(endDate).format('D-MMM-yyyy h:mm:ss a'))}</TableCell>
                 <TableCell align="right">
 
 
@@ -430,7 +441,7 @@ const AssignTasks = () => {
                                     className="mr-5"
                                     style={{ marginTop: "0px", marginBottom: "0px" }}
                                 >
-                                    Previous Assigned Tasks
+                                    Tasks I've assigned to others
                                 </h3>
                                 <div
                                     style={{
@@ -539,8 +550,17 @@ const AssignTasks = () => {
                                                 <textarea placeholder="Task Description" style={{ width: "100%" }} onChange={(e) => setTaskDescription(e.target.value)}></textarea>
                                                 <br /><br />
 
+                                                <select style={{width:'100%', marginBottom:'10px'}} onChange={(e)=>setFrequency(e.target.value)}>
+                                                    <option value="none" selected disabled hidden> Task frequency..</option>
+                                                    <option value="Daily">Daily</option>
+                                                    <option value="weekly">Weekly</option>
+                                                    <option value="Monthly">Monthly</option>
+                                                </select>
+
+                                                <br></br>
+
                                                 <label for="appt">Expected Start Date: &nbsp;</label>
-                                                <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date).format("D-MMM-yyyy")} onChange={(e) => {
+                                                <input style={{ width: "100%" }} type="datetime-local" defaultValue={moment(new Date).format("D-MMM-yyyy")} onChange={(e) => {
                                                     setExpectedTaskStartDate(new Date(e.target.value))
                                                 }}
                                                 />
@@ -548,7 +568,7 @@ const AssignTasks = () => {
 
                                                 <br />
                                                 <label for="appt">Expected End Date:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                                <input type="date" style={{ width: "100%" }} defaultValue={moment(new Date).format("D-MMM-yyyy")} onChange={(e) => {
+                                                <input  style={{ width: "100%" }} type="datetime-local" defaultValue={moment(new Date).format("D-MMM-yyyy")} onChange={(e) => {
                                                     setExpectedTaskEndDate(new Date(e.target.value))
                                                 }} />
 
@@ -598,7 +618,8 @@ const AssignTasks = () => {
                                                         startDate: expectedTaskStartDate,
                                                         endDate: expectedTaskEndDate,
                                                         assignedTo: taskUser,
-                                                        status: taskStatus
+                                                        status: taskStatus,
+                                                        frequency: frequency
                                                     } :
 
                                                         {
@@ -609,7 +630,8 @@ const AssignTasks = () => {
                                                             startDate: expectedTaskStartDate,
                                                             endDate: expectedTaskEndDate,
                                                             assignedTo: taskUser,
-                                                            status: taskStatus
+                                                            status: taskStatus,
+                                                            frequency:frequency
                                                         }
 
 

@@ -1,8 +1,14 @@
-const express = require("express")
+
+
+const express = require("express");
+const { addDepartment, getDepartments, deleteDepartment, getCompanyDepartments } = require("./../Controllers/departments");
 const router = express.Router();
-const {addDepartment } = require('../../../Controllers/Admin/tasks/assignedTasks')
+// const {getDepartments,addDepartment} = require('../../Controllers/departments')
 
-router.post('/department',addDepartment)
+router.get('/',getDepartments);
+router.get('/:id',getCompanyDepartments);
+router.post('/',addDepartment);
+router.delete('/:id',deleteDepartment);
 
 
-module.exports = router;
+module.exports = router

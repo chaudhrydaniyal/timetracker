@@ -1,0 +1,16 @@
+.style::before {
+    content: attr(data-name);
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom: 0;
+    width:0;
+    color:#8254ff;
+    overflow: hidden;
+    transition: width 2s linear;
+}
+.style:hover::before{
+    width:100%
+
+}

@@ -13,6 +13,7 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 import originURL from "../../url";
 
+const url = "companies/";
 const Login = ({setAuth}) => {
 
 
@@ -22,7 +23,6 @@ const Login = ({setAuth}) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-
     var  loginres = false
 
     try {
@@ -40,6 +40,16 @@ const Login = ({setAuth}) => {
     !loginres &&  NotificationManager.error("username or password not correct")
 
     loginres && navigate("/dashboard")
+  }
+  const companyName= async()=>{
+    try{
+      companyName = await axios.get(`${originURL}/${url}`)
+      const res = companyName.data
+      localStorage.setItem('companyName',JSON.stringify(res.companyName))
+    } catch(error){
+
+    }
+
   }
 
   return (

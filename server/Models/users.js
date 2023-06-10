@@ -7,10 +7,10 @@ const user = mongoose.model(
     fullname: String,
     username: String,
     password: String,
-    activeUser:Boolean,
-
-    role:String,
-    isAdmin:Boolean,
+    activeUser: Boolean,
+    role: String,
+    designation: String,
+    isAdmin: Boolean,
     currentProjects: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -20,10 +20,19 @@ const user = mongoose.model(
     teamMembers: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Users"
+        ref: "users"
       }
-    ]
+    ],
+    companies: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'companies'
+    },
+    departments: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Departments'
+    },
   })
+
 );
 
 module.exports = user;

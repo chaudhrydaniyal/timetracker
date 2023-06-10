@@ -1,12 +1,31 @@
-
+const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 
-const departments = mongoose.model(
-  "departments",
-  new mongoose.Schema({
-    name: String,
-    
-   })
-);
+const DepartmentsSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
 
-module.exports = departments;
+  role: {
+    type: String,
+    required: true,
+  },
+
+
+  description: {
+    type: String,
+    required: true,
+  },
+
+  company: {
+    type: ObjectId,
+    required: true,
+  },
+
+
+
+});
+
+const Departments = mongoose.model('Departments',DepartmentsSchema);
+module.exports=Departments;

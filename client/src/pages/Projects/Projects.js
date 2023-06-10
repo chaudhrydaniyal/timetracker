@@ -76,12 +76,7 @@ const Projects = () => {
 
     useEffect(() => {
 
-
         {
-
-
-
-
 
             if (JSON.parse(localStorage.getItem("timesheet_user437")).isAdmin) {
 
@@ -99,13 +94,11 @@ const Projects = () => {
 
 
         }
-
+document.title='Projects'
 
     }, [update]);
 
-
     console.log("reqprop", requestedProperties)
-
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -205,7 +198,7 @@ const Projects = () => {
         };
 
         return (
-            <TableHead>
+            <TableHead style={{}}>
                 <TableRow>
 
                     {headCells.map((headCell) => (
@@ -371,12 +364,12 @@ const Projects = () => {
 
     return (
 
-            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', height: "90%", paddingTop: "50px"  }}>
-                <Container style={{ marginTop: "20px", marginBottom: "80px" }}>
+            <div className='content-wrapper' style={{ backgroundColor: '#f7f7f7', height: "90%", paddingTop: "50px" }}>
+                <Container style={{ marginTop: "50px", marginBottom: "80px" }}>
                     <Box sx={{ width: "95%"}}>
                         <Paper className="p-4" sx={{ width: "100%", mb: 2 }}>
-                            <TableContainer >
-                                <div className="d-flex ml-3 mt-3 mb-1">
+                            <TableContainer style={{padding:"0px"}} >
+                                <div className="d-flex pt-3 pl-3 pr-3" style={{ borderTopLeftRadius:"5px",  borderTopRightRadius:"5px"  }}>
                                     <h3
                                         className="mr-5"
                                         style={{ marginTop: "0px", marginBottom: "0px" }}
@@ -415,7 +408,7 @@ const Projects = () => {
                                         </div>
                                     }
                                     <br />
-                                    <Modal style={{ marginTop: "18vh" }} show={show} onHide={handleClose} animation={false}>
+                                    <Modal style={{ marginTop: "3vh" }} show={show} onHide={handleClose} animation={false}>
                                         <Modal.Header closeButton>
                                             <Modal.Title>Add another Project</Modal.Title>
                                         </Modal.Header>

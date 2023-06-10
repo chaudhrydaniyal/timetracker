@@ -63,7 +63,7 @@ const updateUser = async (req, res, next) => {
 const allUsers = async (req, res, next) => {
 
   try {
-    const users = await User.find();
+    const users = await User.find().populate("companies departments");
     users && res.status(200).json({ message: "All Users", users });
   }
 
@@ -134,7 +134,22 @@ const addTeamMember = async (req, res, next) => {
   }
 }
 
-
+ //users of a company
+const companyUsers = async(req,res,next)=>{
+  try{
+      const {companyid} = req.query;
+      const companyusers = await User.find({companies:companyid}).populate("companies departments");
+      // console.log(companyusers);
+      res.status(200).json({
+      message:"Success",
+      companyUsers:companyusers,
+      error:false
+      })
+       
+  }catch(error){
+   next(error)
+  }
+  }
 
 
 module.exports = {
@@ -143,5 +158,6 @@ module.exports = {
   allUsers,
   singleUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  companyUsers
 }

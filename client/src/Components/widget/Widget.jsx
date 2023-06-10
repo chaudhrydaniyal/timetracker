@@ -100,9 +100,11 @@ const Widget = ({ type }) => {
       break;
     case "balance":
       data = {
-        title: "BALANCE",
+        title: "Tasks I've assigned to others",
         isMoney: true,
         link: "See details",
+        linkURL:"/assigntasks",
+
         icon: (
           <AccountBalanceWalletOutlinedIcon
             className="icon"
@@ -119,18 +121,19 @@ const Widget = ({ type }) => {
   }
 
   return (
-    <div className="widget" style={{backgroundColor:"white", marginRight:"5px" }}>
+    <div className="widget" style={{backgroundColor:"white", marginRight:"5px"}}>
       <div className="left">
-        <span className="title">{data.title}</span>
+        <span className="title" style={{ color:"#354A54"}}>{data.title}</span>
         <span className="counter">
           {data.title=='USERS' && users.length}
           {data.title=='PROJECTS' && projects.length}
 
           {data.title=='ASSIGNED TASKS' && assignedTasks.length}
 
-        
+          {data.title=="Tasks I've assigned to others" && assignedTasks.length}
 
-          {data.isMoney && `$${amount}`}
+
+          {/* {data.isMoney && `$${amount}`} */}
 
         </span>
         <Link to={`${data.linkURL}`} style={{textDecoration:"none", color:"black"}}>
@@ -138,10 +141,10 @@ const Widget = ({ type }) => {
         </Link>
       </div>
       <div className="right">
-        <div className="percentage positive">
+        {/* <div className="percentage positive">
           <KeyboardArrowUpIcon />
           {diff} %
-        </div>
+        </div> */}
         {data.icon}
       </div>
     </div>

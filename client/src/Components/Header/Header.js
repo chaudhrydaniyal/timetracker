@@ -1,76 +1,127 @@
-import { Button } from 'mdbreact';
-import React from 'react'
+import { Button } from "mdbreact";
+import React from "react";
 // import { useContext } from "react";
 // import { Context } from "../../Context/Context"
 import { useNavigate } from "react-router-dom";
-
 
 // import '../../dist/css/adminlte.min.css'
 // import 'font-awesome/css/font-awesome.min.css';
 
 const Header = ({ setAuth }) => {
-
   // const { user, dispatch } = useContext(Context)
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     // await dispatch({ type: "LOGOUT" })
-    localStorage.setItem("timesheet_user437",null)
-    setAuth(null)
-    navigate("/")
-
-  }
+    localStorage.setItem("timesheet_user437", null);
+    setAuth(null);
+    navigate("/");
+  };
   return (
-    <>
-      <div className="wrapper">
+  
+      <div
+        // className="wrapper"
+        style={{ position: "fixed", width: "100%",height:"10%", zIndex:1}}
+      >
         {/* <!-- Navbar --> */}
-        <nav className="main-header navbar navbar-expand navbar-white navbar-light">
+        <nav
+          className="main-header navbar navbar-expand"
+          style={{ background: "#516a7a" }}
+        >
           {/* <!-- Left navbar links --> */}
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link" data-widget="pushmenu" href="/" role="button"><i className="fas fa-bars"></i></a>
+              <a
+                className="nav-link"
+                data-widget="pushmenu"
+                href="/"
+                role="button"
+              >
+                <i className="fas fa-bars" style={{ color: "white" }}></i>
+              </a>
             </li>
             {/* {/* <li className="nav-item d-none d-sm-inline-block">
               <a href="../../index3.html" className="nav-link">Home</a>
             </li> */}
             <li className="nav-item d-none d-sm-inline-block">
-              <a className="nav-link">User-Name:</a>
-            </li> 
+              <i className="fa-solid  fa-fade"> <a className="nav-link" style={{color:'white',fontStyle:'italic',marginTop:'4px'}}><h5> H e l l o :</h5></a></i>
+            </li>
           </ul>
-
-
 
           {/* {user.details.username} */}
 
-          {JSON.parse(localStorage.getItem("timesheet_user437")) && JSON.parse(localStorage.getItem("timesheet_user437")).details && <h5 style={{ marginTop: "0.5%" ,color:'green'}}> {JSON.parse(localStorage.getItem("timesheet_user437")).details.username}</h5>}
+          {JSON.parse(localStorage.getItem("timesheet_user437")) &&
+            JSON.parse(localStorage.getItem("timesheet_user437")).details && (
+              <h5 style={{ marginTop: "0.5%", color: "white" }}>
+                {" "}
+                {
+                  JSON.parse(localStorage.getItem("timesheet_user437")).details.username
+                }
+              </h5>
+            )}
 
+
+
+{/* <ul className="navbar-nav">
+          
+            {/* {/* <li className="nav-item d-none d-sm-inline-block">
+              <a href="../../index3.html" className="nav-link">Home</a>
+            </li> */}
+            {/* <li className="nav-item d-none d-sm-inline-block">
+              <i className="fa-solid  fa-fade"> <a className="nav-link" style={{color:'white',fontStyle:'italic',marginTop:'4px'}}><h5> Company :</h5></a></i>
+            </li>
+          </ul>  */}
+
+            {/* {JSON.parse(localStorage.getItem("timesheet_user437")) &&
+            JSON.parse(localStorage.getItem("timesheet_user437")).details && (
+              <h5 style={{ marginTop: "0.5%", color: "white" }}>
+                {" "}
+                {
+                  JSON.parse(localStorage.getItem("timesheet_user437")).details.companies &&  JSON.parse(localStorage.getItem("timesheet_user437")).details.companies.companyName 
+                }
+              </h5>
+            )} */}
 
           {/* <!-- Right navbar links --> */}
           <ul className="navbar-nav ml-auto mr-5">
             {/* <!-- Navbar Search --> */}
 
-
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <a className="nav-link" data-widget="navbar-search" href="/" role="button">
-                <i className="fas fa-search"></i>
+                <i className="fas fa-search" style={{color:"white"}}></i>
               </a>
               <div className="navbar-search-block">
                 <form className="form-inline">
                   <div className="input-group input-group-sm">
                     <input className="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search" />
-                    <div className="input-group-append">
-                      <button className="btn btn-navbar" type="submit">
-                        <i className="fas fa-search"></i>
+                    <div className="input-group-append" >
+                      <button className="btn btn-navbar"  type="submit">
+                        <i className="fas fa-search" ></i>
                       </button>
-                      <button className="btn btn-navbar" type="button" data-widget="navbar-search">
-                        <i className="fas fa-times"></i>
+                      <button className="btn btn-navbar" type="button" data-widget="navbar-search" >
+                        <i className="fas fa-times" ></i>
                       </button>
                     </div>
                   </div>
                 </form>
               </div>
-            </li>
+            </li> */}
+            <div style={{marginRight:'50px'}}>
+              <input
+                id="tableSearch"
+                className="form-control "
+                placeholder="Search"
+                style={{
+                  width: "100%",
+                  border: "none",
+
+                  backgroundColor: "white",
+                 
+                  borderRadius: "10px",
+                }}
+              ></input>
+            </div>
 
             {/* <!-- Messages Dropdown Menu --> */}
             <li className="nav-item dropdown">
@@ -86,10 +137,14 @@ const Header = ({ setAuth }) => {
                     <div className="media-body">
                       <h3 className="dropdown-item-title">
                         Brad Diesel
-                        <span className="float-right text-sm text-danger"><i className="fas fa-star"></i></span>
+                        <span className="float-right text-sm text-danger">
+                          <i className="fas fa-star"></i>
+                        </span>
                       </h3>
                       <p className="text-sm">Call me whenever you can...</p>
-                      <p className="text-sm text-muted"><i className="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                      <p className="text-sm text-muted">
+                        <i className="far fa-clock mr-1"></i> 4 Hours Ago
+                      </p>
                     </div>
                   </div>
                   {/* <!-- Message End --> */}
@@ -102,10 +157,14 @@ const Header = ({ setAuth }) => {
                     <div className="media-body">
                       <h3 className="dropdown-item-title">
                         John Pierce
-                        <span className="float-right text-sm text-muted"><i className="fas fa-star"></i></span>
+                        <span className="float-right text-sm text-muted">
+                          <i className="fas fa-star"></i>
+                        </span>
                       </h3>
                       <p className="text-sm">I got your message bro</p>
-                      <p className="text-sm text-muted"><i className="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                      <p className="text-sm text-muted">
+                        <i className="far fa-clock mr-1"></i> 4 Hours Ago
+                      </p>
                     </div>
                   </div>
                   {/* <!-- Message End --> */}
@@ -118,20 +177,33 @@ const Header = ({ setAuth }) => {
                     <div className="media-body">
                       <h3 className="dropdown-item-title">
                         Nora Silvester
-                        <span className="float-right text-sm text-warning"><i className="fas fa-star"></i></span>
+                        <span className="float-right text-sm text-warning">
+                          <i className="fas fa-star"></i>
+                        </span>
                       </h3>
                       <p className="text-sm">The subject goes here</p>
-                      <p className="text-sm text-muted"><i className="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                      <p className="text-sm text-muted">
+                        <i className="far fa-clock mr-1"></i> 4 Hours Ago
+                      </p>
                     </div>
                   </div>
                   {/* <!-- Message End --> */}
                 </a>
                 <div className="dropdown-divider"></div>
-                <a href="/" className="dropdown-item dropdown-footer">See All Messages</a>
+                <a href="/" className="dropdown-item dropdown-footer">
+                  See All Messages
+                </a>
               </div>
             </li>
 
-            <li><Button onClick={handleLogout}>Logout</Button></li>
+            <li>
+              <Button
+                style={{ backgroundColor: "#4289ff" }}
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+            </li>
             {/* <!-- Notifications Dropdown Menu --> */}
             {/* <li className="nav-item dropdown">
               <a className="nav-link" data-toggle="dropdown" href="/">
@@ -172,8 +244,8 @@ const Header = ({ setAuth }) => {
           </ul>
         </nav>
       </div>
-    </>
-  )
-}
+   
+  );
+};
 
 export default Header;
